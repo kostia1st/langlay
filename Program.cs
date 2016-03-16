@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -10,6 +11,10 @@ namespace Langwitch
 {
     static class Program
     {
+        private static bool IsExiting
+        {
+            get; set;
+        }
         private static IDictionary<string, IntPtr> CultureToLastUsedLayout = new Dictionary<string, IntPtr>();
         private static KeyEventHandler OnKeyDown = Hooker_KeyDown;
 
@@ -20,24 +25,47 @@ namespace Langwitch
             configManager.ReadFromConfigFile();
             configManager.ReadFromCommandLineArguments();
 
-            using (var hooker = new GlobalKeyboardHook())
-            {                
-                hooker.HookedKeys.Add(configManager.LanguageSwitchKeys);
-
-                hooker.KeyDown = OnKeyDown;
-                while (true)
+            var contextMenu = new ContextMenu(new[]
+            {
+                new MenuItem("Quit", delegate { IsExiting = true; })
+            });
+            var trayIcon = new NotifyIcon()
+            {
+                Text = "Langwitch",
+                Icon = new Icon(typeof(Program), "Keyboard Filled-16.ico"),
+                Visible = true,
+                ContextMenu = contextMenu
+            };
+            try
+            {
+                using (var hooker = new GlobalKeyboardHook())
                 {
-                    Thread.Sleep(1);
-                    try
+                    hooker.HookedKeys.Add(configManager.LanguageSwitchKeys);
+
+                    hooker.KeyDown = OnKeyDown;
+                    while (true)
                     {
-                        Application.DoEvents();
+                        Thread.Sleep(1);
+                        try
+                        {
+                            Application.DoEvents();
+                            if (IsExiting)
+                                // Quitting the loop must be just enough
+                                break;
+                        }
+                        catch (Exception ex)
+                        {
+                            // Do nothing O_o as of yet.
+                            break;
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        // Do nothing O_o as of yet.
-                        break;
-                    }
+
                 }
+            }
+            finally
+            {
+                trayIcon.Dispose();
+                contextMenu.Dispose();
             }
         }
 
