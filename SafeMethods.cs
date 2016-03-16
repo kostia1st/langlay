@@ -20,6 +20,8 @@ namespace Langwitch
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
         [DllImport("user32.dll")]
+        public static extern IntPtr GetActiveWindow();
+        [DllImport("user32.dll")]
         public static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
         /// <summary>

@@ -30,19 +30,18 @@ namespace Langwitch
             var indexOfNext = languageNames.IndexOf(currentLanguageName) + 1;
             if (indexOfNext >= languageNames.Count)
                 indexOfNext = 0;
-            return languageNames[indexOfNext];                
+            return languageNames[indexOfNext];
         }
 
         public static IntPtr GetDefaultLayoutForLanguage(string languageName)
         {
             var firstLanguageLayout = InputLanguages.FirstOrDefault(x => x.Culture.EnglishName == languageName);
-            if (firstLanguageLayout != null)
-                return firstLanguageLayout.Handle;
-            else
-                // Avoid throwing any exceptions. This application must be "safe" 
-                // to use in unpredictable environtment since the goal is to help using it
-                // not to develop it effectively.
-                return InputLanguages.First().Handle;
+            if (firstLanguageLayout == null)
+                firstLanguageLayout = InputLanguages.First();
+            if (firstLanguageLayout == null)
+                throw new NullReferenceException("Not a single language's installed in the system");
+
+            return firstLanguageLayout.Handle;
         }
 
         public static void SetCurrentLayout(IntPtr layoutHandle)
