@@ -36,6 +36,7 @@ namespace Langwitch
         {
             if (IsStarted)
             {
+                IsStarted = false;
                 if (Hooker != null)
                     Hooker.Unhook();
             }
