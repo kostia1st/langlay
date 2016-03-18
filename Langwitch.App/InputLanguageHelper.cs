@@ -12,6 +12,11 @@ namespace Langwitch
             get { return InputLanguage.InstalledInputLanguages.Cast<InputLanguage>(); }
         }
 
+        public static InputLanguage GetInputLanguageByHandle(IntPtr handle)
+        {
+            return InputLanguages.FirstOrDefault(x=> x.Handle == handle);
+        }
+
         public static InputLanguage GetGlobalCurrentInputLanguage()
         {
             var currentLayoutHandle = SafeMethods.GetKeyboardLayout(

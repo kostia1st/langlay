@@ -13,6 +13,11 @@ namespace Langwitch
 
         public const int WM_INPUTLANGCHANGEREQUEST = 0x0050;
 
+        public const int WS_EX_TOOLWINDOW = 0x00000080;
+        public const int WS_EX_NOACTIVATE = 0x08000000;
+        public const int WS_EX_APPWINDOW = 0x00040000;
+        public const int WS_EX_TOPMOST = 0x00000008;
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetKeyboardLayout(int idThread);
         [DllImport("user32.dll")]
@@ -23,6 +28,19 @@ namespace Langwitch
         public static extern IntPtr GetActiveWindow();
         [DllImport("user32.dll")]
         public static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        public static extern IntPtr CreateRoundRectRgn
+        (
+            int nLeftRect, // x-coordinate of upper-left corner
+            int nTopRect, // y-coordinate of upper-left corner
+            int nRightRect, // x-coordinate of lower-right corner
+            int nBottomRect, // y-coordinate of lower-right corner
+            int nWidthEllipse, // height of ellipse
+            int nHeightEllipse // width of ellipse
+         );
+        [DllImport("gdi32.dll")]
+        public static extern bool DeleteObject(IntPtr hObject);
 
         /// <summary>
         /// Sets the windows hook, do the desired event, one of hInstance or threadId must be non-null

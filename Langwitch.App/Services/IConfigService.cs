@@ -9,5 +9,7 @@ namespace Langwitch
         Keys LanguageSwitchKeys { get; }
         IList<int> LayoutSwitchKeyArray { get; }
         Keys LayoutSwitchKeys { get; }
+        bool ShowOverlay { get; }
+        long OverlayMilliseconds { get; }
     }
 }
