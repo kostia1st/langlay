@@ -12,11 +12,15 @@ namespace Langwitch
         public Keys LanguageSwitchKeys { get { return ConvertIntsToKeys(LanguageSwitchKeyArray); } }
         public IList<int> LayoutSwitchKeyArray { get; private set; }
         public Keys LayoutSwitchKeys { get { return ConvertIntsToKeys(LayoutSwitchKeyArray); } }
+        public bool ShowOverlay { get; private set; }
+        public long OverlayMilliseconds { get; private set; }
 
         public ConfigService()
         {
             LanguageSwitchKeyArray = new int[] { (int) Keys.CapsLock };
             LayoutSwitchKeyArray = new int[] { };
+            ShowOverlay= true;
+            OverlayMilliseconds = 1000;
         }
 
         private Keys ConvertIntsToKeys(IList<int> ints)
@@ -51,8 +55,12 @@ namespace Langwitch
                 var argumentValue = parts[1];
                 if (argumentName == ArgumentNames.LanguageSwitchKeys)
                     LanguageSwitchKeyArray = ReadArray(argumentValue);
-                if (argumentName == ArgumentNames.LayoutSwitchKeys)
+                else if (argumentName == ArgumentNames.LayoutSwitchKeys)
                     LayoutSwitchKeyArray = ReadArray(argumentValue);
+                else if (argumentName == ArgumentNames.ShowOverlay)
+                    ShowOverlay = bool.Parse(argumentValue);
+                else if (argumentName == ArgumentNames.OverlayMilliseconds)
+                    OverlayMilliseconds = long.Parse(argumentValue);
             }
         }
 

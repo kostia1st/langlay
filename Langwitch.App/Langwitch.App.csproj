@@ -52,11 +52,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentNames.cs" />
+    <Compile Include="OverlayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OverlayForm.Designer.cs">
+      <DependentUpon>OverlayForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="GlobalKeyboardHook.cs" />
     <Compile Include="InputLanguageHelper.cs" />
     <Compile Include="Services\HotkeyService.cs" />
     <Compile Include="Services\IConfigService.cs" />
+    <Compile Include="Services\IOverlayService.cs" />
     <Compile Include="Services\OverlayService.cs" />
     <Compile Include="SafeMethods.cs" />
     <Compile Include="Program.cs" />
@@ -71,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Keyboard Filled-16.ico" />
+    <EmbeddedResource Include="OverlayForm.resx">
+      <DependentUpon>OverlayForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

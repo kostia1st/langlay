@@ -15,17 +15,20 @@ namespace Langwitch
                 var isExiting = false;
 
                 var configService = new ConfigService();
-                var hotkeyService = new HotkeyService(configService);
+                var overlayService = new OverlayService(configService);
+                var hotkeyService = new HotkeyService(configService, overlayService);
                 var trayService = new TrayService(configService)
                 {
                     OnExit = delegate { isExiting = true; }
                 };
+
                 try
                 {
                     configService.ReadFromConfigFile();
                     configService.ReadFromCommandLineArguments();
                     hotkeyService.Start();
                     trayService.Start();
+                    overlayService.Start();
                     while (true)
                     {
                         Thread.Sleep(1);
@@ -48,6 +51,7 @@ namespace Langwitch
                 {
                     trayService.Stop();
                     hotkeyService.Stop();
+                    overlayService.Stop();
                 }
             });
         }
