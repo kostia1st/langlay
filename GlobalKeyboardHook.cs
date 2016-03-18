@@ -37,18 +37,19 @@ namespace Langwitch
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalKeyboardHook"/> class and installs the keyboard hook.
         /// </summary>
-        public GlobalKeyboardHook()
+        public GlobalKeyboardHook(bool doHookImmediately = true)
         {
             // This is a c# hack in order to keep a firm reference to a dynamically created delegate
             // so that it won't be collected by GC.
             HookProcedureHolder = HookProcedure;
-            Hook();
+            if (doHookImmediately)
+                Hook();
         }
 
         /// <summary>
         /// Installs the global hook
         /// </summary>
-        private void Hook()
+        public void Hook()
         {
             IntPtr hInstance = SafeMethods.LoadLibrary("User32");
             HookHandle = SafeMethods.SetWindowsHookEx(
@@ -58,7 +59,7 @@ namespace Langwitch
         /// <summary>
         /// Uninstalls the global hook
         /// </summary>
-        private void Unhook()
+        public void Unhook()
         {
             SafeMethods.UnhookWindowsHookEx(HookHandle);
         }
@@ -95,7 +96,7 @@ namespace Langwitch
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
-
+        
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -116,7 +117,7 @@ namespace Langwitch
         }
 
         // This code added to correctly implement the disposable pattern.
-        void IDisposable.Dispose()
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

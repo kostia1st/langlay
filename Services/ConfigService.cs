@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Langwitch
 {
-    public class ConfigManager
+    public class ConfigService: IConfigService
     {
-        public IList<int> LanguageSwitchKeyArray { get; set; }
+        public IList<int> LanguageSwitchKeyArray { get; private set; }
         public Keys LanguageSwitchKeys { get { return ConvertIntsToKeys(LanguageSwitchKeyArray); } }
-        public IList<int> LayoutSwitchKeyArray { get; set; }
+        public IList<int> LayoutSwitchKeyArray { get; private set; }
         public Keys LayoutSwitchKeys { get { return ConvertIntsToKeys(LayoutSwitchKeyArray); } }
 
-        public ConfigManager()
+        public ConfigService()
         {
             LanguageSwitchKeyArray = new int[] { (int) Keys.CapsLock };
             LayoutSwitchKeyArray = new int[] { };
@@ -43,16 +42,16 @@ namespace Langwitch
 
         private void ReadArgument(string argument)
         {
-            if (!argument.StartsWith("-"))
-                throw new ArgumentException("Arguments must start with '-'");
-            var parts = argument.Substring(1).Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+            if (!argument.StartsWith("--"))
+                throw new ArgumentException("Arguments must start with '--'");
+            var parts = argument.Substring(2).Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
             var argumentName = parts[0];
             if (parts.Length > 1)
             {
                 var argumentValue = parts[1];
-                if (argumentName == "LanguageSwitchKeys")
+                if (argumentName == ArgumentNames.LanguageSwitchKeys)
                     LanguageSwitchKeyArray = ReadArray(argumentValue);
-                if (argumentName == "LayoutSwitchKeys")
+                if (argumentName == ArgumentNames.LayoutSwitchKeys)
                     LayoutSwitchKeyArray = ReadArray(argumentValue);
             }
         }
