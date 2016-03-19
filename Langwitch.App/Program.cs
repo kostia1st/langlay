@@ -16,7 +16,8 @@ namespace Langwitch
 
                 var configService = new ConfigService();
                 var overlayService = new OverlayService(configService);
-                var hotkeyService = new HotkeyService(configService, overlayService);
+                var languageService = new LanguageService(overlayService);
+                var hotkeyService = new HotkeyService(configService, languageService);
                 var trayService = new TrayService(configService)
                 {
                     OnExit = delegate { isExiting = true; }

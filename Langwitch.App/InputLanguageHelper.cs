@@ -52,7 +52,8 @@ namespace Langwitch
         public static void SetCurrentLayout(IntPtr layoutHandle)
         {
             var foregroundWindowHandle = SafeMethods.GetForegroundWindow();
-            SafeMethods.PostMessage(foregroundWindowHandle, SafeMethods.WM_INPUTLANGCHANGEREQUEST, 0, layoutHandle.ToInt32());
+            // TODO: Need to put a timeout here
+            SafeMethods.SendMessage(foregroundWindowHandle, SafeMethods.WM_INPUTLANGCHANGEREQUEST, 0, layoutHandle.ToInt32());
         }
     }
 }

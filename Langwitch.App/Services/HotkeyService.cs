@@ -9,20 +9,19 @@ namespace Langwitch
     {
         private GlobalKeyboardHook Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
-        private IOverlayService OverlayService { get; set; }
-        private IDictionary<string, IntPtr> CultureToLastUsedLayout
-            = new Dictionary<string, IntPtr>();
+        private ILanguageService LanguageService { get; set; }
         private bool IsStarted { get; set; }
 
         public HotkeyService(
-            IConfigService configService, IOverlayService overlayService)
+            IConfigService configService, 
+            ILanguageService languageService)
         {
             if (configService == null)
                 throw new ArgumentNullException("configService");
-            if (overlayService == null)
-                throw new ArgumentNullException("overlayService");
+            if (languageService == null)
+                throw new ArgumentNullException("languageService");
             ConfigService = configService;
-            OverlayService = overlayService;
+            LanguageService = languageService;
         }
 
         public void Start()
@@ -50,30 +49,7 @@ namespace Langwitch
 
         private void Hooker_KeyDown(object sender, KeyEventArgs e)
         {
-            try
-            {
-                var currentLanguage = InputLanguageHelper.GetGlobalCurrentInputLanguage();
-                if (currentLanguage != null)
-                {
-                    CultureToLastUsedLayout[currentLanguage.Culture.EnglishName] = currentLanguage.Handle;
-                    var nextLanguageName = InputLanguageHelper.GetNextInputLanguageName(currentLanguage.Culture.EnglishName);
-                    IntPtr layoutToSet;
-                    if (CultureToLastUsedLayout.ContainsKey(nextLanguageName))
-                        layoutToSet = CultureToLastUsedLayout[nextLanguageName];
-                    else
-                        layoutToSet = InputLanguageHelper.GetDefaultLayoutForLanguage(nextLanguageName);
-                    InputLanguageHelper.SetCurrentLayout(layoutToSet);
-
-                    var inputLayout = InputLanguageHelper.GetInputLanguageByHandle(layoutToSet);
-                    if (inputLayout != null)
-                        OverlayService.PushMessage(inputLayout.Culture.TwoLetterISOLanguageName + ": " + inputLayout.LayoutName);
-                    e.Handled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            e.Handled = LanguageService.SwitchLanguage();
         }
 
         #region IDisposable Support

@@ -42,11 +42,11 @@ namespace Langwitch
             }
         }
 
-        public void PushMessage(string message)
+        public void PushMessage(string languageName, string layoutName)
         {
             if (IsStarted)
             {
-                OverlayForm.PushMessage(message);
+                OverlayForm.PushMessage(languageName, layoutName);
             }
         }
     }

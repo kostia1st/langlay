@@ -63,13 +63,16 @@
     <Compile Include="InputLanguageHelper.cs" />
     <Compile Include="Services\HotkeyService.cs" />
     <Compile Include="Services\IConfigService.cs" />
+    <Compile Include="Services\ILanguageService.cs" />
     <Compile Include="Services\IOverlayService.cs" />
+    <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Services\OverlayService.cs" />
     <Compile Include="SafeMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\TrayService.cs" />
     <Compile Include="Services\UniquenessService.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
