@@ -42,7 +42,7 @@ namespace Langwitch
         {
             var firstLanguageLayout = InputLanguages.FirstOrDefault(x => x.Culture.EnglishName == languageName);
             if (firstLanguageLayout == null)
-                firstLanguageLayout = InputLanguages.First();
+                firstLanguageLayout = InputLanguages.FirstOrDefault();
             if (firstLanguageLayout == null)
                 throw new NullReferenceException("Not a single language's installed in the system");
 
