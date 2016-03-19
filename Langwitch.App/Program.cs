@@ -31,7 +31,7 @@ namespace Langwitch
                     overlayService.Start();
                     while (true)
                     {
-                        Thread.Sleep(1);
+                        Thread.Sleep(10);
                         try
                         {
                             Application.DoEvents();
