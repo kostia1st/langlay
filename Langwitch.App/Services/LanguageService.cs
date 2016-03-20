@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Langwitch
 {
@@ -10,11 +8,15 @@ namespace Langwitch
         private IDictionary<string, IntPtr> CultureToLastUsedLayout
             = new Dictionary<string, IntPtr>();
         private IOverlayService OverlayService { get; set; }
+        private IConfigService ConfigService { get; set; }
 
-        public LanguageService(IOverlayService overlayService)
+        public LanguageService(IConfigService configService, IOverlayService overlayService)
         {
+            if (configService == null)
+                throw new ArgumentNullException("configService");
             if (overlayService == null)
                 throw new ArgumentNullException("overlayService");
+            ConfigService = configService;
             OverlayService = overlayService;
         }
 

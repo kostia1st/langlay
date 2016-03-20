@@ -16,7 +16,7 @@ namespace Langwitch
 
                 var configService = new ConfigService();
                 var overlayService = new OverlayService(configService);
-                var languageService = new LanguageService(overlayService);
+                var languageService = new LanguageService(configService, overlayService);
                 var hotkeyService = new HotkeyService(configService, languageService);
                 var trayService = new TrayService(configService)
                 {
@@ -27,6 +27,7 @@ namespace Langwitch
                 {
                     configService.ReadFromConfigFile();
                     configService.ReadFromCommandLineArguments();
+
                     hotkeyService.Start();
                     trayService.Start();
                     overlayService.Start();
