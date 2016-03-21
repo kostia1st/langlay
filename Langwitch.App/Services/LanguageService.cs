@@ -20,23 +20,25 @@ namespace Langwitch
             OverlayService = overlayService;
         }
 
-        public bool SwitchLanguage()
+        public bool SwitchLanguage(bool restoreSavedLayout)
         {
             try
             {
-                var currentLanguage = InputLanguageHelper.GetGlobalCurrentInputLanguage();
+                var currentLanguage = InputLanguageHelper.GetCurrentInputLanguage();
                 if (currentLanguage != null)
                 {
+                    // Here we save the layout last used within the language, so that it could be restored later.
                     CultureToLastUsedLayout[currentLanguage.Culture.EnglishName] = currentLanguage.Handle;
+
                     var nextLanguageName = InputLanguageHelper.GetNextInputLanguageName(currentLanguage.Culture.EnglishName);
                     IntPtr layoutToSet;
-                    if (CultureToLastUsedLayout.ContainsKey(nextLanguageName))
+                    if (restoreSavedLayout && CultureToLastUsedLayout.ContainsKey(nextLanguageName))
                         layoutToSet = CultureToLastUsedLayout[nextLanguageName];
                     else
                         layoutToSet = InputLanguageHelper.GetDefaultLayoutForLanguage(nextLanguageName);
-                    InputLanguageHelper.SetCurrentLayout(layoutToSet);
+                    SetCurrentLayout(layoutToSet);
 
-                    currentLanguage = InputLanguageHelper.GetGlobalCurrentInputLanguage();
+                    currentLanguage = InputLanguageHelper.GetCurrentInputLanguage();
                     if (currentLanguage != null)
                     {
                         OverlayService.PushMessage(
@@ -52,5 +54,52 @@ namespace Langwitch
             }
             return false;
         }
+
+        public bool SwitchLayout(bool doWrap)
+        {
+            try
+            {
+                var currentLayout = InputLanguageHelper.GetCurrentInputLanguage();
+                if (currentLayout != null)
+                {
+                    var nextLayoutName = InputLanguageHelper.GetNextInputLayoutName(currentLayout.Culture.EnglishName, currentLayout.LayoutName, doWrap);
+
+                    if (!string.IsNullOrEmpty(nextLayoutName))
+                    {
+                        IntPtr layoutToSet = InputLanguageHelper.GetLayoutByLanguageAndLayoutName(currentLayout.Culture.EnglishName, nextLayoutName).Handle;
+                        SetCurrentLayout(layoutToSet);
+
+                        CultureToLastUsedLayout[currentLayout.Culture.EnglishName] = layoutToSet;
+                        currentLayout = InputLanguageHelper.GetCurrentInputLanguage();
+                        if (currentLayout != null)
+                        {
+                            OverlayService.PushMessage(
+                                currentLayout.Culture.TwoLetterISOLanguageName.CapitalizeFirst(),
+                                currentLayout.LayoutName);
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return false;
+        }
+
+        public bool SwitchLanguageAndLayout()
+        {
+            return SwitchLayout(false) || SwitchLanguage(false);
+
+        }
+
+        private static void SetCurrentLayout(IntPtr layoutHandle)
+        {
+            var foregroundWindowHandle = SafeMethods.GetForegroundWindow();
+            // TODO: Need to put a timeout here
+            SafeMethods.SendMessage(foregroundWindowHandle, SafeMethods.WM_INPUTLANGCHANGEREQUEST, 0, layoutHandle.ToInt32());
+        }
+
     }
 }

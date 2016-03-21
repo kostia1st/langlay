@@ -2,6 +2,8 @@
 {
     public interface ILanguageService
     {
-        bool SwitchLanguage();
+        bool SwitchLanguage(bool restoreLanguageLayout);
+        bool SwitchLayout(bool doWrap);
+        bool SwitchLanguageAndLayout();
     }
 }

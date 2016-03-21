@@ -7,31 +7,45 @@ namespace Langwitch
 {
     public static class InputLanguageHelper
     {
-        private static IEnumerable<InputLanguage> InputLanguages
+        private static IList<InputLanguage> InputLanguages
         {
-            get { return InputLanguage.InstalledInputLanguages.Cast<InputLanguage>(); }
+            get { return InputLanguage.InstalledInputLanguages.Cast<InputLanguage>().ToList(); }
+        }
+
+        public static IList<InputLanguage> GetLayoutsByLanguage(string languageName)
+        {
+            return InputLanguages.Where(x => x.Culture.EnglishName == languageName).ToList();
+        }
+
+        public static string GetNextInputLayoutName(string currentLanguageName, string currentLayoutName, bool doWrap)
+        {
+            var layoutNames = GetLayoutsByLanguage(currentLanguageName).Select(x => x.LayoutName).ToList();
+            var indexOfNext = layoutNames.IndexOf(currentLayoutName) + 1;
+            if (indexOfNext >= layoutNames.Count)
+            {
+                if (doWrap)
+                    return layoutNames[0];
+                else
+                    return null;
+            }
+            return layoutNames[indexOfNext];
         }
 
         public static InputLanguage GetInputLanguageByHandle(IntPtr handle)
         {
-            return InputLanguages.FirstOrDefault(x=> x.Handle == handle);
+            return InputLanguages.FirstOrDefault(x => x.Handle == handle);
         }
 
-        public static InputLanguage GetGlobalCurrentInputLanguage()
+        public static InputLanguage GetCurrentInputLanguage()
         {
             var currentLayoutHandle = SafeMethods.GetKeyboardLayout(
                SafeMethods.GetWindowThreadProcessId(SafeMethods.GetForegroundWindow(), 0));
             return InputLanguages.FirstOrDefault(x => x.Handle == currentLayoutHandle);
         }
 
-        public static IList<string> GetLanguageNamesOrdered()
-        {
-            return InputLanguages.Select(x => x.Culture.EnglishName).Distinct().ToList();
-        }
-
         public static string GetNextInputLanguageName(string currentLanguageName)
         {
-            var languageNames = GetLanguageNamesOrdered();
+            var languageNames = InputLanguages.Select(x => x.Culture.EnglishName).Distinct().ToList();
             var indexOfNext = languageNames.IndexOf(currentLanguageName) + 1;
             if (indexOfNext >= languageNames.Count)
                 indexOfNext = 0;
@@ -40,20 +54,21 @@ namespace Langwitch
 
         public static IntPtr GetDefaultLayoutForLanguage(string languageName)
         {
-            var firstLanguageLayout = InputLanguages.FirstOrDefault(x => x.Culture.EnglishName == languageName);
+            // Avoid re-evaluating properties
+            var inputLanguages = InputLanguages;
+            var firstLanguageLayout = inputLanguages.FirstOrDefault(x => x.Culture.EnglishName == languageName);
             if (firstLanguageLayout == null)
-                firstLanguageLayout = InputLanguages.FirstOrDefault();
+                firstLanguageLayout = inputLanguages.FirstOrDefault();
             if (firstLanguageLayout == null)
                 throw new NullReferenceException("Not a single language's installed in the system");
 
             return firstLanguageLayout.Handle;
         }
 
-        public static void SetCurrentLayout(IntPtr layoutHandle)
+        public static InputLanguage GetLayoutByLanguageAndLayoutName(string languageName, string layoutName)
         {
-            var foregroundWindowHandle = SafeMethods.GetForegroundWindow();
-            // TODO: Need to put a timeout here
-            SafeMethods.SendMessage(foregroundWindowHandle, SafeMethods.WM_INPUTLANGCHANGEREQUEST, 0, layoutHandle.ToInt32());
+            return InputLanguages.FirstOrDefault(x => x.Culture.EnglishName == languageName && x.LayoutName == layoutName);
         }
+
     }
 }

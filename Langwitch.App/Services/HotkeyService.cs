@@ -28,7 +28,10 @@ namespace Langwitch
             {
                 IsStarted = true;
                 Hooker = new GlobalKeyboardHook(false);
-                Hooker.HookedKeys.Add(ConfigService.LanguageSwitchKeys);
+                if (ConfigService.LanguageSwitchKeys != default(Keys))
+                    Hooker.HookedKeys.Add(ConfigService.LanguageSwitchKeys);
+                if (ConfigService.LayoutSwitchKeys != default(Keys))
+                    Hooker.HookedKeys.Add(ConfigService.LayoutSwitchKeys);
 
                 Hooker.KeyDown = Hooker_KeyDown;
                 Hooker.Hook();
@@ -47,7 +50,15 @@ namespace Langwitch
 
         private void Hooker_KeyDown(object sender, KeyEventArgs e)
         {
-            e.Handled = LanguageService.SwitchLanguage();
+            if (e.KeyCode == ConfigService.LanguageSwitchKeys)
+            {
+                if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+                    e.Handled = LanguageService.SwitchLanguageAndLayout();
+                else
+                    e.Handled = LanguageService.SwitchLanguage(true);
+            }
+            else if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+                e.Handled = LanguageService.SwitchLayout(true);
         }
 
         #region IDisposable Support

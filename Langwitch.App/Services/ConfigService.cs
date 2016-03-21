@@ -58,7 +58,7 @@ namespace Langwitch
                 else if (argumentName == ArgumentNames.LayoutSwitchKeys)
                     LayoutSwitchKeyArray = ReadArray(argumentValue);
                 else if (argumentName == ArgumentNames.ShowOverlay)
-                    ShowOverlay = bool.Parse(argumentValue);
+                    ShowOverlay = Utils.ParseBool(argumentValue, false);
                 else if (argumentName == ArgumentNames.OverlayMilliseconds)
                     OverlayMilliseconds = long.Parse(argumentValue);
             }
