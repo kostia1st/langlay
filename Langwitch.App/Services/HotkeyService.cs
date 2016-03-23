@@ -34,6 +34,7 @@ namespace Langwitch
                     Hooker.HookedKeys.Add(ConfigService.LayoutSwitchKeys);
 
                 Hooker.KeyDown = Hooker_KeyDown;
+                Hooker.KeyUp = Hooker_KeyUp;
                 Hooker.Hook();
             }
         }
@@ -59,6 +60,17 @@ namespace Langwitch
             }
             else if (e.KeyCode == ConfigService.LayoutSwitchKeys)
                 e.Handled = LanguageService.SwitchLayout(true);
+        }
+
+        private void Hooker_KeyUp(object sender, KeyEventArgs e)
+        {
+            // We're supposed to handle the key-up as well as the key-down
+            // otherwise the target app will face a strange situation,
+            // which is not guaranteed to work properly.
+            if (e.KeyCode == ConfigService.LanguageSwitchKeys)
+                e.Handled = true;
+            else if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+                e.Handled = true;
         }
 
         #region IDisposable Support

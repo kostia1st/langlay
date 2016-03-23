@@ -13,6 +13,16 @@ namespace Langwitch
 
         public const int WM_INPUTLANGCHANGEREQUEST = 0x0050;
 
+        [Flags]
+        public enum SendMessageTimeoutFlags : uint
+        {
+            SMTO_NORMAL = 0x0,
+            SMTO_BLOCK = 0x1,
+            SMTO_ABORTIFHUNG = 0x2,
+            SMTO_NOTIMEOUTIFNOTHUNG = 0x8,
+            SMTO_ERRORONEXIT = 0x20
+        }
+
         public const int WS_EX_TOOLWINDOW = 0x00000080;
         public const int WS_EX_NOACTIVATE = 0x08000000;
         public const int WS_EX_APPWINDOW = 0x00040000;
@@ -30,6 +40,15 @@ namespace Langwitch
         public static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
         [DllImport("user32.dll")]
         public static extern bool SendMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessageTimeout(
+            IntPtr windowHandle,
+            uint Msg,
+            int wParam,
+            int lParam,
+            SendMessageTimeoutFlags flags,
+            uint timeout,
+            out IntPtr result);
 
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         public static extern IntPtr CreateRoundRectRgn

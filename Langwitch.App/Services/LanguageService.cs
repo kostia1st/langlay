@@ -94,11 +94,15 @@ namespace Langwitch
 
         }
 
-        private static void SetCurrentLayout(IntPtr layoutHandle)
+        private void SetCurrentLayout(IntPtr layoutHandle)
         {
             var foregroundWindowHandle = SafeMethods.GetForegroundWindow();
-            // TODO: Need to put a timeout here
-            SafeMethods.SendMessage(foregroundWindowHandle, SafeMethods.WM_INPUTLANGCHANGEREQUEST, 0, layoutHandle.ToInt32());
+
+            // TODO: this does not work with Skype, for some reason.
+            IntPtr result;
+            SafeMethods.SendMessageTimeout(
+                foregroundWindowHandle, SafeMethods.WM_INPUTLANGCHANGEREQUEST, 0, layoutHandle.ToInt32(),
+                SafeMethods.SendMessageTimeoutFlags.SMTO_ABORTIFHUNG, 500, out result);
         }
 
     }
