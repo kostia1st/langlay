@@ -13,6 +13,33 @@ namespace Langwitch
             return first + rest;
         }
 
+        public static int ParseInt(object value, int defaultValue)
+        {
+            return ParseInt(value, (int?) defaultValue).Value;
+        }
+
+        public static int? ParseInt(object value, int? defaultValue = null)
+        {
+            if (value != null)
+            {
+                if (value is string)
+                {
+                    int result;
+                    if (int.TryParse((string) value, out result))
+                        return result;
+                }
+                else
+                {
+                    try
+                    {
+                        return Convert.ToInt32(value);
+                    }
+                    catch { }
+                }
+            }
+            return defaultValue;
+        }
+
         public static bool ParseBool(object value, bool defaultValue)
         {
             return ParseBool(value, (bool?) defaultValue).Value;

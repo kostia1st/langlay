@@ -14,12 +14,14 @@ namespace Langwitch
         public Keys LayoutSwitchKeys { get { return ConvertIntsToKeys(LayoutSwitchKeyArray); } }
         public bool ShowOverlay { get; private set; }
         public long OverlayMilliseconds { get; private set; }
+        public SwitchMethod SwitchMethod { get; private set; }
 
         public ConfigService()
         {
             LanguageSwitchKeyArray = new int[] { (int) Keys.CapsLock };
             LayoutSwitchKeyArray = new int[] { };
-            ShowOverlay= true;
+            SwitchMethod = SwitchMethod.Message;
+            ShowOverlay = true;
             OverlayMilliseconds = 1000;
         }
 
@@ -61,6 +63,9 @@ namespace Langwitch
                     ShowOverlay = Utils.ParseBool(argumentValue, false);
                 else if (argumentName == ArgumentNames.OverlayMilliseconds)
                     OverlayMilliseconds = long.Parse(argumentValue);
+                else if (argumentName == ArgumentNames.SwitchMethod)
+                    SwitchMethod = string.Equals(argumentValue, ArgumentNames.SwitchMethod_Message, StringComparison.InvariantCultureIgnoreCase) 
+                        ? SwitchMethod.Message : SwitchMethod.InputSimulation;
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Langwitch
 {
@@ -9,15 +10,21 @@ namespace Langwitch
             = new Dictionary<string, IntPtr>();
         private IOverlayService OverlayService { get; set; }
         private IConfigService ConfigService { get; set; }
+        private ILanguageSetterService LanguageSetterService { get; set; }
 
-        public LanguageService(IConfigService configService, IOverlayService overlayService)
+        public LanguageService(
+            IConfigService configService, IOverlayService overlayService,
+            ILanguageSetterService languageSetterService)
         {
             if (configService == null)
                 throw new ArgumentNullException("configService");
             if (overlayService == null)
                 throw new ArgumentNullException("overlayService");
+            if (languageSetterService == null)
+                throw new ArgumentNullException("languageSetterService");
             ConfigService = configService;
             OverlayService = overlayService;
+            LanguageSetterService = languageSetterService;
         }
 
         public bool SwitchLanguage(bool restoreSavedLayout)
@@ -36,8 +43,8 @@ namespace Langwitch
                         layoutToSet = CultureToLastUsedLayout[nextLanguageName];
                     else
                         layoutToSet = InputLanguageHelper.GetDefaultLayoutForLanguage(nextLanguageName);
-                    SetCurrentLayout(layoutToSet);
-
+                    LanguageSetterService.SetCurrentLayout(layoutToSet);
+                    Thread.Sleep(10);
                     currentLanguage = InputLanguageHelper.GetCurrentInputLanguage();
                     if (currentLanguage != null)
                     {
@@ -67,9 +74,10 @@ namespace Langwitch
                     if (!string.IsNullOrEmpty(nextLayoutName))
                     {
                         IntPtr layoutToSet = InputLanguageHelper.GetLayoutByLanguageAndLayoutName(currentLayout.Culture.EnglishName, nextLayoutName).Handle;
-                        SetCurrentLayout(layoutToSet);
+                        LanguageSetterService.SetCurrentLayout(layoutToSet);
 
                         CultureToLastUsedLayout[currentLayout.Culture.EnglishName] = layoutToSet;
+                        Thread.Sleep(10);
                         currentLayout = InputLanguageHelper.GetCurrentInputLanguage();
                         if (currentLayout != null)
                         {
@@ -93,17 +101,5 @@ namespace Langwitch
             return SwitchLayout(false) || SwitchLanguage(false);
 
         }
-
-        private void SetCurrentLayout(IntPtr layoutHandle)
-        {
-            var foregroundWindowHandle = SafeMethods.GetForegroundWindow();
-
-            // TODO: this does not work with Skype, for some reason.
-            IntPtr result;
-            SafeMethods.SendMessageTimeout(
-                foregroundWindowHandle, SafeMethods.WM_INPUTLANGCHANGEREQUEST, 0, layoutHandle.ToInt32(),
-                SafeMethods.SendMessageTimeoutFlags.SMTO_ABORTIFHUNG, 500, out result);
-        }
-
     }
 }
