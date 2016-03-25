@@ -31,26 +31,27 @@ namespace Langwitch
         {
             try
             {
-                var currentLanguage = InputLanguageHelper.GetCurrentInputLanguage();
+                var currentLanguage = InputLayoutHelper.GetCurrentLayout();
                 if (currentLanguage != null)
                 {
                     // Here we save the layout last used within the language, so that it could be restored later.
-                    CultureToLastUsedLayout[currentLanguage.Culture.EnglishName] = currentLanguage.Handle;
+                    CultureToLastUsedLayout[currentLanguage.LanguageName] = currentLanguage.Handle;
 
-                    var nextLanguageName = InputLanguageHelper.GetNextInputLanguageName(currentLanguage.Culture.EnglishName);
+                    var nextLanguageName = InputLayoutHelper.GetNextInputLanguageName(
+                        currentLanguage.LanguageName);
                     IntPtr layoutToSet;
                     if (restoreSavedLayout && CultureToLastUsedLayout.ContainsKey(nextLanguageName))
                         layoutToSet = CultureToLastUsedLayout[nextLanguageName];
                     else
-                        layoutToSet = InputLanguageHelper.GetDefaultLayoutForLanguage(nextLanguageName);
+                        layoutToSet = InputLayoutHelper.GetDefaultLayoutForLanguage(nextLanguageName);
                     LanguageSetterService.SetCurrentLayout(layoutToSet);
                     Thread.Sleep(10);
-                    currentLanguage = InputLanguageHelper.GetCurrentInputLanguage();
+                    currentLanguage = InputLayoutHelper.GetCurrentLayout();
                     if (currentLanguage != null)
                     {
                         OverlayService.PushMessage(
-                            currentLanguage.Culture.TwoLetterISOLanguageName.CapitalizeFirst(),
-                            currentLanguage.LayoutName);
+                            currentLanguage.LanguageNameTwoLetter.CapitalizeFirst(),
+                            currentLanguage.Name);
                         return true;
                     }
                 }
@@ -66,24 +67,25 @@ namespace Langwitch
         {
             try
             {
-                var currentLayout = InputLanguageHelper.GetCurrentInputLanguage();
+                var currentLayout = InputLayoutHelper.GetCurrentLayout();
                 if (currentLayout != null)
                 {
-                    var nextLayoutName = InputLanguageHelper.GetNextInputLayoutName(currentLayout.Culture.EnglishName, currentLayout.LayoutName, doWrap);
+                    var nextLayoutName = InputLayoutHelper.GetNextInputLayoutName(
+                        currentLayout.LanguageName, currentLayout.Name, doWrap);
 
                     if (!string.IsNullOrEmpty(nextLayoutName))
                     {
-                        IntPtr layoutToSet = InputLanguageHelper.GetLayoutByLanguageAndLayoutName(currentLayout.Culture.EnglishName, nextLayoutName).Handle;
+                        IntPtr layoutToSet = InputLayoutHelper.GetLayoutByLanguageAndLayoutName(
+                            currentLayout.LanguageName, nextLayoutName).Handle;
                         LanguageSetterService.SetCurrentLayout(layoutToSet);
 
-                        CultureToLastUsedLayout[currentLayout.Culture.EnglishName] = layoutToSet;
-                        Thread.Sleep(10);
-                        currentLayout = InputLanguageHelper.GetCurrentInputLanguage();
+                        CultureToLastUsedLayout[currentLayout.LanguageName] = layoutToSet;
+                        currentLayout = InputLayoutHelper.GetCurrentLayout();
                         if (currentLayout != null)
                         {
                             OverlayService.PushMessage(
-                                currentLayout.Culture.TwoLetterISOLanguageName.CapitalizeFirst(),
-                                currentLayout.LayoutName);
+                                currentLayout.LanguageNameTwoLetter.CapitalizeFirst(),
+                                currentLayout.Name);
                             return true;
                         }
                     }

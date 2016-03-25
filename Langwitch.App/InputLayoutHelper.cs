@@ -5,21 +5,29 @@ using System.Windows.Forms;
 
 namespace Langwitch
 {
-    public static class InputLanguageHelper
+    public static class InputLayoutHelper
     {
-        private static IList<InputLanguage> InputLanguages
+        public static IList<InputLayout> InputLayouts
         {
-            get { return InputLanguage.InstalledInputLanguages.Cast<InputLanguage>().ToList(); }
+            get
+            {
+                return InputLanguage.InstalledInputLanguages
+                  .Cast<InputLanguage>()
+                  .Select(x => new InputLayout(x))
+                  .ToList();
+            }
         }
 
-        public static IList<InputLanguage> GetLayoutsByLanguage(string languageName)
+        public static IList<InputLayout> GetLayoutsByLanguage(string languageName)
         {
-            return InputLanguages.Where(x => x.Culture.EnglishName == languageName).ToList();
+            return InputLayouts.Where(x => x.LanguageName == languageName).ToList();
         }
 
         public static string GetNextInputLayoutName(string currentLanguageName, string currentLayoutName, bool doWrap)
         {
-            var layoutNames = GetLayoutsByLanguage(currentLanguageName).Select(x => x.LayoutName).ToList();
+            var layoutNames = GetLayoutsByLanguage(currentLanguageName)
+                .Select(x => x.Name)
+                .ToList();
             var indexOfNext = layoutNames.IndexOf(currentLayoutName) + 1;
             if (indexOfNext >= layoutNames.Count)
             {
@@ -31,21 +39,21 @@ namespace Langwitch
             return layoutNames[indexOfNext];
         }
 
-        public static InputLanguage GetInputLanguageByHandle(IntPtr handle)
+        public static InputLayout GetInputLanguageByHandle(IntPtr handle)
         {
-            return InputLanguages.FirstOrDefault(x => x.Handle == handle);
+            return InputLayouts.FirstOrDefault(x => x.Handle == handle);
         }
 
-        public static InputLanguage GetCurrentInputLanguage()
+        public static InputLayout GetCurrentLayout()
         {
             var currentLayoutHandle = SafeMethods.GetKeyboardLayout(
                SafeMethods.GetWindowThreadProcessId(SafeMethods.GetForegroundWindow(), 0));
-            return InputLanguages.FirstOrDefault(x => x.Handle == currentLayoutHandle);
+            return InputLayouts.FirstOrDefault(x => x.Handle == currentLayoutHandle);
         }
 
         public static string GetNextInputLanguageName(string currentLanguageName)
         {
-            var languageNames = InputLanguages.Select(x => x.Culture.EnglishName).Distinct().ToList();
+            var languageNames = InputLayouts.Select(x => x.LanguageName).Distinct().ToList();
             var indexOfNext = languageNames.IndexOf(currentLanguageName) + 1;
             if (indexOfNext >= languageNames.Count)
                 indexOfNext = 0;
@@ -55,8 +63,8 @@ namespace Langwitch
         public static IntPtr GetDefaultLayoutForLanguage(string languageName)
         {
             // Avoid re-evaluating properties
-            var inputLanguages = InputLanguages;
-            var firstLanguageLayout = inputLanguages.FirstOrDefault(x => x.Culture.EnglishName == languageName);
+            var inputLanguages = InputLayouts;
+            var firstLanguageLayout = inputLanguages.FirstOrDefault(x => x.LanguageName == languageName);
             if (firstLanguageLayout == null)
                 firstLanguageLayout = inputLanguages.FirstOrDefault();
             if (firstLanguageLayout == null)
@@ -65,9 +73,9 @@ namespace Langwitch
             return firstLanguageLayout.Handle;
         }
 
-        public static InputLanguage GetLayoutByLanguageAndLayoutName(string languageName, string layoutName)
+        public static InputLayout GetLayoutByLanguageAndLayoutName(string languageName, string layoutName)
         {
-            return InputLanguages.FirstOrDefault(x => x.Culture.EnglishName == languageName && x.LayoutName == layoutName);
+            return InputLayouts.FirstOrDefault(x => x.LanguageName == languageName && x.Name == layoutName);
         }
 
     }
