@@ -119,7 +119,7 @@ namespace Langwitch
 
                 if (amountOfLayoutSwitches > 0)
                 {
-                    if (CurrentLayoutSwitch == 0)
+                    if (CurrentLayoutSwitch == null)
                         throw new Exception(
                             "cannot enumerate layouts, because the system key sequence was not set");
                     SendSequence(CurrentLayoutSwitch.Value, amountOfLayoutSwitches);
