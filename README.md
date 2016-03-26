@@ -6,4 +6,4 @@ Whenever you press your custom keystroke (Caps Lock by default), it just changes
 
 Note, changing input language and changing keyboard layout - are different actions for this tool. And you are free to customize the most preferable way of working with all these matters.
 
-[Installer download link](https://github.com/estorski/langwitch/blob/master/Langwitch.Installer/Release/Langwitch.msi?raw=true)
+[>>> Installer download link <<<](https://github.com/estorski/langwitch/releases/download/v1.0/Langwitch.msi)
