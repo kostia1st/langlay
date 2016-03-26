@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Langwitch
@@ -10,19 +11,27 @@ namespace Langwitch
         public long MillisecondsToKeepVisible { get; set; }
         private const long MillisecondsToFadeOut = 200;
         private const double VisibleOpacity = 0.8;
+        private Brush BrushLanguage { get; set; }
+        private Brush BrushLayout { get; set; }
+        public string LanguageName { get; set; }
+        public string LayoutName { get; set; }
+        private Font FontLanguage { get; set; }
+        private Font FontLayout { get; set; }
+        private const int MinWidth = 140;
 
         public OverlayForm()
         {
             InitializeComponent();
             WatchElapsed = new Stopwatch();
+            BrushLanguage = new SolidBrush(Color.White);
+            BrushLayout = new SolidBrush(Color.Gray);
+            FontLanguage = new Font(Font.FontFamily, 28);
+            FontLayout = new Font(Font.FontFamily, 14);
         }
 
-        protected override bool ShowWithoutActivation 
-        {
-            get { return true; }
-        }
+        protected override bool ShowWithoutActivation { get { return true; } }
 
-        protected override CreateParams CreateParams 
+        protected override CreateParams CreateParams
         {
             get
             {
@@ -42,37 +51,59 @@ namespace Langwitch
 
             WatchElapsed.Restart();
 
-            UpdateSizeAndPosition();
+            UpdateRegionAndPosition();
             timerOverlay.Start();
             OnTimer();
             Visible = true;
 
         }
 
-        private void UpdateSizeAndPosition()
+        private IntPtr RegionHandle { get; set; }
+        private void UpdateRegionAndPosition()
         {
+            using (var g = this.CreateGraphics())
+            {
+                var sizeLanguage = g.MeasureString(LanguageName, FontLanguage);
+                var sizeLayout = g.MeasureString(LayoutName, FontLayout);
+                this.Size = new Size(
+                    Math.Max((int) Math.Max(sizeLanguage.Width, sizeLayout.Width) + 40, MinWidth), 
+                    (int) sizeLanguage.Height + (int) sizeLayout.Height + 20);
+            }
+
             var screenBounds = Screen.PrimaryScreen.Bounds;
             Top = screenBounds.Top + screenBounds.Height - (int) (screenBounds.Height * 0.2);
             Left = screenBounds.Left + ((screenBounds.Width - Width) / 2);
-            
-            var hrgn = SafeMethods.CreateRoundRectRgn(0, 0, Width, Height, 20, 20);
-            try
-            {
-                Region = System.Drawing.Region.FromHrgn(hrgn);
-            }
-            finally
-            {
-                // Make sure we free this unmanaged resource
-                SafeMethods.DeleteObject(hrgn);
-            }
 
+            SetRoundedRegion();
         }
 
-        public void PushMessage(string message)
+        private void SetRoundedRegion()
         {
-            labelOverlay.Text = "";
+            if (Region != null)
+            {
+                Region.Dispose();
+                Region = null;
+            }
+            if (RegionHandle != IntPtr.Zero)
+            {
+                // Make sure we free this unmanaged resource whenever we don't use it anymore
+                SafeMethods.DeleteObject(RegionHandle);
+                RegionHandle = IntPtr.Zero;
+            }
+            RegionHandle = SafeMethods.CreateRoundRectRgn(0, 0, Width, Height, 20, 20);
+            Region = System.Drawing.Region.FromHrgn(RegionHandle);
+            UpdateBounds();
+        }
+
+        public void PushMessage(string languageName, string layoutName)
+        {
+            this.LanguageName = "";
+            this.LayoutName = "";
+            this.Invalidate();
+            Application.DoEvents();
             Visible = false;
-            labelOverlay.Text = message;
+            this.LanguageName = languageName;
+            this.LayoutName = layoutName;
             ResetAndRun();
         }
 
@@ -99,7 +130,6 @@ namespace Langwitch
             Opacity = GetOpacity(WatchElapsed.ElapsedMilliseconds);
             if (Opacity == 0)
             {
-                labelOverlay.Text = "";
                 timerOverlay.Stop();
                 WatchElapsed.Stop();
                 Visible = false;
@@ -109,6 +139,16 @@ namespace Langwitch
         private void timerOverlay_Tick(object sender, EventArgs e)
         {
             OnTimer();
+        }
+
+        private void OverlayForm_Paint(object sender, PaintEventArgs e)
+        {
+            var sizeLanguage = e.Graphics.MeasureString(LanguageName, FontLanguage);
+            var sizeLayout = e.Graphics.MeasureString(LayoutName, FontLayout);
+            var pointLanguage = new PointF((Width - sizeLanguage.Width) / 2, (Height - sizeLanguage.Height - sizeLayout.Height) / 2);
+            var pointLayout = new PointF((Width - sizeLayout.Width) / 2, pointLanguage.Y + sizeLanguage.Height);
+            e.Graphics.DrawString(this.LanguageName, this.FontLanguage, this.BrushLanguage, pointLanguage);
+            e.Graphics.DrawString(this.LayoutName, this.FontLayout, this.BrushLayout, pointLayout);
         }
     }
 }

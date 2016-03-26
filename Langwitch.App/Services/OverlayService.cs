@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Langwitch
+﻿namespace Langwitch
 {
     public class OverlayService: IOverlayService
     {
@@ -42,11 +37,11 @@ namespace Langwitch
             }
         }
 
-        public void PushMessage(string message)
+        public void PushMessage(string languageName, string layoutName)
         {
             if (IsStarted)
             {
-                OverlayForm.PushMessage(message);
+                OverlayForm.PushMessage(languageName, layoutName);
             }
         }
     }

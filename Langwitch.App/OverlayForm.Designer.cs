@@ -29,22 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.labelOverlay = new System.Windows.Forms.Label();
             this.timerOverlay = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
-            // 
-            // labelOverlay
-            // 
-            this.labelOverlay.AutoSize = true;
-            this.labelOverlay.Font = new System.Drawing.Font("Tahoma", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelOverlay.Location = new System.Drawing.Point(0, 0);
-            this.labelOverlay.Margin = new System.Windows.Forms.Padding(0);
-            this.labelOverlay.MinimumSize = new System.Drawing.Size(20, 20);
-            this.labelOverlay.Name = "labelOverlay";
-            this.labelOverlay.Padding = new System.Windows.Forms.Padding(30, 10, 30, 10);
-            this.labelOverlay.Size = new System.Drawing.Size(124, 68);
-            this.labelOverlay.TabIndex = 0;
-            this.labelOverlay.Text = "En";
             // 
             // timerOverlay
             // 
@@ -55,16 +41,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.BackColor = System.Drawing.Color.Black;
             this.CausesValidation = false;
-            this.ClientSize = new System.Drawing.Size(116, 76);
+            this.ClientSize = new System.Drawing.Size(120, 76);
             this.ControlBox = false;
-            this.Controls.Add(this.labelOverlay);
-            this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Font = new System.Drawing.Font("Tahoma", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
@@ -77,14 +60,12 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Overlay";
             this.TopMost = true;
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.OverlayForm_Paint);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label labelOverlay;
         private System.Windows.Forms.Timer timerOverlay;
     }
 }

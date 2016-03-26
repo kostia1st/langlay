@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Langwitch
@@ -9,20 +7,19 @@ namespace Langwitch
     {
         private GlobalKeyboardHook Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
-        private IOverlayService OverlayService { get; set; }
-        private IDictionary<string, IntPtr> CultureToLastUsedLayout
-            = new Dictionary<string, IntPtr>();
+        private ILanguageService LanguageService { get; set; }
         private bool IsStarted { get; set; }
 
         public HotkeyService(
-            IConfigService configService, IOverlayService overlayService)
+            IConfigService configService, 
+            ILanguageService languageService)
         {
             if (configService == null)
                 throw new ArgumentNullException("configService");
-            if (overlayService == null)
-                throw new ArgumentNullException("overlayService");
+            if (languageService == null)
+                throw new ArgumentNullException("languageService");
             ConfigService = configService;
-            OverlayService = overlayService;
+            LanguageService = languageService;
         }
 
         public void Start()
@@ -31,9 +28,13 @@ namespace Langwitch
             {
                 IsStarted = true;
                 Hooker = new GlobalKeyboardHook(false);
-                Hooker.HookedKeys.Add(ConfigService.LanguageSwitchKeys);
+                if (ConfigService.LanguageSwitchKeys != default(Keys))
+                    Hooker.HookedKeys.Add(ConfigService.LanguageSwitchKeys);
+                if (ConfigService.LayoutSwitchKeys != default(Keys))
+                    Hooker.HookedKeys.Add(ConfigService.LayoutSwitchKeys);
 
                 Hooker.KeyDown = Hooker_KeyDown;
+                Hooker.KeyUp = Hooker_KeyUp;
                 Hooker.Hook();
             }
         }
@@ -50,30 +51,26 @@ namespace Langwitch
 
         private void Hooker_KeyDown(object sender, KeyEventArgs e)
         {
-            try
+            if (e.KeyCode == ConfigService.LanguageSwitchKeys)
             {
-                var currentLanguage = InputLanguageHelper.GetGlobalCurrentInputLanguage();
-                if (currentLanguage != null)
-                {
-                    CultureToLastUsedLayout[currentLanguage.Culture.EnglishName] = currentLanguage.Handle;
-                    var nextLanguageName = InputLanguageHelper.GetNextInputLanguageName(currentLanguage.Culture.EnglishName);
-                    IntPtr layoutToSet;
-                    if (CultureToLastUsedLayout.ContainsKey(nextLanguageName))
-                        layoutToSet = CultureToLastUsedLayout[nextLanguageName];
-                    else
-                        layoutToSet = InputLanguageHelper.GetDefaultLayoutForLanguage(nextLanguageName);
-                    InputLanguageHelper.SetCurrentLayout(layoutToSet);
+                if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+                    e.Handled = LanguageService.SwitchLanguageAndLayout();
+                else
+                    e.Handled = LanguageService.SwitchLanguage(true);
+            }
+            else if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+                e.Handled = LanguageService.SwitchLayout(true);
+        }
 
-                    var inputLayout = InputLanguageHelper.GetInputLanguageByHandle(layoutToSet);
-                    if (inputLayout != null)
-                        OverlayService.PushMessage(inputLayout.Culture.TwoLetterISOLanguageName + ": " + inputLayout.LayoutName);
-                    e.Handled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+        private void Hooker_KeyUp(object sender, KeyEventArgs e)
+        {
+            // We're supposed to handle the key-up as well as the key-down
+            // otherwise the target app will face a strange situation,
+            // which is not guaranteed to work properly.
+            if (e.KeyCode == ConfigService.LanguageSwitchKeys)
+                e.Handled = true;
+            else if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+                e.Handled = true;
         }
 
         #region IDisposable Support

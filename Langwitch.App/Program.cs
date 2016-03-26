@@ -15,8 +15,18 @@ namespace Langwitch
                 var isExiting = false;
 
                 var configService = new ConfigService();
+                configService.ReadFromConfigFile();
+                configService.ReadFromCommandLineArguments();
+
+                ILanguageSetterService languageSetterService;
+                if (configService.SwitchMethod == SwitchMethod.InputSimulation)
+                    languageSetterService = new SimulatorLanguageSetterService();
+                else
+                    languageSetterService = new MessageLanguageSetterService();
+
                 var overlayService = new OverlayService(configService);
-                var hotkeyService = new HotkeyService(configService, overlayService);
+                var languageService = new LanguageService(configService, overlayService, languageSetterService);
+                var hotkeyService = new HotkeyService(configService, languageService);
                 var trayService = new TrayService(configService)
                 {
                     OnExit = delegate { isExiting = true; }
@@ -24,8 +34,7 @@ namespace Langwitch
 
                 try
                 {
-                    configService.ReadFromConfigFile();
-                    configService.ReadFromCommandLineArguments();
+
                     hotkeyService.Start();
                     trayService.Start();
                     overlayService.Start();
