@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Langwitch
 {
-    public class ConfigService: IConfigService
+    public class ConfigService : IConfigService
     {
         public IList<int> LanguageSwitchKeyArray { get; private set; }
         public Keys LanguageSwitchKeys { get { return ConvertIntsToKeys(LanguageSwitchKeyArray); } }
@@ -46,6 +46,21 @@ namespace Langwitch
             return arrayString.Split(new[] { '+' }).Select(x => int.Parse(x)).ToList();
         }
 
+        private void ReadArgument(string name, string value)
+        {
+            if (name == ArgumentNames.LanguageSwitchKeys)
+                LanguageSwitchKeyArray = ReadArray(value);
+            else if (name == ArgumentNames.LayoutSwitchKeys)
+                LayoutSwitchKeyArray = ReadArray(value);
+            else if (name == ArgumentNames.ShowOverlay)
+                ShowOverlay = Utils.ParseBool(value, false);
+            else if (name == ArgumentNames.OverlayMilliseconds)
+                OverlayMilliseconds = long.Parse(value);
+            else if (name == ArgumentNames.SwitchMethod)
+                SwitchMethod = string.Equals(value, ArgumentNames.SwitchMethod_Message, StringComparison.InvariantCultureIgnoreCase)
+                    ? SwitchMethod.Message : SwitchMethod.InputSimulation;
+        }
+
         private void ReadArgument(string argument)
         {
             if (!argument.StartsWith("--"))
@@ -54,25 +69,27 @@ namespace Langwitch
             var argumentName = parts[0];
             if (parts.Length > 1)
             {
-                var argumentValue = parts[1];
-                if (argumentName == ArgumentNames.LanguageSwitchKeys)
-                    LanguageSwitchKeyArray = ReadArray(argumentValue);
-                else if (argumentName == ArgumentNames.LayoutSwitchKeys)
-                    LayoutSwitchKeyArray = ReadArray(argumentValue);
-                else if (argumentName == ArgumentNames.ShowOverlay)
-                    ShowOverlay = Utils.ParseBool(argumentValue, false);
-                else if (argumentName == ArgumentNames.OverlayMilliseconds)
-                    OverlayMilliseconds = long.Parse(argumentValue);
-                else if (argumentName == ArgumentNames.SwitchMethod)
-                    SwitchMethod = string.Equals(argumentValue, ArgumentNames.SwitchMethod_Message, StringComparison.InvariantCultureIgnoreCase) 
-                        ? SwitchMethod.Message : SwitchMethod.InputSimulation;
+                ReadArgument(argumentName, parts[1]);
             }
         }
 
         public void ReadFromConfigFile()
         {
-            var arguments = ConfigurationManager.AppSettings["app:arguments"];
-            ReadFromString(arguments);
+            foreach (var key in ConfigurationManager.AppSettings.AllKeys)
+            {
+                if (key.StartsWith("app:"))
+                {
+                    var settingName = key.Substring(4);
+                    if (settingName == "arguments")
+                    {
+                        var arguments = ConfigurationManager.AppSettings[key];
+                        ReadFromString(arguments);
+                    }
+                    else
+                        ReadArgument(settingName, ConfigurationManager.AppSettings[key]);
+
+                }
+            }
         }
 
         public void ReadFromCommandLineArguments()
