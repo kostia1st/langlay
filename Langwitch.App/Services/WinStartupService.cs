@@ -31,7 +31,7 @@ namespace Langwitch
         {
             using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath, true))
             {
-                if (!string.IsNullOrEmpty(pathToExecutable))
+                if (shouldRun && !string.IsNullOrEmpty(pathToExecutable))
                     key.SetValue(AppName, pathToExecutable);
                 else
                     key.DeleteValue(AppName, false);
