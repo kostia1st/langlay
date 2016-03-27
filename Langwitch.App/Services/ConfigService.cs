@@ -15,14 +15,16 @@ namespace Langwitch
         public bool ShowOverlay { get; private set; }
         public long OverlayMilliseconds { get; private set; }
         public SwitchMethod SwitchMethod { get; private set; }
+        public bool DoRunAtWindowsStartup { get; private set; }
 
         public ConfigService()
         {
             LanguageSwitchKeyArray = new int[] { (int) Keys.CapsLock };
             LayoutSwitchKeyArray = new int[] { };
-            SwitchMethod = SwitchMethod.Message;
+            SwitchMethod = SwitchMethod.InputSimulation;
             ShowOverlay = true;
-            OverlayMilliseconds = 1000;
+            OverlayMilliseconds = 500;
+            DoRunAtWindowsStartup = true;
         }
 
         private Keys ConvertIntsToKeys(IList<int> ints)
@@ -59,6 +61,8 @@ namespace Langwitch
             else if (name == ArgumentNames.SwitchMethod)
                 SwitchMethod = string.Equals(value, ArgumentNames.SwitchMethod_Message, StringComparison.InvariantCultureIgnoreCase)
                     ? SwitchMethod.Message : SwitchMethod.InputSimulation;
+            else if (name == ArgumentNames.RunAtWindowsStartup)
+                DoRunAtWindowsStartup = Utils.ParseBool(value, false);
         }
 
         private void ReadArgument(string argument)

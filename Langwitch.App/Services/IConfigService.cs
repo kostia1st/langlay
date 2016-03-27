@@ -11,5 +11,6 @@ namespace Langwitch
         Keys LayoutSwitchKeys { get; }
         bool ShowOverlay { get; }
         long OverlayMilliseconds { get; }
+        bool DoRunAtWindowsStartup { get; }
     }
 }
