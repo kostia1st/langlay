@@ -63,6 +63,8 @@ namespace Langwitch
         [DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern short GetKeyState(int keyCode);
         /// <summary>
         /// Sets the windows hook, do the desired event, one of hInstance or threadId must be non-null
         /// </summary>

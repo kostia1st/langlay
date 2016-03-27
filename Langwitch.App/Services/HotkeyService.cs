@@ -11,7 +11,7 @@ namespace Langwitch
         private bool IsStarted { get; set; }
 
         public HotkeyService(
-            IConfigService configService, 
+            IConfigService configService,
             ILanguageService languageService)
         {
             if (configService == null)
@@ -21,6 +21,7 @@ namespace Langwitch
             ConfigService = configService;
             LanguageService = languageService;
         }
+
 
         public void Start()
         {
@@ -51,15 +52,19 @@ namespace Langwitch
 
         private void Hooker_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == ConfigService.LanguageSwitchKeys)
+            if (ConfigService.LanguageSwitchKeys != Keys.None
+                && (e.KeyData & ConfigService.LanguageSwitchKeys) == ConfigService.LanguageSwitchKeys)
             {
                 if (e.KeyCode == ConfigService.LayoutSwitchKeys)
                     e.Handled = LanguageService.SwitchLanguageAndLayout();
                 else
                     e.Handled = LanguageService.SwitchLanguage(true);
             }
-            else if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+            else if (ConfigService.LayoutSwitchKeys != Keys.None
+                && (e.KeyData & ConfigService.LayoutSwitchKeys) == ConfigService.LayoutSwitchKeys)
+            {
                 e.Handled = LanguageService.SwitchLayout(true);
+            }
         }
 
         private void Hooker_KeyUp(object sender, KeyEventArgs e)
