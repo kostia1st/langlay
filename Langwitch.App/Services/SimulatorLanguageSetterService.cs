@@ -67,11 +67,20 @@ namespace Langwitch
                     // If those values are not set, we suppose we need to read this cache
                     // for the first time (guessing it's pointless to use this switch mode
                     // if no standard hotkeys set at all).
-                    CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue("HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", "Language Hotkey", null));
+                    CurrentLanguageSwitchSequence = 
+                        Utils.ParseInt(Registry.GetValue(
+                            "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", 
+                            "Language Hotkey", null));
                     // Fallback to perhaps "old"-Windows-version key for the language sequence
                     if (CurrentLanguageSwitchSequence == null)
-                        CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue("HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", "Hotkey", null));
-                    CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue("HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", "Layout Hotkey", null));
+                    {
+                        CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue(
+                            "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle",
+                            "Hotkey", null));
+                    }
+                    CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue(
+                        "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", 
+                        "Layout Hotkey", null));
                 }
 
                 var inputLayouts = InputLayoutHelper.InputLayouts;
