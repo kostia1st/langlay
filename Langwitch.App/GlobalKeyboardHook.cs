@@ -75,7 +75,8 @@ namespace Langwitch
         {
             if (code >= 0)
             {
-                Keys key = (Keys)lParam.vkCode;
+                Keys key = (Keys) lParam.vkCode;
+                key = AddModifiers(key);
                 if (HookedKeys.Contains(key))
                 {
                     KeyEventArgs kea = new KeyEventArgs(key);
@@ -94,9 +95,26 @@ namespace Langwitch
             return SafeMethods.CallNextHookEx(HookHandle, code, wParam, ref lParam);
         }
 
+        private Keys AddModifiers(Keys key)
+        {
+            //if ((SafeMethods.GetKeyState((int) Keys.CapsLock) & 0x0001) != 0) key = key | Keys.CapsLock;
+            if ((SafeMethods.GetKeyState((int) Keys.LShiftKey) & 0x8000) != 0) key = key | Keys.LShiftKey;
+            if ((SafeMethods.GetKeyState((int) Keys.RShiftKey) & 0x8000) != 0) key = key | Keys.RShiftKey;
+            if ((SafeMethods.GetKeyState((int) Keys.LControlKey) & 0x8000) != 0) key = key | Keys.LControlKey;
+            if ((SafeMethods.GetKeyState((int) Keys.RControlKey) & 0x8000) != 0) key = key | Keys.RControlKey;
+            if ((SafeMethods.GetKeyState((int) Keys.LMenu) & 0x8000) != 0) key = key | Keys.LMenu;
+            if ((SafeMethods.GetKeyState((int) Keys.RMenu) & 0x8000) != 0) key = key | Keys.RMenu;
+            return key;
+        }
+
+        private Keys RemoveModifiers(Keys keys)
+        {
+            return (Keys) ((int) keys & ~(int) Keys.Shift & ~(int) Keys.Control & ~(int) Keys.Alt);
+        }
+
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
-        
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

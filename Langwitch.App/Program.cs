@@ -18,6 +18,8 @@ namespace Langwitch
                 configService.ReadFromConfigFile();
                 configService.ReadFromCommandLineArguments();
 
+                var startupService = new WinStartupService(configService);
+
                 ILanguageSetterService languageSetterService;
                 if (configService.SwitchMethod == SwitchMethod.InputSimulation)
                     languageSetterService = new SimulatorLanguageSetterService();
@@ -38,9 +40,12 @@ namespace Langwitch
                     hotkeyService.Start();
                     trayService.Start();
                     overlayService.Start();
+                    startupService.ResolveStartup();
                     while (true)
                     {
-                        Thread.Sleep(10);
+                        // This is really questionable, and seems it causes some functional issues.
+                        // To check it out, increase the value to 500 for instance.
+                        Thread.Sleep(5);
                         try
                         {
                             Application.DoEvents();

@@ -15,22 +15,22 @@ namespace Langwitch
 
         private void SendCtrlShift(int amount = 1)
         {
-            InputSimulator.SimulateKeyDown(VirtualKeyCode.LCONTROL);
+            InputSimulator.SimulateKeyDown(VirtualKeyCode.LSHIFT);
             for (int i = 0; i < amount; i++) 
             {
-                InputSimulator.SimulateKeyPress(VirtualKeyCode.LSHIFT);
+                InputSimulator.SimulateKeyPress(VirtualKeyCode.LCONTROL);
             }
-            InputSimulator.SimulateKeyUp(VirtualKeyCode.LCONTROL);
+            InputSimulator.SimulateKeyUp(VirtualKeyCode.LSHIFT);
         }
 
         private void SendAltShift(int amount = 1)
         {
-            InputSimulator.SimulateKeyDown(VirtualKeyCode.LMENU);
+            InputSimulator.SimulateKeyDown(VirtualKeyCode.LSHIFT);
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress(VirtualKeyCode.LSHIFT);
+                InputSimulator.SimulateKeyPress(VirtualKeyCode.LMENU);
             }
-            InputSimulator.SimulateKeyUp(VirtualKeyCode.LMENU);
+            InputSimulator.SimulateKeyUp(VirtualKeyCode.LSHIFT);
         }
 
         private void SendGraveAccent(int amount = 1)
@@ -67,11 +67,20 @@ namespace Langwitch
                     // If those values are not set, we suppose we need to read this cache
                     // for the first time (guessing it's pointless to use this switch mode
                     // if no standard hotkeys set at all).
-                    CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue("HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", "Language Hotkey", null));
+                    CurrentLanguageSwitchSequence = 
+                        Utils.ParseInt(Registry.GetValue(
+                            "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", 
+                            "Language Hotkey", null));
                     // Fallback to perhaps "old"-Windows-version key for the language sequence
                     if (CurrentLanguageSwitchSequence == null)
-                        CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue("HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", "Hotkey", null));
-                    CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue("HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", "Layout Hotkey", null));
+                    {
+                        CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue(
+                            "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle",
+                            "Hotkey", null));
+                    }
+                    CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue(
+                        "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", 
+                        "Layout Hotkey", null));
                 }
 
                 var inputLayouts = InputLayoutHelper.InputLayouts;
@@ -82,22 +91,29 @@ namespace Langwitch
                     .Select(x => x.LanguageName)
                     .Distinct().ToList();
                 var indexOfCurrentLanguage = inputLanguageNames.IndexOf(currentLayout.LanguageName);
-                var indexOfTargetLanguage = inputLanguageNames.IndexOf(targetLayout.LanguageName);
-                var amountOfLanguageSwitches = indexOfTargetLanguage - indexOfCurrentLanguage;
-                if (amountOfLanguageSwitches < 0)
-                    amountOfLanguageSwitches += inputLanguageNames.Count;
-
-                if (amountOfLanguageSwitches > 0)
+                if (indexOfCurrentLanguage >= 0)
                 {
-                    if (CurrentLanguageSwitchSequence == null)
-                        throw new Exception(
-                            "cannot enumerate languages 'cause the system key sequence was not set");
+                    var indexOfTargetLanguage = inputLanguageNames.IndexOf(targetLayout.LanguageName);
+                    var amountOfLanguageSwitches = indexOfTargetLanguage - indexOfCurrentLanguage;
+                    if (amountOfLanguageSwitches < 0)
+                        amountOfLanguageSwitches += inputLanguageNames.Count;
 
-                    SendSequence(CurrentLanguageSwitchSequence.Value, amountOfLanguageSwitches);
+                    if (amountOfLanguageSwitches > 0)
+                    {
+                        if (CurrentLanguageSwitchSequence == null)
+                            throw new Exception(
+                                "cannot enumerate languages 'cause the system key sequence was not set");
+
+                        SendSequence(CurrentLanguageSwitchSequence.Value, amountOfLanguageSwitches);
+                        result = true;
+                    }
+
+                    if (result)
+                    {
+                        // Simulate "interruption" so that the system can process the key sequence.
+                        Thread.Sleep(InterruptionDelay);
+                    }
                 }
-
-                // Simulate "interruption" so that the system can process the key sequence.
-                Thread.Sleep(InterruptionDelay);
 
                 // Re-read the current layout, to know the layout the default switcher selected
                 // for the language.
@@ -108,23 +124,29 @@ namespace Langwitch
                     .Select(x => x.Name)
                     .ToList();
                 var indexOfCurrentLayout = inputLayoutNamesWithinLanguage.IndexOf(currentLayout.Name);
-                var indexOfTargetLayout = inputLayoutNamesWithinLanguage.IndexOf(targetLayout.Name);
-                var amountOfLayoutSwitches = indexOfTargetLayout - indexOfCurrentLayout;
-                if (amountOfLayoutSwitches < 0)
-                    amountOfLayoutSwitches += inputLayoutNamesWithinLanguage.Count;
-
-                if (amountOfLayoutSwitches > 0)
+                if (indexOfCurrentLayout >= 0)
                 {
-                    if (CurrentLayoutSwitchSequence == null)
-                        throw new Exception(
-                            "cannot enumerate layouts, because the system key sequence was not set");
-                    SendSequence(CurrentLayoutSwitchSequence.Value, amountOfLayoutSwitches);
+                    var indexOfTargetLayout = inputLayoutNamesWithinLanguage.IndexOf(targetLayout.Name);
+                    var amountOfLayoutSwitches = indexOfTargetLayout - indexOfCurrentLayout;
+                    if (amountOfLayoutSwitches < 0)
+                        amountOfLayoutSwitches += inputLayoutNamesWithinLanguage.Count;
+
+                    if (amountOfLayoutSwitches > 0)
+                    {
+                        if (CurrentLayoutSwitchSequence == null)
+                            throw new Exception(
+                                "cannot enumerate layouts, because the system key sequence was not set");
+                        SendSequence(CurrentLayoutSwitchSequence.Value, amountOfLayoutSwitches);
+                        result = true;
+                    }
                 }
 
-                // Simulating "interruption" once again, so that synchronous code can read
-                // the current (new) layout after this method finishes.
-                Thread.Sleep(InterruptionDelay);
-                result = true;
+                if (result)
+                {
+                    // Simulating "interruption" once again, so that synchronous code can read
+                    // the current (new) layout after this method finishes.
+                    Thread.Sleep(InterruptionDelay);
+                }
             }
             catch { /* ummm, logging must be here */ }
             return result;

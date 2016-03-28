@@ -9,5 +9,6 @@
         public const string SwitchMethod = "SwitchMethod";
         public const string SwitchMethod_Message = "Message";
         public const string SwitchMethod_InputSimulation = "InputSimulation";
+        public const string RunAtWindowsStartup = "RunAtWindowsStartup";
     }
 }

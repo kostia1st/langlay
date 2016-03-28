@@ -94,6 +94,7 @@
     <Compile Include="Services\SimulatorLanguageSetterService.cs" />
     <Compile Include="Services\TrayService.cs" />
     <Compile Include="Services\UniquenessService.cs" />
+    <Compile Include="Services\WinStartupService.cs" />
     <Compile Include="SwitchMethod.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WindowsSequenceCode.cs" />

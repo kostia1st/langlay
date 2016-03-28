@@ -21,6 +21,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FEF9F04F46BE169FD41538362CC6A712"
+        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_FEF9F04F46BE169FD41538362CC6A712"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "MsmSig" = "8:_UNDEFINED"
@@ -125,6 +137,37 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FEF9F04F46BE169FD41538362CC6A712"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:InputSimulator, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_FEF9F04F46BE169FD41538362CC6A712"
+                    {
+                    "Name" = "8:InputSimulator.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:InputSimulator.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -176,17 +219,6 @@
                 {
                 }
             }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_BF8B16A8AB7E49FFA29BB536E9D69373"
-            {
-            "Name" = "8:#1928"
-            "AlwaysCreate" = "11:TRUE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Property" = "8:StartupFolder"
-                "Folders"
-                {
-                }
-            }
         }
         "LaunchCondition"
         {
@@ -204,7 +236,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Langwitch"
         "ProductCode" = "8:{709FEE23-B43F-4864-A394-5E16B93D529A}"
-        "PackageCode" = "8:{43E941AA-C8D8-4114-A835-723AF32B8361}"
+        "PackageCode" = "8:{90351079-C194-4413-BAA3-CE8ABDDCAF90}"
         "UpgradeCode" = "8:{5EFA80B3-FA49-4F3A-8E8C-0C4F7FC46500}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -348,20 +380,6 @@
             "Transitive" = "11:FALSE"
             "Target" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
             "Folder" = "8:_208713A7E99B40DC974789BDABF1605F"
-            "WorkingFolder" = "8:_B2640D6C6E964983B3164069F866F8D4"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_BBF8F043F95B444ABCA4DEEF0204BBAD"
-            {
-            "Name" = "8:Langwitch"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
-            "Folder" = "8:_BF8B16A8AB7E49FFA29BB536E9D69373"
             "WorkingFolder" = "8:_B2640D6C6E964983B3164069F866F8D4"
             "Icon" = "8:"
             "Feature" = "8:"
