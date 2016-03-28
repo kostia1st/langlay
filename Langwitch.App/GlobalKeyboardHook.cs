@@ -98,12 +98,12 @@ namespace Langwitch
         private Keys AddModifiers(Keys key)
         {
             //if ((SafeMethods.GetKeyState((int) Keys.CapsLock) & 0x0001) != 0) key = key | Keys.CapsLock;
-            if ((SafeMethods.GetKeyState((int) Keys.LShiftKey) & 0x8000) != 0) key = key | Keys.Shift;
-            if ((SafeMethods.GetKeyState((int) Keys.RShiftKey) & 0x8000) != 0) key = key | Keys.Shift;
-            if ((SafeMethods.GetKeyState((int) Keys.LControlKey) & 0x8000) != 0) key = key | Keys.Control;
-            if ((SafeMethods.GetKeyState((int) Keys.RControlKey) & 0x8000) != 0) key = key | Keys.Control;
-            if ((SafeMethods.GetKeyState((int) Keys.LMenu) & 0x8000) != 0) key = key | Keys.Alt;
-            if ((SafeMethods.GetKeyState((int) Keys.RMenu) & 0x8000) != 0) key = key | Keys.Alt;
+            if ((SafeMethods.GetKeyState((int) Keys.LShiftKey) & 0x8000) != 0) key = key | Keys.LShiftKey;
+            if ((SafeMethods.GetKeyState((int) Keys.RShiftKey) & 0x8000) != 0) key = key | Keys.RShiftKey;
+            if ((SafeMethods.GetKeyState((int) Keys.LControlKey) & 0x8000) != 0) key = key | Keys.LControlKey;
+            if ((SafeMethods.GetKeyState((int) Keys.RControlKey) & 0x8000) != 0) key = key | Keys.RControlKey;
+            if ((SafeMethods.GetKeyState((int) Keys.LMenu) & 0x8000) != 0) key = key | Keys.LMenu;
+            if ((SafeMethods.GetKeyState((int) Keys.RMenu) & 0x8000) != 0) key = key | Keys.RMenu;
             return key;
         }
 
