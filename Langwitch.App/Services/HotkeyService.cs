@@ -50,20 +50,32 @@ namespace Langwitch
             }
         }
 
+        private const int InactivePeriod = 500;
+        private DateTime? InactiveTill { get; set; }
+
         private void Hooker_KeyDown(object sender, KeyEventArgs e)
         {
-            if (ConfigService.LanguageSwitchKeys != Keys.None
-                && (e.KeyData & ConfigService.LanguageSwitchKeys) == ConfigService.LanguageSwitchKeys)
+            if (InactiveTill == null || InactiveTill < DateTime.Now)
             {
-                if (e.KeyCode == ConfigService.LayoutSwitchKeys)
-                    e.Handled = LanguageService.SwitchLanguageAndLayout();
-                else
-                    e.Handled = LanguageService.SwitchLanguage(true);
-            }
-            else if (ConfigService.LayoutSwitchKeys != Keys.None
-                && (e.KeyData & ConfigService.LayoutSwitchKeys) == ConfigService.LayoutSwitchKeys)
-            {
-                e.Handled = LanguageService.SwitchLayout(true);
+                if (ConfigService.LanguageSwitchKeys != Keys.None
+                    && (e.KeyData & ConfigService.LanguageSwitchKeys) == ConfigService.LanguageSwitchKeys)
+                {
+                    if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+                        e.Handled = LanguageService.SwitchLanguageAndLayout();
+                    else
+                        e.Handled = LanguageService.SwitchLanguage(true);
+                }
+                else if (ConfigService.LayoutSwitchKeys != Keys.None
+                    && (e.KeyData & ConfigService.LayoutSwitchKeys) == ConfigService.LayoutSwitchKeys)
+                {
+                    e.Handled = LanguageService.SwitchLayout(true);
+                }
+                if (e.Handled)
+                {
+                    // Here, we place a timeout on when the next KeyDown could be applied 
+                    // without resetting it by KeyUp
+                    InactiveTill = DateTime.Now.AddMilliseconds(InactivePeriod);
+                }
             }
         }
 
@@ -76,6 +88,8 @@ namespace Langwitch
                 e.Handled = true;
             else if (e.KeyCode == ConfigService.LayoutSwitchKeys)
                 e.Handled = true;
+            if (e.Handled)
+                InactiveTill = null;
         }
 
         #region IDisposable Support
