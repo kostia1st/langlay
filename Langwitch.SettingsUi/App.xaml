@@ -1,7 +1,7 @@
-﻿<Application x:Class="Langwitch.SettingsUi.App"
+﻿<Application x:Class="Product.SettingsUi.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Langwitch.SettingsUi"
+             xmlns:local="clr-namespace:Product.SettingsUi"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

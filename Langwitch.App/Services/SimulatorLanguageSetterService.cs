@@ -4,7 +4,7 @@ using System.Threading;
 using Microsoft.Win32;
 using WindowsInput;
 
-namespace Langwitch
+namespace Product
 {
     public class SimulatorLanguageSetterService : ILanguageSetterService
     {

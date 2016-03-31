@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Langwitch
+namespace Product
 {
     public class TrayService
     {
@@ -29,7 +29,7 @@ namespace Langwitch
                 });
                 Icon = new NotifyIcon()
                 {
-                    Text = "Langwitch",
+                    Text = Application.ProductName,
                     Icon = new Icon(typeof(Program), "Keyboard Filled-16.ico"),
                     Visible = true,
                     ContextMenu = ContextMenu

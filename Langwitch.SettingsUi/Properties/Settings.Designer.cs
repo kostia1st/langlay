@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Langwitch.SettingsUi.Properties
+namespace Product.SettingsUi.Properties
 {
 
 

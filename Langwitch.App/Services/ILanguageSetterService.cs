@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Langwitch
+namespace Product
 {
     public interface ILanguageSetterService
     {

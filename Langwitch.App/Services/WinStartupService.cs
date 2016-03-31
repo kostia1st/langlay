@@ -1,11 +1,10 @@
 ﻿using System.Windows.Forms;
 using Microsoft.Win32;
 
-namespace Langwitch
+namespace Product
 {
     public class WinStartupService
     {
-        private const string AppName = "Langwitch";
         private const string RegistryPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
         private IConfigService ConfigService { get; set; }
         public WinStartupService(IConfigService configService)
@@ -17,7 +16,7 @@ namespace Langwitch
         {
             using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath, false))
             {
-                return key.GetValue(AppName, null) != null;
+                return key.GetValue(Application.ProductName, null) != null;
             }
         }
 
@@ -27,9 +26,9 @@ namespace Langwitch
             using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath, true))
             {
                 if (shouldRun && !string.IsNullOrEmpty(pathToExecutable))
-                    key.SetValue(AppName, pathToExecutable);
+                    key.SetValue(Application.ProductName, pathToExecutable);
                 else
-                    key.DeleteValue(AppName, false);
+                    key.DeleteValue(Application.ProductName, false);
             }
         }
 

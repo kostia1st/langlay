@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Langwitch
+namespace Product
 {
     public class LanguageService : ILanguageService
     {

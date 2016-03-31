@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Langwitch
+namespace Product
 {
     static class Program
     {

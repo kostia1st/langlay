@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Langwitch
+namespace Product
 {
     public class HotkeyService : IDisposable
     {

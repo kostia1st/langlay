@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Langwitch
+namespace Product
 {
     /// <summary>
     /// A class that manages a global low level keyboard hook
