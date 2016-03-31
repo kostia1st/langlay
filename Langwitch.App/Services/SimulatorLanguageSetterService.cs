@@ -16,7 +16,7 @@ namespace Langwitch
         private void SendCtrlShift(int amount = 1)
         {
             InputSimulator.SimulateKeyDown(VirtualKeyCode.LSHIFT);
-            for (int i = 0; i < amount; i++) 
+            for (int i = 0; i < amount; i++)
             {
                 InputSimulator.SimulateKeyPress(VirtualKeyCode.LCONTROL);
             }
@@ -57,31 +57,36 @@ namespace Langwitch
             }
         }
 
+        private const string ToggleKey = "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle";
+
+        private void ReadCurrentSwitchSequences()
+        {
+            // If those values are not set, we suppose we need to read this cache
+            // for the first time (guessing it's pointless to use this switch mode
+            // if no standard hotkeys set at all).
+            CurrentLanguageSwitchSequence =
+                Utils.ParseInt(Registry.GetValue(
+                    ToggleKey,
+                    "Language Hotkey", null));
+            // Fallback to perhaps "old"-Windows-version key for the language sequence
+            if (CurrentLanguageSwitchSequence == null)
+            {
+                CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue(
+                    ToggleKey,
+                    "Hotkey", null));
+            }
+            CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue(
+                ToggleKey,
+                "Layout Hotkey", null));
+        }
+
         public bool SetCurrentLayout(IntPtr targetHandle)
         {
             var result = false;
             try
             {
                 if (CurrentLanguageSwitchSequence == null && CurrentLayoutSwitchSequence == null)
-                {
-                    // If those values are not set, we suppose we need to read this cache
-                    // for the first time (guessing it's pointless to use this switch mode
-                    // if no standard hotkeys set at all).
-                    CurrentLanguageSwitchSequence = 
-                        Utils.ParseInt(Registry.GetValue(
-                            "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", 
-                            "Language Hotkey", null));
-                    // Fallback to perhaps "old"-Windows-version key for the language sequence
-                    if (CurrentLanguageSwitchSequence == null)
-                    {
-                        CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue(
-                            "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle",
-                            "Hotkey", null));
-                    }
-                    CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue(
-                        "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle", 
-                        "Layout Hotkey", null));
-                }
+                    ReadCurrentSwitchSequences();
 
                 var inputLayouts = InputLayoutHelper.InputLayouts;
                 var currentLayout = InputLayoutHelper.GetCurrentLayout();
@@ -144,7 +149,7 @@ namespace Langwitch
                 if (result)
                 {
                     // Simulating "interruption" once again, so that synchronous code can read
-                    // the current (new) layout after this method finishes.
+                    // the current (new) layout from OS after this method finishes.
                     Thread.Sleep(InterruptionDelay);
                 }
             }

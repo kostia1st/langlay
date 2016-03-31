@@ -22,7 +22,6 @@ namespace Langwitch
             LanguageService = languageService;
         }
 
-
         public void Start()
         {
             if (!IsStarted)

@@ -1,6 +1,6 @@
 ﻿namespace Langwitch
 {
-    public class OverlayService: IOverlayService
+    public class OverlayService : IOverlayService
     {
         private IConfigService ConfigService { get; set; }
         private bool IsStarted { get; set; }
