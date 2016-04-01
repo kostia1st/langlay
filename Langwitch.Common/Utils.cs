@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Product
+namespace Product.Common
 {
     public static class Utils
     {

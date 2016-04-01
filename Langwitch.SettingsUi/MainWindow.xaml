@@ -19,29 +19,38 @@
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Feel free to change the settings below. They get saved immediately after you change them. However, you must 'Close and Apply' if you have the application currently running." 
                            Margin="0 10 0 0" TextWrapping="Wrap"  />
-                <CheckBox x:Name="checkBox" 
+                <CheckBox x:Name="chbRunAtStartup" 
                           Content="Run at Windows startup" 
                           Margin="0 20 0 0"
-                          IsChecked="True"/>
+                          IsChecked="{Binding RunAtWindowsStartup}"/>
                 <Rectangle Stroke="Silver" HorizontalAlignment="Stretch" StrokeThickness="1" Height="1" Margin="0 10 0 0" />
-                <CheckBox x:Name="checkBox2" Content="Show Overlay" Margin="0 10 0 0" IsChecked="True"/>
+                <CheckBox x:Name="chbShowOverlay" 
+                          Content="Show Overlay" Margin="0 10 0 0" 
+                          IsChecked="{Binding ShowOverlay}"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
                     <TextBlock Text="Overlay stays visible for" Width="150" />
                     <Slider x:Name="sliderOverlayTime" Width="200" Minimum="0" Maximum="2000" 
-                            Interval="50"
                             IsSnapToTickEnabled="True"
                             TickFrequency="50"
-                            ValueChanged="slider_ValueChanged" />
-                    <TextBlock x:Name="tbkOverlayTime" Text="100ms" Width="50" />
+                            Value="{Binding OverlayMilliseconds}" />
+                    <TextBlock x:Name="tbkOverlayTime" Width="50">
+                        <Run Text="{Binding OverlayMilliseconds}" />
+                        <Run Text="ms" />
+                    </TextBlock>
                 </StackPanel>
-                <Rectangle Stroke="Silver" HorizontalAlignment="Stretch" StrokeThickness="1" Height="1" Margin="0 10 0 0" />
+                <Rectangle Stroke="Silver" 
+                           HorizontalAlignment="Stretch" 
+                           StrokeThickness="1" Height="1" 
+                           Margin="0 10 0 0" />
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
-                    <TextBlock Text="Language switch method:" Width="150" VerticalAlignment="Top" Margin="0 2 0 0" />
-                    <ComboBox x:Name="comboBox" Width="150" VerticalAlignment="Top">
-                        <ComboBoxItem IsSelected="True" Content="Input Simulation" />
-                        <ComboBoxItem Content="Messaging" />
-                    </ComboBox>
+                    <TextBlock Text="Switch method:" Width="150" VerticalAlignment="Top" Margin="0 2 0 0" />
+                    <ComboBox x:Name="cbSwitchMethod" 
+                              ItemsSource="{Binding SwitchMethod, Mode=OneTime, Converter={StaticResource enumConverter}}"
+                              SelectedItem="{Binding SwitchMethod}"
+                              Width="150" 
+                              VerticalAlignment="Top" />
+
                     <TextBlock Text="Leave 'Input Simulation' if you are not sure about it."
                                TextWrapping="Wrap" HorizontalAlignment="Stretch" 
                                Margin="10 2 0 0"

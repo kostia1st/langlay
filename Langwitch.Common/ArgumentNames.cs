@@ -1,4 +1,4 @@
-﻿namespace Product
+﻿namespace Product.Common
 {
     class ArgumentNames
     {

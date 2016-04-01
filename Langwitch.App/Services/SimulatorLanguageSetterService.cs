@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using Microsoft.Win32;
+using Product.Common;
 using WindowsInput;
 
 namespace Product

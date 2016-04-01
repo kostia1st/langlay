@@ -20,19 +20,23 @@ namespace Product.SettingsUi
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ConfigService ConfigService { get; set; }
+        private ConfigViewModel ViewModel { get; set; }
+
         public MainWindow()
         {
+            ConfigService = new ConfigService();
+            ConfigService.ReadFromConfigFile();
+
+            ViewModel = new ConfigViewModel(ConfigService);
+
+            DataContext = ViewModel;
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            tbkOverlayTime.Text = sliderOverlayTime.Value.ToString() + "ms";
         }
     }
 }
