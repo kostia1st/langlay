@@ -47,7 +47,9 @@
                     <TextBlock Text="Switch method:" Width="150" VerticalAlignment="Top" Margin="0 2 0 0" />
                     <ComboBox x:Name="cbSwitchMethod" 
                               ItemsSource="{Binding SwitchMethod, Mode=OneTime, Converter={StaticResource enumConverter}}"
-                              SelectedItem="{Binding SwitchMethod}"
+                              SelectedValue="{Binding SwitchMethod}"
+                              DisplayMemberPath="Text"
+                              SelectedValuePath="Key"
                               Width="150" 
                               VerticalAlignment="Top" />
 

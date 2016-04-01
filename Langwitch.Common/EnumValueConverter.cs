@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
 namespace Product.Common
 {
-    public class EnumValueConverter: IValueConverter
+    public class EnumValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -27,8 +28,16 @@ namespace Product.Common
             if (!Cache.TryGetValue(type, out values))
             {
                 values = type.GetFields()
-                    .Where(f => f.IsLiteral)
-                    .Select(f => f.GetValue(null))
+                    .Where(x => x.IsLiteral)
+                    .Select(x => new EnumItem
+                    {
+                        Key = x.GetValue(null),
+                        Text = x
+                            .GetCustomAttributes(true)
+                            .OfType<DisplayAttribute>()
+                            .FirstOrDefault()
+                            .GetValueOrDefault(y => y.GetName())
+                    })
                     .ToArray();
                 Cache[type] = values;
             }
