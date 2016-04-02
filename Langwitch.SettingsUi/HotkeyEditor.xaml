@@ -11,7 +11,6 @@
             <ColumnDefinition Width="120" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <!--<TextBlock Text="{Binding DataContext}" />-->
         <ComboBox x:Name="cbLanguageSwitchKeys"
                   ItemsSource="{Binding KeyCode, Mode=OneTime, Converter={StaticResource enumConverter}}"
                   SelectedValue="{Binding KeyCode}"

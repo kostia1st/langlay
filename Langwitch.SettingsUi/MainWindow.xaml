@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Product.SettingsUi"
         mc:Ignorable="d"
-        Title="Settings" Height="576" Width="532.879" 
+        Title="Settings" Height="600" Width="550" 
         ResizeMode="NoResize" SizeToContent="Manual" 
         ScrollViewer.VerticalScrollBarVisibility="Disabled" 
         VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
@@ -90,7 +90,7 @@
                    StrokeThickness="1" 
                    Height="1" Margin="0 10 0 0"
                    Grid.Row="1"/>
-        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />

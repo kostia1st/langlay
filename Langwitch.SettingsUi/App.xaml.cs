@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using Product.Common;
 
@@ -15,7 +11,7 @@ namespace Product.SettingsUi
     /// </summary>
     public partial class App : Application
     {
-        [System.STAThreadAttribute()]
+        [STAThread]
         public static void Main()
         {
             var productName = Assembly.GetEntryAssembly()
