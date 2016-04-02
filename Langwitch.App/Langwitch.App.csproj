@@ -88,7 +88,6 @@
     <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Services\MessageLanguageSetterService.cs" />
     <Compile Include="Services\Overlay\OverlayService.cs" />
-    <Compile Include="SafeMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\SimulatorLanguageSetterService.cs" />

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -60,9 +61,17 @@ namespace Product.SettingsUi
 
             if (process != null)
             {
-                process.CloseMainWindow();
-                process.WaitForExit(500);
-                process.Kill();
+                var thread = process.Threads.Cast<ProcessThread>().FirstOrDefault();
+                if (thread != null)
+                {
+                    SafeMethods.PostThreadMessage(thread.Id, SafeMethods.WM_CLOSE, 0, 0);
+                }
+                else
+                {
+                    process.CloseMainWindow();
+                }
+                if (!process.WaitForExit(500))
+                    process.Kill();
                 var productLocation = 
                     System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), AppSpecific.MainAppPath);
                 Process.Start(new ProcessStartInfo(productLocation));

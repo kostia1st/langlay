@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Product
+namespace Product.Common
 {
-    internal class SafeMethods
+    public class SafeMethods
     {
         public const int WH_KEYBOARD_LL = 13;
         public const int WM_KEYDOWN = 0x100;
@@ -105,6 +105,10 @@ namespace Product
         /// <returns>A handle to the library</returns>
         [DllImport("kernel32.dll")]
         public static extern IntPtr LoadLibrary(string lpFileName);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool PostThreadMessage(int threadId, uint msg, int wParam, int lParam);
+
 
         /// <summary>
         /// defines the callback type for the hook
