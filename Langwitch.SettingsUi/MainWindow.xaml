@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Product.SettingsUi"
         mc:Ignorable="d"
-        Title="MainWindow" Height="576" Width="532.879" 
+        Title="Settings" Height="576" Width="532.879" 
         ResizeMode="NoResize" SizeToContent="Manual" 
         ScrollViewer.VerticalScrollBarVisibility="Disabled" 
         VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">

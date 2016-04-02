@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using Product.Common;
 
 namespace Product
 {
@@ -23,7 +24,7 @@ namespace Product
 
         private void LaunchProduct()
         {
-            var settingsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Langwitch.SettingsUi.exe");
+            var settingsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), AppSpecific.SettingsPath);
             Process.Start(settingsPath);
         }
 

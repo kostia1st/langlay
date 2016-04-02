@@ -8,7 +8,7 @@ namespace Product.SettingsUi
     public class ConfigService : ConfigServiceBase
     {
         public ConfigService()
-            : base(ConfigurationManager.OpenExeConfiguration("langwitch.exe"))
+            : base(ConfigurationManager.OpenExeConfiguration(AppSpecific.MainAppPath))
         {
         }
 

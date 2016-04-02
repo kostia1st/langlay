@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Product.Common;
 
 namespace Product.SettingsUi
 {
@@ -51,9 +52,11 @@ namespace Product.SettingsUi
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // Close the running product, and restart it.
-            var process = Process.GetProcessesByName("Langwitch").FirstOrDefault();
+            var process = Process.GetProcessesByName(AppSpecific.MainAppProcessName).FirstOrDefault();
+#if DEBUG
             if (process == null)
-                process = Process.GetProcessesByName("Langwitch.vshost").FirstOrDefault();
+                process = Process.GetProcessesByName(AppSpecific.MainAppProcessName + ".vshost").FirstOrDefault();
+#endif
 
             if (process != null)
             {
@@ -61,7 +64,7 @@ namespace Product.SettingsUi
                 process.WaitForExit(500);
                 process.Kill();
                 var productLocation = 
-                    System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Langwitch.exe");
+                    System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), AppSpecific.MainAppPath);
                 Process.Start(new ProcessStartInfo(productLocation));
             }
             this.Close();

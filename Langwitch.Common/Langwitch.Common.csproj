@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentNames.cs" />
+    <Compile Include="AppSpecific.cs" />
     <Compile Include="Services\ConfigServiceBase.cs" />
     <Compile Include="EnumItem.cs" />
     <Compile Include="EnumValueConverter.cs" />
