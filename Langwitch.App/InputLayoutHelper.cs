@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Product.Common;
 
-namespace Langwitch
+namespace Product
 {
     public static class InputLayoutHelper
     {

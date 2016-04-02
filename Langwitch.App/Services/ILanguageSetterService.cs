@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Langwitch
+namespace Product
 {
     public interface ILanguageSetterService
     {

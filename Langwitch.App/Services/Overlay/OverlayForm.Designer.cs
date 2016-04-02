@@ -1,4 +1,4 @@
-﻿namespace Langwitch
+﻿namespace Product
 {
     partial class OverlayForm
     {

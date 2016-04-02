@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Langwitch
+namespace Product.Common
 {
     public static class Utils
     {

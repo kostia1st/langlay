@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Langwitch
+namespace Product.Common
 {
-    internal class SafeMethods
+    public class SafeMethods
     {
         public const int WH_KEYBOARD_LL = 13;
         public const int WM_KEYDOWN = 0x100;
@@ -12,6 +12,9 @@ namespace Langwitch
         public const int WM_SYSKEYUP = 0x105;
 
         public const int WM_INPUTLANGCHANGEREQUEST = 0x0050;
+        public const int WM_CLOSE = 0x0010;
+        public const int WM_DESTROY = 0x0002;
+        public const int WM_QUIT = 0x0012;
 
         [Flags]
         public enum SendMessageTimeoutFlags : uint
@@ -102,6 +105,10 @@ namespace Langwitch
         /// <returns>A handle to the library</returns>
         [DllImport("kernel32.dll")]
         public static extern IntPtr LoadLibrary(string lpFileName);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool PostThreadMessage(int threadId, uint msg, int wParam, int lParam);
+
 
         /// <summary>
         /// defines the callback type for the hook

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using Product.Common;
 
-namespace Langwitch
+namespace Product
 {
     static class Program
     {
         [STAThread]
         static void Main()
         {
-            var uniquenessService = new UniquenessService("Langwitch");
+            var uniquenessService = new UniquenessService(Application.ProductName);
             uniquenessService.RunOrIgnore(delegate
             {
                 var isExiting = false;
@@ -34,32 +35,16 @@ namespace Langwitch
                     OnExit = delegate { isExiting = true; }
                 };
 
+                Application.AddMessageFilter(new AppMessageFilter { OnClose = delegate { isExiting = true; } });
+
                 try
                 {
-
                     hotkeyService.Start();
                     trayService.Start();
                     overlayService.Start();
                     startupService.ResolveStartup();
-                    while (true)
-                    {
-                        // This is really questionable, and seems it causes some functional issues.
-                        // To check it out, increase the value to 500 for instance.
-                        Thread.Sleep(5);
-                        try
-                        {
-                            Application.DoEvents();
-                            if (isExiting)
-                                // Quitting the loop must be just enough
-                                break;
-                        }
-                        catch (Exception ex)
-                        {
-                            // Do nothing O_o as of yet.
-                            break;
-                        }
-                    }
 
+                    RunUntil(() => !isExiting);
                 }
                 finally
                 {
@@ -68,6 +53,29 @@ namespace Langwitch
                     overlayService.Stop();
                 }
             });
+        }
+
+        private static void RunUntil(Func<bool> predicate)
+        {
+            while (true)
+            {
+                // This is really questionable, and seems it causes some functional issues.
+                // To check it out, increase the value to 500 for instance.
+                Thread.Sleep(5);
+                try
+                {
+                    Application.DoEvents();
+
+                    if (!predicate())
+                        // Quitting the loop must be just enough
+                        break;
+                }
+                catch (Exception ex)
+                {
+                    // Do nothing O_o as of yet.
+                    break;
+                }
+            }
         }
 
     }

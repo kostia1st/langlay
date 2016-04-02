@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Product.Common;
 
-namespace Langwitch
+namespace Product
 {
     public class LanguageService : ILanguageService
     {

@@ -7,7 +7,7 @@
     <ProjectGuid>{764B8166-CDCE-4C65-BFDD-DDBBD4789870}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Langwitch</RootNamespace>
+    <RootNamespace>Product</RootNamespace>
     <AssemblyName>Langwitch</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -69,34 +69,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentNames.cs" />
+    <Compile Include="AppMessageFilter.cs" />
     <Compile Include="InputLayout.cs" />
-    <Compile Include="OverlayForm.cs">
+    <Compile Include="Services\Overlay\OverlayForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OverlayForm.Designer.cs">
+    <Compile Include="Services\Overlay\OverlayForm.Designer.cs">
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\ConfigService.cs" />
-    <Compile Include="GlobalKeyboardHook.cs" />
+    <Compile Include="Services\Hotkey\GlobalKeyboardHook.cs" />
     <Compile Include="InputLayoutHelper.cs" />
-    <Compile Include="Services\HotkeyService.cs" />
+    <Compile Include="Services\ConfigService.cs" />
+    <Compile Include="Services\Hotkey\HotkeyService.cs" />
     <Compile Include="Services\IConfigService.cs" />
     <Compile Include="Services\ILanguageService.cs" />
     <Compile Include="Services\ILanguageSetterService.cs" />
-    <Compile Include="Services\IOverlayService.cs" />
+    <Compile Include="Services\Overlay\IOverlayService.cs" />
     <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Services\MessageLanguageSetterService.cs" />
-    <Compile Include="Services\OverlayService.cs" />
-    <Compile Include="SafeMethods.cs" />
+    <Compile Include="Services\Overlay\OverlayService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\SimulatorLanguageSetterService.cs" />
     <Compile Include="Services\TrayService.cs" />
-    <Compile Include="Services\UniquenessService.cs" />
     <Compile Include="Services\WinStartupService.cs" />
-    <Compile Include="SwitchMethod.cs" />
-    <Compile Include="Utils.cs" />
     <Compile Include="WindowsSequenceCode.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Keyboard Filled-16.ico" />
-    <EmbeddedResource Include="OverlayForm.resx">
+    <EmbeddedResource Include="Services\Overlay\OverlayForm.resx">
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -126,6 +122,12 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Langwitch.Common\Langwitch.Common.csproj">
+      <Project>{d0bff2f2-f0a4-48e4-8f29-8fcb93175970}</Project>
+      <Name>Langwitch.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

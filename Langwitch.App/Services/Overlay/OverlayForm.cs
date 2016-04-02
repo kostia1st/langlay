@@ -2,8 +2,9 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using Product.Common;
 
-namespace Langwitch
+namespace Product
 {
     public partial class OverlayForm : Form
     {

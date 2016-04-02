@@ -1,4 +1,4 @@
-﻿namespace Langwitch
+﻿namespace Product
 {
     public static class WindowsSequenceCode
     {

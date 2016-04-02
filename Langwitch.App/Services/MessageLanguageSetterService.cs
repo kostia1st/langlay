@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Product.Common;
 
-namespace Langwitch
+namespace Product
 {
     public class MessageLanguageSetterService : ILanguageSetterService
     {
