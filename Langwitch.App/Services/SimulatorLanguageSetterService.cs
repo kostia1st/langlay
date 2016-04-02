@@ -16,29 +16,29 @@ namespace Product
 
         private void SendCtrlShift(int amount = 1)
         {
-            InputSimulator.SimulateKeyDown(VirtualKeyCode.LSHIFT);
+            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LShiftKey);
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress(VirtualKeyCode.LCONTROL);
+                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LControlKey);
             }
-            InputSimulator.SimulateKeyUp(VirtualKeyCode.LSHIFT);
+            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LShiftKey);
         }
 
         private void SendAltShift(int amount = 1)
         {
-            InputSimulator.SimulateKeyDown(VirtualKeyCode.LSHIFT);
+            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LShiftKey);
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress(VirtualKeyCode.LMENU);
+                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LMenu);
             }
-            InputSimulator.SimulateKeyUp(VirtualKeyCode.LSHIFT);
+            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LShiftKey);
         }
 
         private void SendGraveAccent(int amount = 1)
         {
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress(VirtualKeyCode.OEM_3);
+                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.Oemtilde);
             }
         }
 

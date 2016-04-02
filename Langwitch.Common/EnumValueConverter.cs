@@ -36,7 +36,7 @@ namespace Product.Common
                             .GetCustomAttributes(true)
                             .OfType<DisplayAttribute>()
                             .FirstOrDefault()
-                            .GetValueOrDefault(y => y.GetName())
+                            .GetValueOrDefault(y => y.GetName(), x.GetValue(null).ToString())
                     })
                     .ToArray();
                 Cache[type] = values;

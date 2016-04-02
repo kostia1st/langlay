@@ -12,6 +12,9 @@ namespace Product
         public const int WM_SYSKEYUP = 0x105;
 
         public const int WM_INPUTLANGCHANGEREQUEST = 0x0050;
+        public const int WM_CLOSE = 0x0010;
+        public const int WM_DESTROY = 0x0002;
+        public const int WM_QUIT = 0x0012;
 
         [Flags]
         public enum SendMessageTimeoutFlags : uint

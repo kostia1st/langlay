@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,14 +31,50 @@ namespace Product.SettingsUi
             ConfigService.ReadFromConfigFile();
 
             ViewModel = new ConfigViewModel(ConfigService);
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
             DataContext = ViewModel;
             InitializeComponent();
         }
 
+        private void DoOnViewModelChanged()
+        {
+            // Save configuration
+            ConfigService.SaveToFile();
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            DoOnViewModelChanged();
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            // Close the running product, and restart it.
+            var process = Process.GetProcessesByName("Langwitch").FirstOrDefault();
+            if (process == null)
+                process = Process.GetProcessesByName("Langwitch.vshost").FirstOrDefault();
+
+            if (process != null)
+            {
+                process.CloseMainWindow();
+                process.WaitForExit(500);
+                process.Kill();
+                var productLocation = 
+                    System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Langwitch.exe");
+                Process.Start(new ProcessStartInfo(productLocation));
+            }
             this.Close();
+        }
+
+        private void HotkeyComposer_Layout_Changed(object sender, RoutedEventArgs e)
+        {
+            ViewModel.NotifyLayoutSequenceChanged();
+        }
+
+        private void HotkeyComposer_Language_Changed(object sender, RoutedEventArgs e)
+        {
+            ViewModel.NotifyLanguageSequenceChanged();
         }
     }
 }

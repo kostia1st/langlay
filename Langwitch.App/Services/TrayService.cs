@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Product
@@ -18,6 +21,12 @@ namespace Product
             ConfigService = configService;
         }
 
+        private void LaunchProduct()
+        {
+            var settingsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Langwitch.SettingsUi.exe");
+            Process.Start(settingsPath);
+        }
+
         public void Start()
         {
             if (!IsStarted)
@@ -25,6 +34,8 @@ namespace Product
                 IsStarted = true;
                 ContextMenu = new ContextMenu(new[]
                 {
+                    new MenuItem("Settings", delegate { LaunchProduct(); }),
+                    new MenuItem("-"),
                     new MenuItem("Quit", delegate { if (OnExit != null) OnExit(); })
                 });
                 Icon = new NotifyIcon()

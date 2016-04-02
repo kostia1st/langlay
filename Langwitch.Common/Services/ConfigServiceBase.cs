@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace Product.Common
 {
     public class ConfigServiceBase
     {
         protected Configuration Configuration { get; set; }
-        public IList<int> LanguageSwitchKeyArray { get; set; }
-        public Keys LanguageSwitchKeys { get { return ConvertIntsToKeys(LanguageSwitchKeyArray); } }
-        public IList<int> LayoutSwitchKeyArray { get; set; }
-        public Keys LayoutSwitchKeys { get { return ConvertIntsToKeys(LayoutSwitchKeyArray); } }
+        public bool DoSwitchLanguage { get; set; }
+        public IList<KeyCode> LanguageSwitchKeyArray { get; set; }
+        public KeyCode LanguageSwitchKeys { get { return ReduceKeyCodeArray(LanguageSwitchKeyArray); } }
+        public bool DoSwitchLayout { get; set; }
+        public IList<KeyCode> LayoutSwitchKeyArray { get; set; }
+        public KeyCode LayoutSwitchKeys { get { return ReduceKeyCodeArray(LayoutSwitchKeyArray); } }
         public bool ShowOverlay { get; set; }
         public long OverlayMilliseconds { get; set; }
         public SwitchMethod SwitchMethod { get; set; }
@@ -23,20 +24,22 @@ namespace Product.Common
             if (configuration == null)
                 throw new ArgumentNullException("configuration");
             Configuration = configuration;
-            LanguageSwitchKeyArray = new int[] { (int) Keys.CapsLock };
-            LayoutSwitchKeyArray = new int[] { };
+            LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
+            LayoutSwitchKeyArray = new KeyCode[] { };
             SwitchMethod = SwitchMethod.InputSimulation;
             ShowOverlay = true;
             OverlayMilliseconds = 500;
             DoRunAtWindowsStartup = true;
+            DoSwitchLanguage = true;
+            DoSwitchLayout = false;
         }
 
-        private Keys ConvertIntsToKeys(IList<int> ints)
+        private KeyCode ReduceKeyCodeArray(IList<KeyCode> keyCodes)
         {
-            var result = (Keys) ints.FirstOrDefault();
-            for (var i = 1; i < ints.Count; i++)
+            var result = keyCodes.FirstOrDefault();
+            for (var i = 1; i < keyCodes.Count; i++)
             {
-                result |= (Keys) ints[i];
+                result |= keyCodes[i];
             }
             return result;
         }
@@ -47,23 +50,27 @@ namespace Product.Common
             arguments.ForEach(x => ReadArgument(x));
         }
 
-        private IList<int> ReadArray(string arrayString)
+        private IList<KeyCode> KeyStringToArray(string arrayString)
         {
-            return arrayString.Split(new[] { '+' }).Select(x => int.Parse(x)).ToList();
+            return arrayString.Split(new[] { '+' }).Select(x => (KeyCode) int.Parse(x)).ToList();
         }
 
         private void ReadArgument(string name, string value)
         {
-            if (name == ArgumentNames.LanguageSwitchKeys)
-                LanguageSwitchKeyArray = ReadArray(value);
+            if (name == ArgumentNames.SwitchLanguage)
+                DoSwitchLanguage = Utils.ParseBool(value, true);
+            else if (name == ArgumentNames.SwitchLayout)
+                DoSwitchLayout = Utils.ParseBool(value, false);
+            else if (name == ArgumentNames.LanguageSwitchKeys)
+                LanguageSwitchKeyArray = KeyStringToArray(value);
             else if (name == ArgumentNames.LayoutSwitchKeys)
-                LayoutSwitchKeyArray = ReadArray(value);
+                LayoutSwitchKeyArray = KeyStringToArray(value);
             else if (name == ArgumentNames.ShowOverlay)
                 ShowOverlay = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.OverlayMilliseconds)
                 OverlayMilliseconds = long.Parse(value);
             else if (name == ArgumentNames.SwitchMethod)
-                SwitchMethod = string.Equals(value, ArgumentNames.SwitchMethod_Message, StringComparison.InvariantCultureIgnoreCase)
+                SwitchMethod = string.Equals(value, SwitchMethod.Message.ToString(), StringComparison.InvariantCultureIgnoreCase)
                     ? SwitchMethod.Message : SwitchMethod.InputSimulation;
             else if (name == ArgumentNames.RunAtWindowsStartup)
                 DoRunAtWindowsStartup = Utils.ParseBool(value, false);

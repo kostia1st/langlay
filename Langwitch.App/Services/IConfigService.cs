@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
+using Product.Common;
 
 namespace Product
 {
     public interface IConfigService
     {
-        IList<int> LanguageSwitchKeyArray { get; }
-        Keys LanguageSwitchKeys { get; }
-        IList<int> LayoutSwitchKeyArray { get; }
-        Keys LayoutSwitchKeys { get; }
+        IList<KeyCode> LanguageSwitchKeyArray { get; }
+        KeyCode LanguageSwitchKeys { get; }
+        IList<KeyCode> LayoutSwitchKeyArray { get; }
+        KeyCode LayoutSwitchKeys { get; }
         bool ShowOverlay { get; }
         long OverlayMilliseconds { get; }
         bool DoRunAtWindowsStartup { get; }
+        bool DoSwitchLanguage { get; }
+        bool DoSwitchLayout { get; }
     }
 }

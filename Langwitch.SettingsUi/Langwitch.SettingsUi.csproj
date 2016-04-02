@@ -52,9 +52,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </ApplicationDefinition>
+    </Page>
+    <Page Include="HotkeyComposer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HotkeyEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -65,6 +73,13 @@
     </Compile>
     <Compile Include="ConfigService.cs" />
     <Compile Include="ConfigViewModel.cs" />
+    <Compile Include="HotkeyComposer.xaml.cs">
+      <DependentUpon>HotkeyComposer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HotkeyEditor.xaml.cs">
+      <DependentUpon>HotkeyEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="KeyCodeViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

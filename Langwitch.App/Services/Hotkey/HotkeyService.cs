@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Product.Common;
 
 namespace Product
 {
@@ -28,10 +29,10 @@ namespace Product
             {
                 IsStarted = true;
                 Hooker = new GlobalKeyboardHook(false);
-                if (ConfigService.LanguageSwitchKeys != default(Keys))
-                    Hooker.HookedKeys.Add(ConfigService.LanguageSwitchKeys);
-                if (ConfigService.LayoutSwitchKeys != default(Keys))
-                    Hooker.HookedKeys.Add(ConfigService.LayoutSwitchKeys);
+                if (ConfigService.DoSwitchLanguage && ConfigService.LanguageSwitchKeys != default(KeyCode))
+                    Hooker.HookedKeys.Add((Keys) ConfigService.LanguageSwitchKeys);
+                if (ConfigService.DoSwitchLayout && ConfigService.LayoutSwitchKeys != default(KeyCode))
+                    Hooker.HookedKeys.Add((Keys) ConfigService.LayoutSwitchKeys);
 
                 Hooker.KeyDown = Hooker_KeyDown;
                 Hooker.KeyUp = Hooker_KeyUp;
@@ -56,16 +57,19 @@ namespace Product
         {
             if (InactiveTill == null || InactiveTill < DateTime.Now)
             {
-                if (ConfigService.LanguageSwitchKeys != Keys.None
-                    && (e.KeyData & ConfigService.LanguageSwitchKeys) == ConfigService.LanguageSwitchKeys)
+                if (ConfigService.DoSwitchLanguage
+                    && ConfigService.LanguageSwitchKeys != KeyCode.None
+                    && ((KeyCode) e.KeyData & ConfigService.LanguageSwitchKeys) == ConfigService.LanguageSwitchKeys)
                 {
-                    if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+                    if (ConfigService.DoSwitchLayout 
+                        && (KeyCode) e.KeyData == ConfigService.LayoutSwitchKeys)
                         e.Handled = LanguageService.SwitchLanguageAndLayout();
                     else
                         e.Handled = LanguageService.SwitchLanguage(true);
                 }
-                else if (ConfigService.LayoutSwitchKeys != Keys.None
-                    && (e.KeyData & ConfigService.LayoutSwitchKeys) == ConfigService.LayoutSwitchKeys)
+                else if (ConfigService.DoSwitchLayout
+                    && ConfigService.LayoutSwitchKeys != KeyCode.None
+                    && ((KeyCode) e.KeyData & ConfigService.LayoutSwitchKeys) == ConfigService.LayoutSwitchKeys)
                 {
                     e.Handled = LanguageService.SwitchLayout(true);
                 }
@@ -83,9 +87,11 @@ namespace Product
             // We're supposed to handle the key-up as well as the key-down
             // otherwise the target app will face a strange situation,
             // which is not guaranteed to work properly.
-            if (e.KeyCode == ConfigService.LanguageSwitchKeys)
+            if (ConfigService.DoSwitchLanguage 
+                && (KeyCode) e.KeyCode == ConfigService.LanguageSwitchKeys)
                 e.Handled = true;
-            else if (e.KeyCode == ConfigService.LayoutSwitchKeys)
+            else if (ConfigService.DoSwitchLayout
+                && (KeyCode) e.KeyCode == ConfigService.LayoutSwitchKeys)
                 e.Handled = true;
             if (e.Handled)
                 InactiveTill = null;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Product.Common;
 
 namespace Product
 {
@@ -79,7 +80,7 @@ namespace Product
                 key = AddModifiers(key);
                 if (HookedKeys.Contains(key))
                 {
-                    KeyEventArgs kea = new KeyEventArgs(key);
+                    KeyEventArgs kea = new KeyEventArgs((Keys) key);
                     if ((wParam == SafeMethods.WM_KEYDOWN || wParam == SafeMethods.WM_SYSKEYDOWN) && (KeyDown != null))
                     {
                         KeyDown(this, kea);
@@ -105,11 +106,6 @@ namespace Product
             if ((SafeMethods.GetKeyState((int) Keys.LMenu) & 0x8000) != 0) key = key | Keys.LMenu;
             if ((SafeMethods.GetKeyState((int) Keys.RMenu) & 0x8000) != 0) key = key | Keys.RMenu;
             return key;
-        }
-
-        private Keys RemoveModifiers(Keys keys)
-        {
-            return (Keys) ((int) keys & ~(int) Keys.Shift & ~(int) Keys.Control & ~(int) Keys.Alt);
         }
 
         #region IDisposable Support

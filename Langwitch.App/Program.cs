@@ -35,6 +35,8 @@ namespace Product
                     OnExit = delegate { isExiting = true; }
                 };
 
+                Application.AddMessageFilter(new AppMessageFilter { OnClose = delegate { isExiting = true; } });
+
                 try
                 {
                     hotkeyService.Start();
@@ -63,6 +65,7 @@ namespace Product
                 try
                 {
                     Application.DoEvents();
+
                     if (!predicate())
                         // Quitting the loop must be just enough
                         break;

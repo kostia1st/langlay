@@ -69,30 +69,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppMessageFilter.cs" />
     <Compile Include="InputLayout.cs" />
-    <Compile Include="OverlayForm.cs">
+    <Compile Include="Services\Overlay\OverlayForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OverlayForm.Designer.cs">
+    <Compile Include="Services\Overlay\OverlayForm.Designer.cs">
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GlobalKeyboardHook.cs" />
+    <Compile Include="Services\Hotkey\GlobalKeyboardHook.cs" />
     <Compile Include="InputLayoutHelper.cs" />
     <Compile Include="Services\ConfigService.cs" />
-    <Compile Include="Services\HotkeyService.cs" />
+    <Compile Include="Services\Hotkey\HotkeyService.cs" />
     <Compile Include="Services\IConfigService.cs" />
     <Compile Include="Services\ILanguageService.cs" />
     <Compile Include="Services\ILanguageSetterService.cs" />
-    <Compile Include="Services\IOverlayService.cs" />
+    <Compile Include="Services\Overlay\IOverlayService.cs" />
     <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Services\MessageLanguageSetterService.cs" />
-    <Compile Include="Services\OverlayService.cs" />
+    <Compile Include="Services\Overlay\OverlayService.cs" />
     <Compile Include="SafeMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\SimulatorLanguageSetterService.cs" />
     <Compile Include="Services\TrayService.cs" />
-    <Compile Include="Services\UniquenessService.cs" />
     <Compile Include="Services\WinStartupService.cs" />
     <Compile Include="WindowsSequenceCode.cs" />
   </ItemGroup>
@@ -103,7 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Keyboard Filled-16.ico" />
-    <EmbeddedResource Include="OverlayForm.resx">
+    <EmbeddedResource Include="Services\Overlay\OverlayForm.resx">
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
