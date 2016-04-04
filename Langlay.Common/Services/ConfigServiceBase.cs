@@ -18,6 +18,7 @@ namespace Product.Common
         public long OverlayMilliseconds { get; set; }
         public SwitchMethod SwitchMethod { get; set; }
         public bool DoRunAtWindowsStartup { get; set; }
+        public bool DoShowSettingsOnce { get; set; }
 
         public ConfigServiceBase(Configuration configuration)
         {
@@ -32,6 +33,7 @@ namespace Product.Common
             DoRunAtWindowsStartup = true;
             DoSwitchLanguage = true;
             DoSwitchLayout = false;
+            DoShowSettingsOnce = true;
         }
 
         private KeyCode ReduceKeyCodeArray(IList<KeyCode> keyCodes)
@@ -74,6 +76,8 @@ namespace Product.Common
                     ? SwitchMethod.Message : SwitchMethod.InputSimulation;
             else if (name == ArgumentNames.RunAtWindowsStartup)
                 DoRunAtWindowsStartup = Utils.ParseBool(value, false);
+            else if (name == ArgumentNames.ShowSettingsOnce)
+                DoShowSettingsOnce = Utils.ParseBool(value, true);
         }
 
         private void ReadArgument(string argument)

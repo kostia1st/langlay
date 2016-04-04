@@ -18,6 +18,7 @@ namespace Product
                 configService.ReadFromCommandLineArguments();
 
                 var startupService = new WinStartupService(configService);
+                var settingsService = new SettingsService(configService);
 
                 ILanguageSetterService languageSetterService;
                 if (configService.SwitchMethod == SwitchMethod.InputSimulation)
@@ -28,7 +29,7 @@ namespace Product
                 var overlayService = new OverlayService(configService);
                 var languageService = new LanguageService(configService, overlayService, languageSetterService);
                 var hotkeyService = new HotkeyService(configService, languageService);
-                var trayService = new TrayService(configService)
+                var trayService = new TrayService(configService, settingsService)
                 {
                     OnExit = delegate { Application.Exit(); }
                 };
@@ -45,6 +46,7 @@ namespace Product
                     trayService.Start();
                     overlayService.Start();
                     startupService.ResolveStartup();
+                    settingsService.ResolveFirstRun();
 
                     Application.Run();
                 }

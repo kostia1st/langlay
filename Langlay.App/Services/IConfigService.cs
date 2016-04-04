@@ -14,5 +14,6 @@ namespace Product
         bool DoRunAtWindowsStartup { get; }
         bool DoSwitchLanguage { get; }
         bool DoSwitchLayout { get; }
+        bool DoShowSettingsOnce { get; }
     }
 }

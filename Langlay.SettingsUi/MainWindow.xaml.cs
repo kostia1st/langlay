@@ -21,7 +21,7 @@ namespace Product.SettingsUi
 
             ViewModel = new ConfigViewModel(ConfigService);
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
-
+            ViewModel.ShowSettingsOnce = false;
             DataContext = ViewModel;
             InitializeComponent();
         }

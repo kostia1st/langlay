@@ -22,6 +22,7 @@ namespace Product.SettingsUi
             WriteArgument(ArgumentNames.SwitchMethod, SwitchMethod.ToString());
             WriteArgument(ArgumentNames.LanguageSwitchKeys, ArrayToKeyString(LanguageSwitchKeyArray));
             WriteArgument(ArgumentNames.LayoutSwitchKeys, ArrayToKeyString(LayoutSwitchKeyArray));
+            WriteArgument(ArgumentNames.ShowSettingsOnce, DoShowSettingsOnce.ToString());
             Configuration.Save();
         }
 

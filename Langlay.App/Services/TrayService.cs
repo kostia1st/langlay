@@ -11,21 +11,17 @@ namespace Product
     public class TrayService
     {
         private IConfigService ConfigService { get; set; }
+        private ISettingsService SettingsService { get; set; }
         private ContextMenu ContextMenu { get; set; }
         private NotifyIcon Icon { get; set; }
         private bool IsStarted { get; set; }
 
         public Action OnExit { get; set; }
 
-        public TrayService(IConfigService configService)
+        public TrayService(IConfigService configService, ISettingsService settingsService)
         {
             ConfigService = configService;
-        }
-
-        private void LaunchProduct()
-        {
-            var settingsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), AppSpecific.SettingsPath);
-            Process.Start(settingsPath);
+            SettingsService = settingsService;
         }
 
         public void Start()
@@ -35,7 +31,7 @@ namespace Product
                 IsStarted = true;
                 ContextMenu = new ContextMenu(new[]
                 {
-                    new MenuItem("Settings", delegate { LaunchProduct(); }),
+                    new MenuItem("Settings", delegate { SettingsService.ShowSettings(); }),
                     new MenuItem("-"),
                     new MenuItem("Quit", delegate { if (OnExit != null) OnExit(); })
                 });

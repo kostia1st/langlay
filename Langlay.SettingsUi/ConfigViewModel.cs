@@ -132,6 +132,19 @@ namespace Product.SettingsUi
             }
         }
 
+        public bool ShowSettingsOnce
+        {
+            get { return ConfigService.DoShowSettingsOnce; }
+            set
+            {
+                if (ConfigService.DoShowSettingsOnce != value)
+                {
+                    ConfigService.DoShowSettingsOnce = value;
+                    NotifyPropertyChanged("ShowSettingsOnce");
+                }
+            }
+        }
+
         private void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
