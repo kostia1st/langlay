@@ -57,7 +57,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\Langwitch.msi"
+        "OutputFilename" = "8:Debug\\Langlay.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -89,7 +89,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\Langwitch.msi"
+        "OutputFilename" = "8:Release\\Langlay.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -153,11 +153,11 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Langwitch.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Langlay.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                 }
-            "SourcePath" = "8:Langwitch.Common.dll"
+            "SourcePath" = "8:Langlay.Common.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
@@ -223,7 +223,7 @@
                 {
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_208713A7E99B40DC974789BDABF1605F"
                     {
-                    "Name" = "8:Langwitch"
+                    "Name" = "8:Langlay"
                     "AlwaysCreate" = "11:TRUE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
@@ -396,7 +396,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_6874AB3F703641909DF65B6F7F4FD63D"
             {
-            "Name" = "8:Langwitch"
+            "Name" = "8:Langlay"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -410,7 +410,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AA88641618B647DDB3EF630CE856DE56"
             {
-            "Name" = "8:Langwitch"
+            "Name" = "8:Langlay"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -683,7 +683,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C95BAE5C8F3E44D3B0ECEC3229C22568"
             {
-            "SourcePath" = "8:..\\Langwitch.App\\obj\\Debug\\Langlay.exe"
+            "SourcePath" = "8:..\\Langlay.App\\obj\\Debug\\Langlay.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"

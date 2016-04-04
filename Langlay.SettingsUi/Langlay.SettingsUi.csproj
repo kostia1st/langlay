@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Langwitch.App\bin\Debug\</OutputPath>
+    <OutputPath>..\Langlay.App\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -92,7 +92,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Langwitch.Common\Langlay.Common.csproj">
+    <ProjectReference Include="..\Langlay.Common\Langlay.Common.csproj">
       <Project>{d0bff2f2-f0a4-48e4-8f29-8fcb93175970}</Project>
       <Name>Langlay.Common</Name>
     </ProjectReference>

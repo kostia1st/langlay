@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langlay.App", "Langwitch.App\Langlay.App.csproj", "{764B8166-CDCE-4C65-BFDD-DDBBD4789870}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langlay.App", "Langlay.App\Langlay.App.csproj", "{764B8166-CDCE-4C65-BFDD-DDBBD4789870}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Langlay.Installer", "Langwitch.Installer\Langwitch.Installer.vdproj", "{A289ED8A-DCDA-42C8-9D24-1F925925F6B1}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Langlay.Installer", "Langlay.Installer\Langlay.Installer.vdproj", "{A289ED8A-DCDA-42C8-9D24-1F925925F6B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langlay.SettingsUi", "Langwitch.SettingsUi\Langlay.SettingsUi.csproj", "{8D088F3C-C645-4333-9170-3B7F3021D26C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langlay.SettingsUi", "Langlay.SettingsUi\Langlay.SettingsUi.csproj", "{8D088F3C-C645-4333-9170-3B7F3021D26C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langlay.Common", "Langwitch.Common\Langlay.Common.csproj", "{D0BFF2F2-F0A4-48E4-8F29-8FCB93175970}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langlay.Common", "Langlay.Common\Langlay.Common.csproj", "{D0BFF2F2-F0A4-48E4-8F29-8FCB93175970}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
