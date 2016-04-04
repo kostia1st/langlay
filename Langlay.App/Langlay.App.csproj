@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Keyboard Filled-16.ico</ApplicationIcon>
+    <ApplicationIcon>Keyboard-Filled-2-16.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="InputSimulator">
@@ -102,7 +102,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Keyboard Filled-16.ico" />
     <EmbeddedResource Include="Services\Overlay\OverlayForm.resx">
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,6 +128,9 @@
       <Project>{d0bff2f2-f0a4-48e4-8f29-8fcb93175970}</Project>
       <Name>Langlay.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Keyboard-Filled-2-16.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
