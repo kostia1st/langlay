@@ -38,8 +38,8 @@ namespace Product
             {
                 CreateParams baseParams = base.CreateParams;
                 baseParams.ExStyle |=
-                    (SafeMethods.WS_EX_NOACTIVATE | SafeMethods.WS_EX_TOOLWINDOW | SafeMethods.WS_EX_TOPMOST);
-                baseParams.ExStyle &= ~SafeMethods.WS_EX_APPWINDOW;
+                    (Win32.WS_EX_NOACTIVATE | Win32.WS_EX_TOOLWINDOW | Win32.WS_EX_TOPMOST);
+                baseParams.ExStyle &= ~Win32.WS_EX_APPWINDOW;
                 return baseParams;
             }
         }
@@ -88,10 +88,10 @@ namespace Product
             if (RegionHandle != IntPtr.Zero)
             {
                 // Make sure we free this unmanaged resource whenever we don't use it anymore
-                SafeMethods.DeleteObject(RegionHandle);
+                Win32.DeleteObject(RegionHandle);
                 RegionHandle = IntPtr.Zero;
             }
-            RegionHandle = SafeMethods.CreateRoundRectRgn(0, 0, Width, Height, 20, 20);
+            RegionHandle = Win32.CreateRoundRectRgn(0, 0, Width, Height, 20, 20);
             Region = System.Drawing.Region.FromHrgn(RegionHandle);
             UpdateBounds();
         }

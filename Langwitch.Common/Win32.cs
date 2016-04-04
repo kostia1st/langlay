@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Product.Common
 {
-    public class SafeMethods
+    public class Win32
     {
         public const int WH_KEYBOARD_LL = 13;
         public const int WM_KEYDOWN = 0x100;
@@ -15,6 +15,7 @@ namespace Product.Common
         public const int WM_CLOSE = 0x0010;
         public const int WM_DESTROY = 0x0002;
         public const int WM_QUIT = 0x0012;
+        public const int WM_USER_RESTART = 0x0400 + 20;
 
         [Flags]
         public enum SendMessageTimeoutFlags : uint
@@ -124,5 +125,26 @@ namespace Product.Common
             public int dwExtraInfo;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public Int32 x;
+            public Int32 y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct CURSORINFO
+        {
+            public Int32 cbSize;        // Specifies the size, in bytes, of the structure. 
+                                        // The caller must set this to Marshal.SizeOf(typeof(CURSORINFO)).
+            public Int32 flags;         // Specifies the cursor state. This parameter can be one of the following values:
+                                        //    0             The cursor is hidden.
+                                        //    CURSOR_SHOWING    The cursor is showing.
+            public IntPtr hCursor;          // Handle to the cursor. 
+            public POINT ptScreenPos;       // A POINT structure that receives the screen coordinates of the cursor. 
+        }
+
+        [DllImport("user32.dll")]
+        public static extern bool GetCursorInfo(out CURSORINFO pci);
     }
 }

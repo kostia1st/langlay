@@ -13,8 +13,6 @@ namespace Product
             var uniquenessService = new UniquenessService(Application.ProductName);
             uniquenessService.RunOrIgnore(delegate
             {
-                var isExiting = false;
-
                 var configService = new ConfigService();
                 configService.ReadFromConfigFile();
                 configService.ReadFromCommandLineArguments();
@@ -32,10 +30,14 @@ namespace Product
                 var hotkeyService = new HotkeyService(configService, languageService);
                 var trayService = new TrayService(configService)
                 {
-                    OnExit = delegate { isExiting = true; }
+                    OnExit = delegate { Application.Exit(); }
                 };
 
-                Application.AddMessageFilter(new AppMessageFilter { OnClose = delegate { isExiting = true; } });
+                Application.AddMessageFilter(new AppMessageFilter
+                {
+                    OnClose = delegate { Application.Exit(); },
+                    OnRestart = delegate { Application.Restart(); }
+                });
 
                 try
                 {
@@ -44,7 +46,11 @@ namespace Product
                     overlayService.Start();
                     startupService.ResolveStartup();
 
-                    RunUntil(() => !isExiting);
+                    Application.Run();
+                }
+                catch (Exception ex)
+                {
+                    // Do nothing O_o as of yet.
                 }
                 finally
                 {
@@ -54,29 +60,5 @@ namespace Product
                 }
             });
         }
-
-        private static void RunUntil(Func<bool> predicate)
-        {
-            while (true)
-            {
-                // This is really questionable, and seems it causes some functional issues.
-                // To check it out, increase the value to 500 for instance.
-                Thread.Sleep(5);
-                try
-                {
-                    Application.DoEvents();
-
-                    if (!predicate())
-                        // Quitting the loop must be just enough
-                        break;
-                }
-                catch (Exception ex)
-                {
-                    // Do nothing O_o as of yet.
-                    break;
-                }
-            }
-        }
-
     }
 }

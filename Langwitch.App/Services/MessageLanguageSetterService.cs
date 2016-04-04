@@ -10,13 +10,13 @@ namespace Product
     {
         public bool SetCurrentLayout(IntPtr handle)
         {
-            var foregroundWindowHandle = SafeMethods.GetForegroundWindow();
+            var foregroundWindowHandle = Win32.GetForegroundWindow();
 
             // TODO: this does not work with Skype, for some reason.
             IntPtr result;
-            SafeMethods.SendMessageTimeout(
-                foregroundWindowHandle, SafeMethods.WM_INPUTLANGCHANGEREQUEST, 0, handle.ToInt32(),
-                SafeMethods.SendMessageTimeoutFlags.SMTO_ABORTIFHUNG, 500, out result);
+            Win32.SendMessageTimeout(
+                foregroundWindowHandle, Win32.WM_INPUTLANGCHANGEREQUEST, 0, handle.ToInt32(),
+                Win32.SendMessageTimeoutFlags.SMTO_ABORTIFHUNG, 500, out result);
             return true;
         }
     }

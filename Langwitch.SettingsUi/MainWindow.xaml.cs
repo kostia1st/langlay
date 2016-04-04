@@ -51,17 +51,19 @@ namespace Product.SettingsUi
                 var thread = process.Threads.Cast<ProcessThread>().FirstOrDefault();
                 if (thread != null)
                 {
-                    SafeMethods.PostThreadMessage(thread.Id, SafeMethods.WM_CLOSE, 0, 0);
+                    Win32.PostThreadMessage(thread.Id, Win32.WM_USER_RESTART, 0, 0);
                 }
                 else
                 {
                     process.CloseMainWindow();
                 }
-                if (!process.WaitForExit(500))
+                if (!process.WaitForExit(1000))
+                {
                     process.Kill();
-                var productLocation = 
-                    System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), AppSpecific.MainAppPath);
-                Process.Start(new ProcessStartInfo(productLocation));
+                    var productLocation =
+                        System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), AppSpecific.MainAppPath);
+                    Process.Start(new ProcessStartInfo(productLocation));
+                }
             }
             this.Close();
         }

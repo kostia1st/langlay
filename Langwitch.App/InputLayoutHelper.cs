@@ -47,8 +47,8 @@ namespace Product
 
         public static InputLayout GetCurrentLayout()
         {
-            var currentLayoutHandle = SafeMethods.GetKeyboardLayout(
-               SafeMethods.GetWindowThreadProcessId(SafeMethods.GetForegroundWindow(), 0));
+            var currentLayoutHandle = Win32.GetKeyboardLayout(
+               Win32.GetWindowThreadProcessId(Win32.GetForegroundWindow(), 0));
             return InputLayouts.FirstOrDefault(x => x.Handle == currentLayoutHandle);
         }
 

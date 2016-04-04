@@ -33,7 +33,7 @@ namespace Product
         /// <summary>
         /// Strong reference to a native callback method.
         /// </summary>
-        private SafeMethods.KeyboardHookProc HookProcedureHolder;
+        private Win32.KeyboardHookProc HookProcedureHolder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalKeyboardHook"/> class and installs the keyboard hook.
@@ -52,9 +52,9 @@ namespace Product
         /// </summary>
         public void Hook()
         {
-            IntPtr hInstance = SafeMethods.LoadLibrary("User32");
-            HookHandle = SafeMethods.SetWindowsHookEx(
-                SafeMethods.WH_KEYBOARD_LL, HookProcedureHolder, hInstance, 0);
+            IntPtr hInstance = Win32.LoadLibrary("User32");
+            HookHandle = Win32.SetWindowsHookEx(
+                Win32.WH_KEYBOARD_LL, HookProcedureHolder, hInstance, 0);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Product
         /// </summary>
         public void Unhook()
         {
-            SafeMethods.UnhookWindowsHookEx(HookHandle);
+            Win32.UnhookWindowsHookEx(HookHandle);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Product
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
         /// <returns></returns>
-        private int HookProcedure(int code, int wParam, ref SafeMethods.KeyboardHookStruct lParam)
+        private int HookProcedure(int code, int wParam, ref Win32.KeyboardHookStruct lParam)
         {
             if (code >= 0)
             {
@@ -81,11 +81,11 @@ namespace Product
                 if (HookedKeys.Contains(key))
                 {
                     KeyEventArgs kea = new KeyEventArgs((Keys) key);
-                    if ((wParam == SafeMethods.WM_KEYDOWN || wParam == SafeMethods.WM_SYSKEYDOWN) && (KeyDown != null))
+                    if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
                     {
                         KeyDown(this, kea);
                     }
-                    else if ((wParam == SafeMethods.WM_KEYUP || wParam == SafeMethods.WM_SYSKEYUP) && (KeyUp != null))
+                    else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
                     {
                         KeyUp(this, kea);
                     }
@@ -93,18 +93,18 @@ namespace Product
                         return 1;
                 }
             }
-            return SafeMethods.CallNextHookEx(HookHandle, code, wParam, ref lParam);
+            return Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
         }
 
         private Keys AddModifiers(Keys key)
         {
             //if ((SafeMethods.GetKeyState((int) Keys.CapsLock) & 0x0001) != 0) key = key | Keys.CapsLock;
-            if ((SafeMethods.GetKeyState((int) Keys.LShiftKey) & 0x8000) != 0) key = key | Keys.LShiftKey;
-            if ((SafeMethods.GetKeyState((int) Keys.RShiftKey) & 0x8000) != 0) key = key | Keys.RShiftKey;
-            if ((SafeMethods.GetKeyState((int) Keys.LControlKey) & 0x8000) != 0) key = key | Keys.LControlKey;
-            if ((SafeMethods.GetKeyState((int) Keys.RControlKey) & 0x8000) != 0) key = key | Keys.RControlKey;
-            if ((SafeMethods.GetKeyState((int) Keys.LMenu) & 0x8000) != 0) key = key | Keys.LMenu;
-            if ((SafeMethods.GetKeyState((int) Keys.RMenu) & 0x8000) != 0) key = key | Keys.RMenu;
+            if ((Win32.GetKeyState((int) Keys.LShiftKey) & 0x8000) != 0) key = key | Keys.LShiftKey;
+            if ((Win32.GetKeyState((int) Keys.RShiftKey) & 0x8000) != 0) key = key | Keys.RShiftKey;
+            if ((Win32.GetKeyState((int) Keys.LControlKey) & 0x8000) != 0) key = key | Keys.LControlKey;
+            if ((Win32.GetKeyState((int) Keys.RControlKey) & 0x8000) != 0) key = key | Keys.RControlKey;
+            if ((Win32.GetKeyState((int) Keys.LMenu) & 0x8000) != 0) key = key | Keys.LMenu;
+            if ((Win32.GetKeyState((int) Keys.RMenu) & 0x8000) != 0) key = key | Keys.RMenu;
             return key;
         }
 

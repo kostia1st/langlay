@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="ArgumentNames.cs" />
     <Compile Include="AppSpecific.cs" />
-    <Compile Include="SafeMethods.cs" />
+    <Compile Include="Win32.cs" />
     <Compile Include="Services\ConfigServiceBase.cs" />
     <Compile Include="EnumItem.cs" />
     <Compile Include="EnumValueConverter.cs" />
