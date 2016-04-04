@@ -15,8 +15,26 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_6FD718E40917C19F02A57A95D9AF13FD"
+        "MsmKey" = "8:_06EDB3FCCC764346A464FD473B0A8DD8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_61E85315F8DD125078ECB3B829B1B1E6"
         "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C52DC61E2D3307973B09B96331C2335C"
+        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C52DC61E2D3307973B09B96331C2335C"
+        "OwnerKey" = "8:_06EDB3FCCC764346A464FD473B0A8DD8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -27,20 +45,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FEF9F04F46BE169FD41538362CC6A712"
-        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_61E85315F8DD125078ECB3B829B1B1E6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FEF9F04F46BE169FD41538362CC6A712"
+        "OwnerKey" = "8:_06EDB3FCCC764346A464FD473B0A8DD8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6FD718E40917C19F02A57A95D9AF13FD"
+        "OwnerKey" = "8:_C52DC61E2D3307973B09B96331C2335C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -149,15 +167,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6FD718E40917C19F02A57A95D9AF13FD"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_61E85315F8DD125078ECB3B829B1B1E6"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Langlay.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:InputSimulator, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_61E85315F8DD125078ECB3B829B1B1E6"
+                    {
+                    "Name" = "8:InputSimulator.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
-            "SourcePath" = "8:Langlay.Common.dll"
+            "SourcePath" = "8:InputSimulator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
@@ -175,20 +198,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FEF9F04F46BE169FD41538362CC6A712"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C52DC61E2D3307973B09B96331C2335C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:InputSimulator, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Langlay.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_FEF9F04F46BE169FD41538362CC6A712"
+                    "_C52DC61E2D3307973B09B96331C2335C"
                     {
-                    "Name" = "8:InputSimulator.dll"
+                    "Name" = "8:Langlay.Common.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:InputSimulator.dll"
+            "SourcePath" = "8:Langlay.Common.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
@@ -274,7 +297,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Langlay"
         "ProductCode" = "8:{709FEE23-B43F-4864-A394-5E16B93D529A}"
-        "PackageCode" = "8:{90351079-C194-4413-BAA3-CE8ABDDCAF90}"
+        "PackageCode" = "8:{1566142F-72A3-43F3-BE9A-831848E5746E}"
         "UpgradeCode" = "8:{5EFA80B3-FA49-4F3A-8E8C-0C4F7FC46500}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -681,6 +704,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_06EDB3FCCC764346A464FD473B0A8DD8"
+            {
+            "SourcePath" = "8:..\\Langlay.SettingsUi\\obj\\Debug\\Langlay.SettingsUi.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{8D088F3C-C645-4333-9170-3B7F3021D26C}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C95BAE5C8F3E44D3B0ECEC3229C22568"
             {
             "SourcePath" = "8:..\\Langlay.App\\obj\\Debug\\Langlay.exe"

@@ -15,7 +15,7 @@ namespace Product.SettingsUi
         public static void Main()
         {
             var productName = Assembly.GetEntryAssembly()
-                .GetCustomAttributes(typeof(AssemblyProductAttribute))
+                .GetCustomAttributes(typeof(AssemblyProductAttribute), true)
                 .OfType<AssemblyProductAttribute>()
                 .FirstOrDefault().GetValueOrDefault(x => x.Product);
             var uniquenessService = new UniquenessService(productName);

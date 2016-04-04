@@ -5,7 +5,7 @@ using Product.Common;
 
 namespace Product
 {
-    public class SettingsService: ISettingsService
+    public class SettingsService : ISettingsService
     {
         private IConfigService ConfigService { get; set; }
 
@@ -16,8 +16,16 @@ namespace Product
 
         public void ShowSettings()
         {
-            var settingsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), AppSpecific.SettingsPath);
-            Process.Start(settingsPath);
+            var location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var fullFileName = Path.Combine(location, AppSpecific.SettingsPath);
+            var psi = new ProcessStartInfo
+            {
+                FileName = fullFileName,
+                WorkingDirectory = location,
+                LoadUserProfile = true,
+                UseShellExecute = false
+            };
+            Process.Start(psi);
         }
 
         public void ResolveFirstRun()

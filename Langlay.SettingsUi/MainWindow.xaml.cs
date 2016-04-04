@@ -60,9 +60,18 @@ namespace Product.SettingsUi
                 if (!process.WaitForExit(1000))
                 {
                     process.Kill();
-                    var productLocation =
-                        System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), AppSpecific.MainAppPath);
-                    Process.Start(new ProcessStartInfo(productLocation));
+
+                    var location = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                    var fullFilename =
+                        System.IO.Path.Combine(location, AppSpecific.MainAppPath);
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = fullFilename,
+                        WorkingDirectory = location,
+                        UseShellExecute = false,
+                        LoadUserProfile = true
+                    };
+                    Process.Start(psi);
                 }
             }
             this.Close();
