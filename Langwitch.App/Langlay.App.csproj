@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Product</RootNamespace>
-    <AssemblyName>Langwitch</AssemblyName>
+    <AssemblyName>Langlay</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -125,9 +125,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Langwitch.Common\Langwitch.Common.csproj">
+    <ProjectReference Include="..\Langwitch.Common\Langlay.Common.csproj">
       <Project>{d0bff2f2-f0a4-48e4-8f29-8fcb93175970}</Project>
-      <Name>Langwitch.Common</Name>
+      <Name>Langlay.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

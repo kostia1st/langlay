@@ -7,8 +7,8 @@ namespace Product.Common
 {
     public static class AppSpecific
     {
-        public const string MainAppProcessName = "Langwitch";
-        public const string MainAppPath = "Langwitch.exe";
-        public const string SettingsPath = "Langwitch.SettingsUi.exe";
+        public const string MainAppProcessName = "Langlay";
+        public const string MainAppPath = "Langlay.exe";
+        public const string SettingsPath = "Langlay.SettingsUi.exe";
     }
 }

@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:Langwitch.Installer"
+"ProjectName" = "8:Langlay.Installer"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -13,6 +13,12 @@
 "SccProvider" = "8:"
     "Hierarchy"
     {
+        "Entry"
+        {
+        "MsmKey" = "8:_6FD718E40917C19F02A57A95D9AF13FD"
+        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
+        "MsmSig" = "8:_UNDEFINED"
+        }
         "Entry"
         {
         "MsmKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
@@ -29,6 +35,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_FEF9F04F46BE169FD41538362CC6A712"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6FD718E40917C19F02A57A95D9AF13FD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -137,6 +149,32 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6FD718E40917C19F02A57A95D9AF13FD"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Langwitch.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:Langwitch.Common.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FEF9F04F46BE169FD41538362CC6A712"
             {
             "AssemblyRegister" = "3:1"
@@ -234,7 +272,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Langwitch"
+        "ProductName" = "8:Langlay"
         "ProductCode" = "8:{709FEE23-B43F-4864-A394-5E16B93D529A}"
         "PackageCode" = "8:{90351079-C194-4413-BAA3-CE8ABDDCAF90}"
         "UpgradeCode" = "8:{5EFA80B3-FA49-4F3A-8E8C-0C4F7FC46500}"
@@ -247,7 +285,7 @@
         "Manufacturer" = "8:estorski"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Langwitch"
+        "Title" = "8:Langlay"
         "Subject" = "8:"
         "ARPCONTACT" = "8:estorski"
         "Keywords" = "8:"
@@ -645,7 +683,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C95BAE5C8F3E44D3B0ECEC3229C22568"
             {
-            "SourcePath" = "8:..\\Langwitch.App\\obj\\Debug\\Langwitch.exe"
+            "SourcePath" = "8:..\\Langwitch.App\\obj\\Debug\\Langlay.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
