@@ -1,4 +1,4 @@
-# Langwitch
+# Langlay
 A small & simple tool for switching current input language with a custom hotkey, for Windows.
 
 The tool just hangs somewhere in your RAM (and is rather small btw), and monitors your keystrokes.
@@ -6,4 +6,4 @@ Whenever you press your custom keystroke (Caps Lock by default), it just changes
 
 Note, changing input language and changing keyboard layout - are different actions for this tool. And you are free to customize the most preferable way of working with all these matters.
 
-[>>> Installer download link <<<](https://github.com/estorski/langwitch/releases/download/v1.0/Langwitch.msi)
+[>>> Installer download link <<<](https://github.com/estorski/langlay/releases/download/v1.0/Langwitch.msi)

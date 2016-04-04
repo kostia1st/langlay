@@ -1,0 +1,103 @@
+﻿<Window x:Class="Product.SettingsUi.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Product.SettingsUi"
+        mc:Ignorable="d"
+        Title="Settings" Height="600" Width="550" 
+        ResizeMode="NoResize" SizeToContent="Manual" 
+        ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+        VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" Padding="20 0" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Feel free to change the settings below. They get saved immediately after you change them. However, you must 'Close and Apply' if you have the application currently running." 
+                           Margin="0 10 0 0" TextWrapping="Wrap"  />
+                <CheckBox x:Name="chbRunAtStartup" 
+                          Content="Run at Windows startup" 
+                          Margin="0 20 0 0"
+                          IsChecked="{Binding RunAtWindowsStartup}"/>
+                <Rectangle Stroke="Silver" HorizontalAlignment="Stretch" StrokeThickness="1" Height="1" Margin="0 10 0 0" />
+                <CheckBox x:Name="chbShowOverlay" 
+                          Content="Show Overlay" Margin="0 10 0 0" 
+                          IsChecked="{Binding ShowOverlay}"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
+                    <TextBlock Text="Overlay stays visible for" Width="150" />
+                    <Slider x:Name="sliderOverlayTime" Width="200" Minimum="0" Maximum="2000" 
+                            IsSnapToTickEnabled="True"
+                            TickFrequency="50"
+                            Value="{Binding OverlayMilliseconds}" />
+                    <TextBlock x:Name="tbkOverlayTime" Width="50">
+                        <Run Text="{Binding OverlayMilliseconds}" />
+                        <Run Text="ms" />
+                    </TextBlock>
+                </StackPanel>
+                <Rectangle Stroke="Silver" 
+                           HorizontalAlignment="Stretch" 
+                           StrokeThickness="1" Height="1" 
+                           Margin="0 10 0 0" />
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
+                    <TextBlock Text="Switch method:" Width="150" VerticalAlignment="Top" Margin="0 2 0 0" />
+                    <ComboBox x:Name="cbSwitchMethod" 
+                              ItemsSource="{Binding SwitchMethod, Mode=OneTime, Converter={StaticResource enumConverter}}"
+                              SelectedValue="{Binding SwitchMethod}"
+                              DisplayMemberPath="Text"
+                              SelectedValuePath="Key"
+                              Width="150" 
+                              VerticalAlignment="Top" />
+
+                    <TextBlock Text="Leave 'Input Simulation' if you are not sure about it."
+                               TextWrapping="Wrap" HorizontalAlignment="Stretch" 
+                               Margin="10 2 0 0"
+                               Width="170" MinWidth="0"/>
+                </StackPanel>
+                <Rectangle Stroke="Silver" HorizontalAlignment="Stretch" StrokeThickness="1" Height="1" Margin="0 10 0 0" />
+                <TextBlock Text="Here you can set up a key sequence for switching either language or layout, or both." 
+                           VerticalAlignment="Center"
+                           Margin="0 10 0 0"/>
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                    <CheckBox Content="Language:"
+                              IsChecked="{Binding SwitchLanguage}"
+                              VerticalAlignment="Top"
+                              Margin="0 2 0 0"
+                              Width="150"  />
+                    <local:HotkeyComposer DataContext="{Binding LanguageSwitchSequence}"
+                                          x:Name="HotkeyComposer_Language"
+                                          Changed="HotkeyComposer_Language_Changed"/>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                    <CheckBox Content="Layout:"
+                              IsChecked="{Binding SwitchLayout}"
+                              VerticalAlignment="Top"
+                              Margin="0 2 0 0"
+                              Width="150" />
+                    <local:HotkeyComposer DataContext="{Binding LayoutSwitchSequence}"
+                                          x:Name="HotkeyComposer_Layout"
+                                          Changed="HotkeyComposer_Layout_Changed"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <Rectangle Stroke="Gray" 
+                   HorizontalAlignment="Stretch" 
+                   StrokeThickness="1" 
+                   Height="1" Margin="0 10 0 0"
+                   Grid.Row="1"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Margin="10" Padding="10 5" Click="Button_Click">
+                <TextBlock Text="Close and Apply" />
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
