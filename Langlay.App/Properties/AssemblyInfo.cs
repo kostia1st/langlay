@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Langwitch.Common")]
+[assembly: AssemblyTitle("Langlay")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Langwitch.Common")]
+[assembly: AssemblyProduct("Langlay")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d0bff2f2-f0a4-48e4-8f29-8fcb93175970")]
+[assembly: Guid("764b8166-cdce-4c65-bfdd-ddbbd4789870")]
 
 // Version information for an assembly consists of the following four values:
 //

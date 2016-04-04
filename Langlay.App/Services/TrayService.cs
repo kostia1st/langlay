@@ -42,7 +42,7 @@ namespace Product
                 Icon = new NotifyIcon()
                 {
                     Text = Application.ProductName,
-                    Icon = new Icon(typeof(Program), "Keyboard Filled-16.ico"),
+                    Icon = new Icon(typeof(Program), "Keyboard-Filled-2-16.ico"),
                     Visible = true,
                     ContextMenu = ContextMenu
                 };

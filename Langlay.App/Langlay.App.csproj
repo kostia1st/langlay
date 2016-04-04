@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Product</RootNamespace>
-    <AssemblyName>Langwitch</AssemblyName>
+    <AssemblyName>Langlay</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -50,11 +50,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Keyboard Filled-16.ico</ApplicationIcon>
+    <ApplicationIcon>Keyboard-Filled-2-16.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="InputSimulator">
-      <HintPath>..\Langwitch.Libs\InputSimulator.dll</HintPath>
+      <HintPath>..\Langlay.Libs\InputSimulator.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -102,7 +102,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Keyboard Filled-16.ico" />
     <EmbeddedResource Include="Services\Overlay\OverlayForm.resx">
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -125,10 +124,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Langwitch.Common\Langwitch.Common.csproj">
+    <ProjectReference Include="..\Langlay.Common\Langlay.Common.csproj">
       <Project>{d0bff2f2-f0a4-48e4-8f29-8fcb93175970}</Project>
-      <Name>Langwitch.Common</Name>
+      <Name>Langlay.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Keyboard-Filled-2-16.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
