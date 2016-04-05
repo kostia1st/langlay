@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="AppMessageFilter.cs" />
     <Compile Include="InputLayout.cs" />
+    <Compile Include="Services\Hotkey\IHotkeyService.cs" />
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\MouseCursorService.cs" />
     <Compile Include="Services\Overlay\OverlayForm.cs">

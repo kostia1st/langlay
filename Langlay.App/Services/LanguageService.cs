@@ -11,27 +11,31 @@ namespace Product
             = new Dictionary<string, IntPtr>();
         private IOverlayService OverlayService { get; set; }
         private IConfigService ConfigService { get; set; }
-        private ILanguageSetterService LanguageSetterService { get; set; }
+        public ILanguageSetterService LanguageSetterService { get; set; }
 
         public LanguageService(
-            IConfigService configService, IOverlayService overlayService,
-            ILanguageSetterService languageSetterService)
+            IConfigService configService, IOverlayService overlayService)
         {
-            if (configService == null)
-                throw new ArgumentNullException("configService");
-            if (overlayService == null)
-                throw new ArgumentNullException("overlayService");
-            if (languageSetterService == null)
-                throw new ArgumentNullException("languageSetterService");
             ConfigService = configService;
             OverlayService = overlayService;
-            LanguageSetterService = languageSetterService;
+        }
+
+        private void CheckServicesAreSet()
+        {
+            if (ConfigService == null)
+                throw new NullReferenceException("ConfigService must not be null");
+            if (OverlayService == null)
+                throw new NullReferenceException("OverlayService");
+            if (LanguageSetterService == null)
+                throw new NullReferenceException("LanguageSetterService");
         }
 
         public bool SwitchLanguage(bool restoreSavedLayout)
         {
             try
             {
+                CheckServicesAreSet();
+
                 var currentLanguage = InputLayoutHelper.GetCurrentLayout();
                 if (currentLanguage != null)
                 {
@@ -68,6 +72,7 @@ namespace Product
         {
             try
             {
+                CheckServicesAreSet();
                 var currentLayout = InputLayoutHelper.GetCurrentLayout();
                 if (currentLayout != null)
                 {
@@ -102,7 +107,6 @@ namespace Product
         public bool SwitchLanguageAndLayout()
         {
             return SwitchLayout(false) || SwitchLanguage(false);
-
         }
     }
 }

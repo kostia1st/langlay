@@ -19,15 +19,18 @@ namespace Product
                 var startupService = new WinStartupService(configService);
                 var settingsService = new SettingsService(configService);
 
+                var overlayService = new OverlayService(configService);
+                var languageService = new LanguageService(configService, overlayService);
+                var hotkeyService = new HotkeyService(configService, languageService);
+
                 ILanguageSetterService languageSetterService;
                 if (configService.SwitchMethod == SwitchMethod.InputSimulation)
-                    languageSetterService = new SimulatorLanguageSetterService();
+                    languageSetterService = new SimulatorLanguageSetterService(hotkeyService);
                 else
                     languageSetterService = new MessageLanguageSetterService();
 
-                var overlayService = new OverlayService(configService);
-                var languageService = new LanguageService(configService, overlayService, languageSetterService);
-                var hotkeyService = new HotkeyService(configService, languageService);
+                languageService.LanguageSetterService = languageSetterService;
+
                 var trayService = new TrayService(configService, settingsService)
                 {
                     OnExit = delegate { Application.Exit(); }

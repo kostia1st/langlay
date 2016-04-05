@@ -15,24 +15,32 @@ namespace Product
         private int? CurrentLanguageSwitchSequence { get; set; }
         private int? CurrentLayoutSwitchSequence { get; set; }
 
-        private void SendCtrlShift(int amount = 1)
+        public IHotkeyService HotkeyService { get; set; }
+
+        public SimulatorLanguageSetterService(IHotkeyService hotkeyService)
         {
-            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LShiftKey);
-            for (int i = 0; i < amount; i++)
-            {
-                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LControlKey);
-            }
-            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LShiftKey);
+            HotkeyService = hotkeyService;
         }
 
-        private void SendAltShift(int amount = 1)
+        private void SendCtrlShift(int amount = 1)
         {
-            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LShiftKey);
+            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LControlKey);
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LMenu);
+                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LShiftKey);
             }
-            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LShiftKey);
+            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LControlKey);
+        }
+        
+        private void SendAltShift(int amount = 1)
+        {
+            // It's important to HOLD the Alt key first, not vice versa
+            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LMenu);
+            for (int i = 0; i < amount; i++)
+            {
+                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LShiftKey);
+            }
+            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LMenu);
         }
 
         private void SendGraveAccent(int amount = 1)
@@ -87,6 +95,8 @@ namespace Product
             var result = false;
             try
             {
+                HotkeyService.SetEnabledState(false);
+
                 if (CurrentLanguageSwitchSequence == null && CurrentLayoutSwitchSequence == null)
                     ReadCurrentSwitchSequences();
 
@@ -154,6 +164,7 @@ namespace Product
                     // the current (new) layout from OS after this method finishes.
                     Thread.Sleep(InterruptionDelay);
                 }
+                HotkeyService.SetEnabledState(true);
             }
             catch { /* ummm, logging must be here */ }
             return result;
