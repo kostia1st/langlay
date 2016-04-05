@@ -40,8 +40,9 @@ namespace Product
                     Text = Application.ProductName,
                     Icon = new Icon(typeof(Program), "Keyboard-Filled-2-16.ico"),
                     Visible = true,
-                    ContextMenu = ContextMenu
+                    ContextMenu = ContextMenu,                    
                 };
+                Icon.MouseDoubleClick += delegate { SettingsService.ShowSettings(); };
             }
         }
 
