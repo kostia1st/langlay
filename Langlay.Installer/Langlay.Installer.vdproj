@@ -15,18 +15,18 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_06EDB3FCCC764346A464FD473B0A8DD8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_61E85315F8DD125078ECB3B829B1B1E6"
         "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_879F961C69EE4227861101CC4ECFFF77"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C52DC61E2D3307973B09B96331C2335C"
         "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "MsmSig" = "8:_UNDEFINED"
@@ -34,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_C52DC61E2D3307973B09B96331C2335C"
-        "OwnerKey" = "8:_06EDB3FCCC764346A464FD473B0A8DD8"
+        "OwnerKey" = "8:_879F961C69EE4227861101CC4ECFFF77"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,7 +52,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_06EDB3FCCC764346A464FD473B0A8DD8"
+        "OwnerKey" = "8:_879F961C69EE4227861101CC4ECFFF77"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -98,6 +98,11 @@
                     {
                     "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.4.5"
+                    {
+                    "Name" = "8:Windows Installer 4.5"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.4.5"
                     }
                 }
             }
@@ -297,7 +302,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Langlay"
         "ProductCode" = "8:{709FEE23-B43F-4864-A394-5E16B93D529A}"
-        "PackageCode" = "8:{1566142F-72A3-43F3-BE9A-831848E5746E}"
+        "PackageCode" = "8:{22079CA4-E1E7-4CB8-B22D-2C120A839B73}"
         "UpgradeCode" = "8:{5EFA80B3-FA49-4F3A-8E8C-0C4F7FC46500}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -704,7 +709,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_06EDB3FCCC764346A464FD473B0A8DD8"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_879F961C69EE4227861101CC4ECFFF77"
             {
             "SourcePath" = "8:..\\Langlay.SettingsUi\\obj\\Debug\\Langlay.SettingsUi.exe"
             "TargetName" = "8:"
