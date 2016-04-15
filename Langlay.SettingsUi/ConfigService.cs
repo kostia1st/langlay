@@ -8,7 +8,7 @@ namespace Product.SettingsUi
     public class ConfigService : ConfigServiceBase
     {
         public ConfigService()
-            : base(ConfigurationManager.OpenExeConfiguration(AppSpecific.MainAppPath))
+            : base()
         {
         }
 
@@ -23,12 +23,12 @@ namespace Product.SettingsUi
             WriteArgument(ArgumentNames.LanguageSwitchKeys, ArrayToKeyString(LanguageSwitchKeyArray));
             WriteArgument(ArgumentNames.LayoutSwitchKeys, ArrayToKeyString(LayoutSwitchKeyArray));
             WriteArgument(ArgumentNames.ShowSettingsOnce, DoShowSettingsOnce.ToString());
-            Configuration.Save(ConfigurationSaveMode.Minimal, false);
+            UserConfig.Save(ConfigurationSaveMode.Minimal, false);
         }
 
         public void WriteArgument(string name, string value)
         {
-            var appSettings = Configuration.AppSettings.Settings;
+            var appSettings = UserConfig.AppSettings.Settings;
             var key = "app:" + name;
             if (!appSettings.AllKeys.Contains(key))
                 appSettings.Add(key, value);

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using Product.Common;
 
@@ -16,10 +15,7 @@ namespace Product.SettingsUi
 
         public MainWindow()
         {
-            ConfigService = new ConfigService();
-            ConfigService.ReadFromConfigFile();
-
-            ViewModel = new ConfigViewModel(ConfigService);
+            ViewModel = new ConfigViewModel(App.ConfigService);
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
             ViewModel.ShowSettingsOnce = false;
             DataContext = ViewModel;
@@ -29,7 +25,7 @@ namespace Product.SettingsUi
         private void DoOnViewModelChanged()
         {
             // Save configuration
-            ConfigService.SaveToFile();
+            App.ConfigService.SaveToFile();
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -61,9 +57,9 @@ namespace Product.SettingsUi
                 {
                     process.Kill();
 
-                    var location = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                    var location = PathUtils.GetAppDirectory();
                     var fullFilename =
-                        System.IO.Path.Combine(location, AppSpecific.MainAppPath);
+                        System.IO.Path.Combine(location, AppSpecific.MainAppFilename);
                     var psi = new ProcessStartInfo
                     {
                         FileName = fullFilename,

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using Product.Common;
 
 namespace Product
@@ -16,8 +15,8 @@ namespace Product
 
         public void ShowSettings()
         {
-            var location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var fullFileName = Path.Combine(location, AppSpecific.SettingsPath);
+            var location = PathUtils.GetAppDirectory();
+            var fullFileName = Path.Combine(location, AppSpecific.SettingsAppFilename);
             var psi = new ProcessStartInfo
             {
                 FileName = fullFileName,
