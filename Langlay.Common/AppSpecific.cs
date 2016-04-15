@@ -7,8 +7,10 @@ namespace Product.Common
 {
     public static class AppSpecific
     {
+        public const string MainAppTitle = "Langlay";
         public const string MainAppProcessName = "Langlay";
-        public const string MainAppPath = "Langlay.exe";
-        public const string SettingsPath = "Langlay.SettingsUi.exe";
+        public const string MainAppFilename = "Langlay.exe";
+        public const string MainAppConfigFilename = MainAppFilename + ".config";
+        public const string SettingsAppFilename = "Langlay.SettingsUi.exe";
     }
 }

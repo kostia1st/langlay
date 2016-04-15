@@ -24,6 +24,16 @@ namespace Product
             SettingsService = settingsService;
         }
 
+        private void OpenIssues()
+        {
+            var psi = new ProcessStartInfo()
+            {
+                UseShellExecute = true,
+                FileName = "https://github.com/estorski/langlay/issues",
+            };
+            Process.Start(psi);
+        }
+
         public void Start()
         {
             if (!IsStarted)
@@ -32,6 +42,7 @@ namespace Product
                 ContextMenu = new ContextMenu(new[]
                 {
                     new MenuItem("Settings", delegate { SettingsService.ShowSettings(); }),
+                    new MenuItem("Report a bug", delegate { OpenIssues(); }),
                     new MenuItem("-"),
                     new MenuItem("Quit", delegate { if (OnExit != null) OnExit(); })
                 });
@@ -40,8 +51,9 @@ namespace Product
                     Text = Application.ProductName,
                     Icon = new Icon(typeof(Program), "Keyboard-Filled-2-16.ico"),
                     Visible = true,
-                    ContextMenu = ContextMenu
+                    ContextMenu = ContextMenu,                    
                 };
+                Icon.MouseDoubleClick += delegate { SettingsService.ShowSettings(); };
             }
         }
 

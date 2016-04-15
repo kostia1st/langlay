@@ -13,51 +13,66 @@ namespace Product
             uniquenessService.RunOrIgnore(delegate
             {
                 var configService = new ConfigService();
-                configService.ReadFromConfigFile();
-                configService.ReadFromCommandLineArguments();
-
-                var startupService = new WinStartupService(configService);
-                var settingsService = new SettingsService(configService);
-
-                ILanguageSetterService languageSetterService;
-                if (configService.SwitchMethod == SwitchMethod.InputSimulation)
-                    languageSetterService = new SimulatorLanguageSetterService();
-                else
-                    languageSetterService = new MessageLanguageSetterService();
-
-                var overlayService = new OverlayService(configService);
-                var languageService = new LanguageService(configService, overlayService, languageSetterService);
-                var hotkeyService = new HotkeyService(configService, languageService);
-                var trayService = new TrayService(configService, settingsService)
-                {
-                    OnExit = delegate { Application.Exit(); }
-                };
-
-                Application.AddMessageFilter(new AppMessageFilter
-                {
-                    OnClose = delegate { Application.Exit(); },
-                    OnRestart = delegate { Application.Restart(); }
-                });
-
                 try
                 {
+                    configService.ReadFromConfigFile(false);
+                    configService.ReadFromConfigFile(true);
+                    configService.ReadFromCommandLineArguments();
+
+                    var startupService = new WinStartupService(configService);
+                    var settingsService = new SettingsService(configService);
+
+                    var overlayService = new OverlayService(configService);
+                    var languageService = new LanguageService(configService, overlayService);
+                    var hotkeyService = new HotkeyService(configService, languageService);
+
+                    ILanguageSetterService languageSetterService;
+                    if (configService.SwitchMethod == SwitchMethod.InputSimulation)
+                        languageSetterService = new SimulatorLanguageSetterService(hotkeyService);
+                    else
+                        languageSetterService = new MessageLanguageSetterService();
+
+                    languageService.LanguageSetterService = languageSetterService;
+
+                    var trayService = new TrayService(configService, settingsService)
+                    {
+                        OnExit = delegate { Application.Exit(); }
+                    };
+
+                    Application.AddMessageFilter(new AppMessageFilter
+                    {
+                        OnClose = delegate { Application.Exit(); },
+                        OnRestart = delegate { Application.Restart(); }
+                    });
+
                     hotkeyService.Start();
                     trayService.Start();
                     overlayService.Start();
                     startupService.ResolveStartup();
                     settingsService.ResolveFirstRun();
 
-                    Application.Run();
+                    try
+                    {
+                        Application.Run();
+                    }
+                    catch (Exception ex)
+                    {
+#if DEBUG
+                        MessageBox.Show(ex.ToString());
+#else
+                        // Do nothing O_o as of yet.
+#endif
+                    }
+                    finally
+                    {
+                        trayService.Stop();
+                        hotkeyService.Stop();
+                        overlayService.Stop();
+                    }
                 }
                 catch (Exception ex)
                 {
-                    // Do nothing O_o as of yet.
-                }
-                finally
-                {
-                    trayService.Stop();
-                    hotkeyService.Stop();
-                    overlayService.Stop();
+                    MessageBox.Show(ex.ToString());
                 }
             });
         }

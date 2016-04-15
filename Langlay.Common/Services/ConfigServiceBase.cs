@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Product.Common
 {
     public class ConfigServiceBase
     {
-        protected Configuration Configuration { get; set; }
+        protected Configuration GlobalConfig { get; set; }
+        protected Configuration UserConfig { get; set; }
+
         public bool DoSwitchLanguage { get; set; }
         public IList<KeyCode> LanguageSwitchKeyArray { get; set; }
         public KeyCode LanguageSwitchKeys { get { return ReduceKeyCodeArray(LanguageSwitchKeyArray); } }
@@ -20,11 +24,11 @@ namespace Product.Common
         public bool DoRunAtWindowsStartup { get; set; }
         public bool DoShowSettingsOnce { get; set; }
 
-        public ConfigServiceBase(Configuration configuration)
+        public ConfigServiceBase()
         {
-            if (configuration == null)
-                throw new ArgumentNullException("configuration");
-            Configuration = configuration;
+            GlobalConfig = OpenConfiguration(false);
+            UserConfig = OpenConfiguration(true);
+
             LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
             LayoutSwitchKeyArray = new KeyCode[] { };
             SwitchMethod = SwitchMethod.InputSimulation;
@@ -54,7 +58,7 @@ namespace Product.Common
 
         private IList<KeyCode> KeyStringToArray(string arrayString)
         {
-            return arrayString.Split(new[] { '+' }).Select(x => (KeyCode) int.Parse(x)).ToList();
+            return arrayString.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries).Select(x => (KeyCode) Utils.ParseInt(x, 0)).ToList();
         }
 
         private void ReadArgument(string name, string value)
@@ -92,9 +96,17 @@ namespace Product.Common
             }
         }
 
-        public void ReadFromConfigFile()
+        public void ReadFromConfigFile(bool isUserLevel)
         {
-            var appSettings = Configuration.AppSettings.Settings;
+            if (isUserLevel)
+                ReadFromConfigFile(UserConfig);
+            else
+                ReadFromConfigFile(GlobalConfig);
+        }
+
+        protected void ReadFromConfigFile(Configuration configuration)
+        {
+            var appSettings = configuration.AppSettings.Settings;
             foreach (var key in appSettings.AllKeys)
             {
                 if (key.StartsWith("app:"))
@@ -117,5 +129,49 @@ namespace Product.Common
             var arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1));
             ReadFromString(arguments);
         }
+
+        protected static Configuration OpenConfiguration(bool isUserSpecific)
+        {
+            string rootPath;
+            if (isUserSpecific)
+            {
+                rootPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    AppSpecific.MainAppTitle);
+            }
+            else
+            {
+                rootPath = PathUtils.GetAppDirectory();
+            }
+
+            var configPath = Path.Combine(rootPath, AppSpecific.MainAppConfigFilename);
+            return OpenOrCreateFile(configPath);
+        }
+
+        protected static Configuration OpenOrCreateFile(string configPath)
+        {
+            if (string.IsNullOrEmpty(configPath))
+                throw new ArgumentNullException("exeFilepath");
+            if (!File.Exists(configPath))
+            {
+                var directoryPath = Path.GetDirectoryName(configPath);
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+                File.WriteAllText((string) configPath, @"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<configuration>
+  <appSettings>
+  </appSettings>
+</configuration>");
+            }
+            return ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap()
+            {
+                RoamingUserConfigFilename = configPath,
+                LocalUserConfigFilename = configPath,
+                ExeConfigFilename = configPath
+            }, ConfigurationUserLevel.None);
+        }
+
     }
 }

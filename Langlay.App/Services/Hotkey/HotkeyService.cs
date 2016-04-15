@@ -4,12 +4,13 @@ using Product.Common;
 
 namespace Product
 {
-    public class HotkeyService : IDisposable
+    public class HotkeyService : IDisposable, IHotkeyService
     {
         private GlobalKeyboardHook Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
         private ILanguageService LanguageService { get; set; }
         private bool IsStarted { get; set; }
+        private bool IsEnabled { get; set; }
 
         public HotkeyService(
             IConfigService configService,
@@ -21,6 +22,18 @@ namespace Product
                 throw new ArgumentNullException("languageService");
             ConfigService = configService;
             LanguageService = languageService;
+            IsEnabled = true;
+        }
+
+        public bool GetIsEnabled()
+        {
+            return IsEnabled;
+        }
+
+        public void SetEnabledState(bool isEnabled)
+        {
+            if (IsEnabled != isEnabled)
+                IsEnabled = isEnabled;
         }
 
         public void Start()
@@ -55,7 +68,7 @@ namespace Product
 
         private void Hooker_KeyDown(object sender, KeyEventArgs e)
         {
-            if (InactiveTill == null || InactiveTill < DateTime.Now)
+            if (IsEnabled && (InactiveTill == null || InactiveTill < DateTime.Now))
             {
                 if (ConfigService.DoSwitchLanguage
                     && ConfigService.LanguageSwitchKeys != KeyCode.None
@@ -84,17 +97,20 @@ namespace Product
 
         private void Hooker_KeyUp(object sender, KeyEventArgs e)
         {
-            // We're supposed to handle the key-up as well as the key-down
-            // otherwise the target app will face a strange situation,
-            // which is not guaranteed to work properly.
-            if (ConfigService.DoSwitchLanguage 
-                && (KeyCode) e.KeyCode == ConfigService.LanguageSwitchKeys)
-                e.Handled = true;
-            else if (ConfigService.DoSwitchLayout
-                && (KeyCode) e.KeyCode == ConfigService.LayoutSwitchKeys)
-                e.Handled = true;
-            if (e.Handled)
-                InactiveTill = null;
+            if (IsEnabled)
+            {
+                // We're supposed to handle the key-up as well as the key-down
+                // otherwise the target app will face a strange situation,
+                // which is not guaranteed to work properly.
+                if (ConfigService.DoSwitchLanguage
+                    && (KeyCode) e.KeyCode == ConfigService.LanguageSwitchKeys)
+                    e.Handled = true;
+                else if (ConfigService.DoSwitchLayout
+                    && (KeyCode) e.KeyCode == ConfigService.LayoutSwitchKeys)
+                    e.Handled = true;
+                if (e.Handled)
+                    InactiveTill = null;
+            }
         }
 
         #region IDisposable Support
