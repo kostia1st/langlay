@@ -152,8 +152,13 @@ namespace Product.Common
         {
             if (string.IsNullOrEmpty(configPath))
                 throw new ArgumentNullException("exeFilepath");
-            if (!File.Exists((string) configPath))
+            if (!File.Exists(configPath))
             {
+                var directoryPath = Path.GetDirectoryName(configPath);
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
                 File.WriteAllText((string) configPath, @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <configuration>
   <appSettings>

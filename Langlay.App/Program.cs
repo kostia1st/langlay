@@ -57,7 +57,11 @@ namespace Product
                     }
                     catch (Exception ex)
                     {
+#if DEBUG
+                        MessageBox.Show(ex.ToString());
+#else
                         // Do nothing O_o as of yet.
+#endif
                     }
                     finally
                     {
