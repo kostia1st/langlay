@@ -1,9 +1,9 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
-using System.Diagnostics;
 
 namespace Product
 {
