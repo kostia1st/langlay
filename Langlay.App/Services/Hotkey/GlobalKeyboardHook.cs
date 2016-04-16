@@ -92,7 +92,7 @@ namespace Product
                 }
                 else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
                 {
-                    if (HookedKeys.Any(x => x.NonModifiers == nonModifiers && x.Modifiers == modifiers))
+                    if (HookedKeys.Any(x => x.NonModifiers == nonModifiers && x.Modifiers == modifiers || x.Modifiers == modifiers))
                     {
                         Trace.WriteLine("Hooked keyUP " + modifiers.ToString() + " - " + nonModifiers.ToString());
                         KeyUp(this, kea);
