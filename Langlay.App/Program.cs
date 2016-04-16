@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -58,7 +59,7 @@ namespace Product
                     catch (Exception ex)
                     {
 #if DEBUG
-                        MessageBox.Show(ex.ToString());
+                        throw;
 #else
                         // Do nothing O_o as of yet.
 #endif
@@ -72,6 +73,7 @@ namespace Product
                 }
                 catch (Exception ex)
                 {
+                    Trace.WriteLine(ex.ToString());
                     MessageBox.Show(ex.ToString());
                 }
             });
