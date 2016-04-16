@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 using Microsoft.Win32;
 using Product.Common;
 using WindowsInput;

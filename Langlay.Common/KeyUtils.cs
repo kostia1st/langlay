@@ -39,7 +39,7 @@ namespace Product.Common
             return Modifiers.Contains(key);
         }
 
-        public static Keys AddToggles(Keys key)
+        public static Keys AddToggles(Keys key = Keys.None)
         {
             foreach (var toggle in Toggles)
             {
@@ -48,7 +48,7 @@ namespace Product.Common
             return key;
         }
 
-        public static Keys AddModifiers(Keys key)
+        public static Keys AddModifiers(Keys key = Keys.None)
         {
             foreach (var modifier in Modifiers)
             {

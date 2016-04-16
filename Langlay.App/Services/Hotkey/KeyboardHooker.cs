@@ -54,7 +54,7 @@ namespace Product
         /// </summary>
         public void Hook()
         {
-            IntPtr hInstance = Win32.LoadLibrary("User32");
+            var hInstance = Win32.LoadLibrary("User32");
             HookHandle = Win32.SetWindowsHookEx(
                 Win32.WH_KEYBOARD_LL, HookProcedureHolder, hInstance, 0);
         }
@@ -79,7 +79,7 @@ namespace Product
             if (code >= 0)
             {
                 var nonModifiers = (Keys) lParam.vkCode;
-                var modifiers = KeyUtils.AddModifiers(Keys.None);
+                var modifiers = KeyUtils.AddModifiers();
 
                 var kea = new KeyEventArgs2(nonModifiers, modifiers);
                 if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
