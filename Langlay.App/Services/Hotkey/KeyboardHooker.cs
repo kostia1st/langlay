@@ -86,7 +86,7 @@ namespace Product
                 {
                     if (HookedKeys.Any(x => x.NonModifiers == nonModifiers && x.Modifiers == modifiers))
                     {
-                        Trace.WriteLine("Hooked keyDOWN " + modifiers.ToString() + " - " + nonModifiers.ToString());
+                        Trace.WriteLine("Hooked keyDOWN " + modifiers.ToString() + " + " + nonModifiers.ToString());
                         KeyDown(this, kea);
                     }
                 }
@@ -94,7 +94,7 @@ namespace Product
                 {
                     if (HookedKeys.Any(x => x.NonModifiers == nonModifiers && x.Modifiers == modifiers || x.Modifiers == modifiers))
                     {
-                        Trace.WriteLine("Hooked keyUP " + modifiers.ToString() + " - " + nonModifiers.ToString());
+                        Trace.WriteLine("Hooked keyUP " + modifiers.ToString() + " + " + nonModifiers.ToString());
                         KeyUp(this, kea);
                     }
                 }
@@ -102,7 +102,7 @@ namespace Product
                     return 1;
                 else
                 {
-                    Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": " + modifiers.ToString() + " - " + nonModifiers.ToString());
+                    Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": " + modifiers.ToString() + " + " + nonModifiers.ToString());
                 }
             }
             return Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);

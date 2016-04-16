@@ -49,8 +49,10 @@ namespace Product
                     {
                         Trace.WriteLine("-- START Simulating full keystroke up");
                         Trace.Indent();
-                        KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
-                        KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
+                        if (savedKeyDown.KeyStroke.NonModifiers != Keys.None)
+                            KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
+                        if (savedKeyDown.KeyStroke.Modifiers != Keys.None)
+                            KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
                         Trace.Unindent();
                         Trace.WriteLine("-- END Simulating full keystroke up");
                         
@@ -66,8 +68,10 @@ namespace Product
 
                         Trace.WriteLine("-- START Simulating full keystroke down");
                         Trace.Indent();
-                        KeyboardSimulator.KeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
-                        KeyboardSimulator.KeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
+                        if (savedKeyDown.KeyStroke.Modifiers != Keys.None)
+                            KeyboardSimulator.KeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
+                        if (savedKeyDown.KeyStroke.NonModifiers != Keys.None)
+                            KeyboardSimulator.KeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
                         Trace.Unindent();
                         Trace.WriteLine("-- END Simulating full keystroke down");
                     }
