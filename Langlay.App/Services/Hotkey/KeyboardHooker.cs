@@ -10,7 +10,7 @@ namespace Product
     /// <summary>
     /// A class that manages a global low level keyboard hook
     /// </summary>
-    public class GlobalKeyboardHook : IDisposable
+    public class KeyboardHooker : IDisposable
     {
         /// <summary>
         /// The collections of keys to watch for
@@ -38,9 +38,9 @@ namespace Product
         private Win32.KeyboardHookProc HookProcedureHolder;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GlobalKeyboardHook"/> class and installs the keyboard hook.
+        /// Initializes a new instance of the <see cref="KeyboardHooker"/> class and installs the keyboard hook.
         /// </summary>
-        public GlobalKeyboardHook(bool doHookImmediately = true)
+        public KeyboardHooker(bool doHookImmediately = true)
         {
             // This is a c# hack in order to keep a firm reference to a dynamically created delegate
             // so that it won't be collected by GC.
@@ -125,7 +125,7 @@ namespace Product
             }
         }
 
-        ~GlobalKeyboardHook()
+        ~KeyboardHooker()
         {
             Dispose(false);
         }

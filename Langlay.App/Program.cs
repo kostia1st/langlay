@@ -24,7 +24,7 @@ namespace Product
 
                     var overlayService = new OverlayService(configService);
                     var languageService = new LanguageService(configService, overlayService);
-                    var hotkeyService = new HotkeyService(configService, languageService);
+                    var hotkeyService = new HookedHotkeyService(configService, languageService);
 
                     ILanguageSetterService languageSetterService;
                     if (configService.SwitchMethod == SwitchMethod.InputSimulation)

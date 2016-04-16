@@ -6,15 +6,15 @@ using WindowsInput;
 
 namespace Product
 {
-    public class HotkeyService : IDisposable, IHotkeyService
+    public class HookedHotkeyService : IDisposable, IHotkeyService
     {
-        private GlobalKeyboardHook Hooker { get; set; }
+        private KeyboardHooker Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
         private ILanguageService LanguageService { get; set; }
         private bool IsStarted { get; set; }
         private bool IsEnabled { get; set; }
 
-        public HotkeyService(
+        public HookedHotkeyService(
             IConfigService configService,
             ILanguageService languageService)
         {
@@ -79,7 +79,7 @@ namespace Product
             if (!IsStarted)
             {
                 IsStarted = true;
-                Hooker = new GlobalKeyboardHook(false);
+                Hooker = new KeyboardHooker(false);
                 if (ConfigService.DoSwitchLanguage && (ConfigService.LanguageSwitchModifiers | ConfigService.LanguageSwitchNonModifiers) != default(KeyCode))
                     Hooker.HookedKeys.Add(new KeyStroke((Keys) ConfigService.LanguageSwitchNonModifiers, (Keys) ConfigService.LanguageSwitchModifiers));
                 if (ConfigService.DoSwitchLayout && (ConfigService.LayoutSwitchModifiers | ConfigService.LayoutSwitchNonModifiers) != default(KeyCode))
@@ -222,7 +222,7 @@ namespace Product
             }
         }
 
-        ~HotkeyService()
+        ~HookedHotkeyService()
         {
             Dispose(false);
         }
