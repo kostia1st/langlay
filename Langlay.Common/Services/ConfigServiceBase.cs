@@ -14,10 +14,13 @@ namespace Product.Common
 
         public bool DoSwitchLanguage { get; set; }
         public IList<KeyCode> LanguageSwitchKeyArray { get; set; }
-        public KeyCode LanguageSwitchKeys { get { return ReduceKeyCodeArray(LanguageSwitchKeyArray); } }
+        public KeyCode LanguageSwitchNonModifiers { get { return KeyUtils.ReduceKeyCodeArray(LanguageSwitchKeyArray, false); } }
+        public KeyCode LanguageSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LanguageSwitchKeyArray, true); } }
+
         public bool DoSwitchLayout { get; set; }
         public IList<KeyCode> LayoutSwitchKeyArray { get; set; }
-        public KeyCode LayoutSwitchKeys { get { return ReduceKeyCodeArray(LayoutSwitchKeyArray); } }
+        public KeyCode LayoutSwitchNonModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, false); } }
+        public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
         public bool ShowOverlay { get; set; }
         public long OverlayMilliseconds { get; set; }
         public SwitchMethod SwitchMethod { get; set; }
@@ -38,16 +41,6 @@ namespace Product.Common
             DoSwitchLanguage = true;
             DoSwitchLayout = false;
             DoShowSettingsOnce = true;
-        }
-
-        private KeyCode ReduceKeyCodeArray(IList<KeyCode> keyCodes)
-        {
-            var result = keyCodes.FirstOrDefault();
-            for (var i = 1; i < keyCodes.Count; i++)
-            {
-                result |= keyCodes[i];
-            }
-            return result;
         }
 
         private void ReadFromString(string str)

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 using Product.Common;
+using WindowsInput;
 
 namespace Product
 {
@@ -30,10 +33,42 @@ namespace Product
             return IsEnabled;
         }
 
-        public void SetEnabledState(bool isEnabled)
+        public void SetEnabled(bool value)
         {
-            if (IsEnabled != isEnabled)
-                IsEnabled = isEnabled;
+            if (IsEnabled != value)
+            {
+                if (!value)
+                    IsEnabled = false;
+                var savedKeyDown = this.SavedKeyDown;
+                if (savedKeyDown != null)
+                {
+                    if (!value)
+                    {
+                        Trace.WriteLine("-- START Simulating full keystroke up");
+                        Trace.Indent();
+                        InputSimulator.SimulateKeyUp((VirtualKeyCode) savedKeyDown.NonModifiers);
+                        InputSimulator.SimulateKeyUp((VirtualKeyCode) savedKeyDown.Modifiers);
+                        Trace.Unindent();
+                        Trace.WriteLine("-- END Simulating full keystroke up");
+                    }
+                    else
+                    {
+                        // This line (or equivalent) is necessary to avoid 
+                        // phantom KEY UP messages afterwards.
+                        Application.DoEvents();
+
+                        Trace.WriteLine("-- START Simulating full keystroke down");
+                        Trace.Indent();
+                        InputSimulator.SimulateKeyDown((VirtualKeyCode) savedKeyDown.Modifiers);
+                        InputSimulator.SimulateKeyDown((VirtualKeyCode) savedKeyDown.NonModifiers);
+                        Trace.Unindent();
+                        Trace.WriteLine("-- END Simulating full keystroke down");
+                    }
+                }
+                if (value)
+                    IsEnabled = true;
+
+            }
         }
 
         public void Start()
@@ -42,10 +77,10 @@ namespace Product
             {
                 IsStarted = true;
                 Hooker = new GlobalKeyboardHook(false);
-                if (ConfigService.DoSwitchLanguage && ConfigService.LanguageSwitchKeys != default(KeyCode))
-                    Hooker.HookedKeys.Add((Keys) ConfigService.LanguageSwitchKeys);
-                if (ConfigService.DoSwitchLayout && ConfigService.LayoutSwitchKeys != default(KeyCode))
-                    Hooker.HookedKeys.Add((Keys) ConfigService.LayoutSwitchKeys);
+                if (ConfigService.DoSwitchLanguage && (ConfigService.LanguageSwitchModifiers & ConfigService.LanguageSwitchNonModifiers) != default(KeyCode))
+                    Hooker.HookedKeys.Add(new KeyStroke((Keys) ConfigService.LanguageSwitchNonModifiers, (Keys) ConfigService.LanguageSwitchModifiers));
+                if (ConfigService.DoSwitchLayout && (ConfigService.LayoutSwitchModifiers & ConfigService.LayoutSwitchNonModifiers) != default(KeyCode))
+                    Hooker.HookedKeys.Add(new KeyStroke((Keys) ConfigService.LayoutSwitchNonModifiers, (Keys) ConfigService.LayoutSwitchModifiers));
 
                 Hooker.KeyDown = Hooker_KeyDown;
                 Hooker.KeyUp = Hooker_KeyUp;
@@ -66,50 +101,88 @@ namespace Product
         private const int InactivePeriod = 500;
         private DateTime? InactiveTill { get; set; }
 
-        private void Hooker_KeyDown(object sender, KeyEventArgs e)
+        private bool HandleSwitch(KeyboardSwitch keyboardSwitch)
         {
-            if (IsEnabled && (InactiveTill == null || InactiveTill < DateTime.Now))
+            return LanguageService.ConductSwitch(keyboardSwitch);
+        }
+
+        private KeyEventArgs2 SavedKeyDown;
+
+        private void ResetKeyDown()
+        {
+            InactiveTill = null;
+            SavedKeyDown = null;
+        }
+
+        private void Hooker_KeyDown(object sender, KeyEventArgs2 e)
+        {
+            KeyboardSwitch? switchToApply = null;
+
+            var triggeredLanguageSwitch = ConfigService.DoSwitchLanguage
+                && ((KeyCode) e.NonModifiers & ConfigService.LanguageSwitchNonModifiers) == ConfigService.LanguageSwitchNonModifiers
+                && ((KeyCode) e.Modifiers & ConfigService.LanguageSwitchModifiers) == ConfigService.LanguageSwitchModifiers;
+
+            var triggeredLayoutSwitch = ConfigService.DoSwitchLayout
+                && ((KeyCode) e.NonModifiers & ConfigService.LayoutSwitchNonModifiers) == ConfigService.LayoutSwitchNonModifiers
+                && ((KeyCode) e.Modifiers & ConfigService.LayoutSwitchModifiers) == ConfigService.LayoutSwitchModifiers;
+
+            if (triggeredLanguageSwitch)
             {
-                if (ConfigService.DoSwitchLanguage
-                    && ConfigService.LanguageSwitchKeys != KeyCode.None
-                    && ((KeyCode) e.KeyData & ConfigService.LanguageSwitchKeys) == ConfigService.LanguageSwitchKeys)
+                if (triggeredLayoutSwitch)
+                    switchToApply = KeyboardSwitch.LanguageAndLayout;
+                else
+                    switchToApply = KeyboardSwitch.LanguageRestoreLayout;
+            }
+            else if (triggeredLayoutSwitch)
+            {
+                switchToApply = KeyboardSwitch.Layout;
+            }
+
+            if (switchToApply != null)
+            {
+                var now = DateTime.Now;
+                if (InactiveTill == null || InactiveTill < now)
                 {
-                    if (ConfigService.DoSwitchLayout 
-                        && (KeyCode) e.KeyData == ConfigService.LayoutSwitchKeys)
-                        e.Handled = LanguageService.SwitchLanguageAndLayout();
+                    if (IsEnabled)
+                    {
+                        SavedKeyDown = e;
+                        e.Handled = HandleSwitch(switchToApply.Value);
+                        if (e.Handled)
+                        {
+                            // Here, we place a timeout on when the next KeyDown could be applied 
+                            // without resetting it by KeyUp
+                            InactiveTill = DateTime.Now.AddMilliseconds(InactivePeriod);
+                        }
+                    }
                     else
-                        e.Handled = LanguageService.SwitchLanguage(true);
+                        e.Handled = true;
                 }
-                else if (ConfigService.DoSwitchLayout
-                    && ConfigService.LayoutSwitchKeys != KeyCode.None
-                    && ((KeyCode) e.KeyData & ConfigService.LayoutSwitchKeys) == ConfigService.LayoutSwitchKeys)
-                {
-                    e.Handled = LanguageService.SwitchLayout(true);
-                }
-                if (e.Handled)
-                {
-                    // Here, we place a timeout on when the next KeyDown could be applied 
-                    // without resetting it by KeyUp
-                    InactiveTill = DateTime.Now.AddMilliseconds(InactivePeriod);
-                }
+                else
+                    e.Handled = true;
             }
         }
 
-        private void Hooker_KeyUp(object sender, KeyEventArgs e)
+        private void Hooker_KeyUp(object sender, KeyEventArgs2 e)
         {
-            if (IsEnabled)
+            // We're supposed to handle the key-up as well as the key-down
+            // otherwise the target app will face a strange situation,
+            // which is not guaranteed to work properly.
+            var triggeredLanguageSwitch = ConfigService.DoSwitchLanguage
+                && (((KeyCode) e.NonModifiers & ConfigService.LanguageSwitchNonModifiers) == ConfigService.LanguageSwitchNonModifiers
+                && ((KeyCode) e.Modifiers & ConfigService.LanguageSwitchModifiers) == ConfigService.LanguageSwitchModifiers);
+
+            var triggeredLayoutSwitch = ConfigService.DoSwitchLayout
+                && (((KeyCode) e.NonModifiers & ConfigService.LayoutSwitchNonModifiers) == ConfigService.LayoutSwitchNonModifiers
+                && ((KeyCode) e.Modifiers & ConfigService.LayoutSwitchModifiers) == ConfigService.LayoutSwitchModifiers);
+
+            if (triggeredLanguageSwitch || triggeredLayoutSwitch)
             {
-                // We're supposed to handle the key-up as well as the key-down
-                // otherwise the target app will face a strange situation,
-                // which is not guaranteed to work properly.
-                if (ConfigService.DoSwitchLanguage
-                    && (KeyCode) e.KeyCode == ConfigService.LanguageSwitchKeys)
-                    e.Handled = true;
-                else if (ConfigService.DoSwitchLayout
-                    && (KeyCode) e.KeyCode == ConfigService.LayoutSwitchKeys)
-                    e.Handled = true;
-                if (e.Handled)
-                    InactiveTill = null;
+                // Since the sequence is fully owned by the app, we should never pass it thru.
+                e.Handled = true;
+
+                if (IsEnabled)
+                    // Reset the previous key down only when allowed to.
+                    ResetKeyDown();
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -31,7 +32,7 @@ namespace Product
             }
             InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LControlKey);
         }
-        
+
         private void SendAltShift(int amount = 1)
         {
             // It's important to HOLD the Alt key first, not vice versa
@@ -53,6 +54,8 @@ namespace Product
 
         private void SendSequence(int sequenceCode, int amount)
         {
+            Trace.WriteLine("-- START Simulating switch sequence");
+            Trace.Indent();
             switch (sequenceCode)
             {
                 case WindowsSequenceCode.CtrlShift:
@@ -65,6 +68,8 @@ namespace Product
                     SendGraveAccent(amount);
                     break;
             }
+            Trace.Unindent();
+            Trace.WriteLine("-- END Simulating switch sequence");
         }
 
         private const string ToggleKey = "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle";
@@ -93,10 +98,9 @@ namespace Product
         public bool SetCurrentLayout(IntPtr targetHandle)
         {
             var result = false;
+            HotkeyService.SetEnabled(false);
             try
             {
-                HotkeyService.SetEnabledState(false);
-
                 if (CurrentLanguageSwitchSequence == null && CurrentLayoutSwitchSequence == null)
                     ReadCurrentSwitchSequences();
 
@@ -164,9 +168,11 @@ namespace Product
                     // the current (new) layout from OS after this method finishes.
                     Thread.Sleep(InterruptionDelay);
                 }
-                HotkeyService.SetEnabledState(true);
             }
-            catch { /* ummm, logging must be here */ }
+            finally
+            {
+                HotkeyService.SetEnabled(true);
+            }
             return result;
         }
     }

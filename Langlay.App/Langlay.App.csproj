@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -23,9 +24,9 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>Langlay</ProductName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -72,7 +73,11 @@
     <Compile Include="AppMessageFilter.cs" />
     <Compile Include="InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
+    <Compile Include="Services\Hotkey\KeyEventArgs2.cs" />
+    <Compile Include="Services\Hotkey\KeyEventHandler2.cs" />
+    <Compile Include="Services\Hotkey\KeyStroke.cs" />
     <Compile Include="Services\ISettingsService.cs" />
+    <Compile Include="Services\KeyboardSwitch.cs" />
     <Compile Include="Services\MouseCursorService.cs" />
     <Compile Include="Services\Overlay\OverlayForm.cs">
       <SubType>Form</SubType>

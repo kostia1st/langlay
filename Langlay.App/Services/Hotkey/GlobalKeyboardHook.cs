@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Product.Common;
+using System.Diagnostics;
 
 namespace Product
 {
@@ -13,7 +15,7 @@ namespace Product
         /// <summary>
         /// The collections of keys to watch for
         /// </summary>
-        public List<Keys> HookedKeys = new List<Keys>();
+        public IList<KeyStroke> HookedKeys = new List<KeyStroke>();
         /// <summary>
         /// Handle to the hook, need this to unhook and call the next hook
         /// </summary>
@@ -23,11 +25,11 @@ namespace Product
         /// <summary>
         /// Occurs when one of the hooked keys is pressed
         /// </summary>
-        public KeyEventHandler KeyDown;
+        public KeyEventHandler2 KeyDown;
         /// <summary>
         /// Occurs when one of the hooked keys is released
         /// </summary>
-        public KeyEventHandler KeyUp;
+        public KeyEventHandler2 KeyUp;
         #endregion
 
         /// <summary>
@@ -76,36 +78,34 @@ namespace Product
         {
             if (code >= 0)
             {
-                Keys key = (Keys) lParam.vkCode;
-                key = AddModifiers(key);
-                if (HookedKeys.Contains(key))
+                var nonModifiers = (Keys) lParam.vkCode;
+                var modifiers = KeyUtils.AddModifiers(Keys.None);
+
+                var kea = new KeyEventArgs2(nonModifiers, modifiers);
+                if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
                 {
-                    KeyEventArgs kea = new KeyEventArgs((Keys) key);
-                    if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
+                    if (HookedKeys.Any(x => x.NonModifiers == nonModifiers && x.Modifiers == modifiers))
                     {
+                        Trace.WriteLine("Hooked keyDOWN " + modifiers.ToString() + " - " + nonModifiers.ToString());
                         KeyDown(this, kea);
                     }
-                    else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
+                }
+                else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
+                {
+                    if (HookedKeys.Any(x => x.NonModifiers == nonModifiers && x.Modifiers == modifiers))
                     {
+                        Trace.WriteLine("Hooked keyUP " + modifiers.ToString() + " - " + nonModifiers.ToString());
                         KeyUp(this, kea);
                     }
-                    if (kea.Handled)
-                        return 1;
+                }
+                if (kea.Handled)
+                    return 1;
+                else
+                {
+                    Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": " + modifiers.ToString() + " - " + nonModifiers.ToString());
                 }
             }
             return Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
-        }
-
-        private Keys AddModifiers(Keys key)
-        {
-            //if ((SafeMethods.GetKeyState((int) Keys.CapsLock) & 0x0001) != 0) key = key | Keys.CapsLock;
-            if ((Win32.GetKeyState((int) Keys.LShiftKey) & 0x8000) != 0) key = key | Keys.LShiftKey;
-            if ((Win32.GetKeyState((int) Keys.RShiftKey) & 0x8000) != 0) key = key | Keys.RShiftKey;
-            if ((Win32.GetKeyState((int) Keys.LControlKey) & 0x8000) != 0) key = key | Keys.LControlKey;
-            if ((Win32.GetKeyState((int) Keys.RControlKey) & 0x8000) != 0) key = key | Keys.RControlKey;
-            if ((Win32.GetKeyState((int) Keys.LMenu) & 0x8000) != 0) key = key | Keys.LMenu;
-            if ((Win32.GetKeyState((int) Keys.RMenu) & 0x8000) != 0) key = key | Keys.RMenu;
-            return key;
         }
 
         #region IDisposable Support

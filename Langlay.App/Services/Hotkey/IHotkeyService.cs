@@ -8,6 +8,6 @@ namespace Product
     public interface IHotkeyService
     {
         bool GetIsEnabled();
-        void SetEnabledState(bool isEnabled);
+        void SetEnabled(bool isEnabled);
     }
 }

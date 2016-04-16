@@ -17,6 +17,22 @@ namespace Product.Common
         public const int WM_QUIT = 0x0012;
         public const int WM_USER_RESTART = 0x0400 + 20;
 
+        public static string MessageToString(int message)
+        {
+            switch (message)
+            {
+                case WM_KEYDOWN:
+                    return "Key Down";
+                case WM_KEYUP:
+                    return "Key Up";
+                case WM_SYSKEYDOWN:
+                    return "Key Down (Sys)";
+                case WM_SYSKEYUP:
+                    return "Key Up (Sys)";
+            }
+            return null;
+        }
+
         [Flags]
         public enum SendMessageTimeoutFlags : uint
         {
@@ -69,6 +85,8 @@ namespace Product.Common
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern short GetAsyncKeyState(int keyCode);
         /// <summary>
         /// Sets the windows hook, do the desired event, one of hInstance or threadId must be non-null
         /// </summary>
