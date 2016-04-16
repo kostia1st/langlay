@@ -92,6 +92,11 @@ namespace Product
                 CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue(
                     ToggleKey,
                     "Hotkey", null));
+                if (CurrentLanguageSwitchSequence == null)
+                {
+                    // this is by default (on Win10 at least)
+                    CurrentLanguageSwitchSequence = WindowsSequenceCode.AltShift; 
+                }
             }
             CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue(
                 ToggleKey,
