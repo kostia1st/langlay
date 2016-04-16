@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Product.Common;
 using WindowsInput;
+using WindowsInput.Native;
 
 namespace Product
 {
@@ -13,6 +14,8 @@ namespace Product
         private ILanguageService LanguageService { get; set; }
         private bool IsStarted { get; set; }
         private bool IsEnabled { get; set; }
+
+        private KeyboardSimulator KeyboardSimulator { get; set; }
 
         public HookedHotkeyService(
             IConfigService configService,
@@ -25,6 +28,7 @@ namespace Product
             ConfigService = configService;
             LanguageService = languageService;
             IsEnabled = true;
+            KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
         public bool GetIsEnabled()
@@ -45,8 +49,8 @@ namespace Product
                     {
                         Trace.WriteLine("-- START Simulating full keystroke up");
                         Trace.Indent();
-                        InputSimulator.SimulateKeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
-                        InputSimulator.SimulateKeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
+                        KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
+                        KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
                         Trace.Unindent();
                         Trace.WriteLine("-- END Simulating full keystroke up");
                         
@@ -62,8 +66,8 @@ namespace Product
 
                         Trace.WriteLine("-- START Simulating full keystroke down");
                         Trace.Indent();
-                        InputSimulator.SimulateKeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
-                        InputSimulator.SimulateKeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
+                        KeyboardSimulator.KeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
+                        KeyboardSimulator.KeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
                         Trace.Unindent();
                         Trace.WriteLine("-- END Simulating full keystroke down");
                     }

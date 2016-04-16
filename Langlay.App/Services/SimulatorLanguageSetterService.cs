@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using Product.Common;
 using WindowsInput;
+using WindowsInput.Native;
 
 namespace Product
 {
@@ -17,38 +18,40 @@ namespace Product
         private int? CurrentLayoutSwitchSequence { get; set; }
 
         public IHotkeyService HotkeyService { get; set; }
+        private KeyboardSimulator KeyboardSimulator { get; set; }
 
         public SimulatorLanguageSetterService(IHotkeyService hotkeyService)
         {
             HotkeyService = hotkeyService;
+            KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
         private void SendCtrlShift(int amount = 1)
         {
-            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LControlKey);
+            KeyboardSimulator.KeyDown((VirtualKeyCode) KeyCode.LControlKey);
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LShiftKey);
+                KeyboardSimulator.KeyPress((VirtualKeyCode) KeyCode.LShiftKey);
             }
-            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LControlKey);
+            KeyboardSimulator.KeyUp((VirtualKeyCode) KeyCode.LControlKey);
         }
 
         private void SendAltShift(int amount = 1)
         {
             // It's important to HOLD the Alt key first, not vice versa
-            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LMenu);
+            KeyboardSimulator.KeyDown((VirtualKeyCode) KeyCode.LMenu);
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LShiftKey);
+                KeyboardSimulator.KeyPress((VirtualKeyCode) KeyCode.LShiftKey);
             }
-            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LMenu);
+            KeyboardSimulator.KeyUp((VirtualKeyCode) KeyCode.LMenu);
         }
 
         private void SendGraveAccent(int amount = 1)
         {
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.Oemtilde);
+                KeyboardSimulator.KeyPress((VirtualKeyCode) KeyCode.Oemtilde);
             }
         }
 
