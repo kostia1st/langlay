@@ -77,9 +77,9 @@ namespace Product
             {
                 IsStarted = true;
                 Hooker = new GlobalKeyboardHook(false);
-                if (ConfigService.DoSwitchLanguage && (ConfigService.LanguageSwitchModifiers & ConfigService.LanguageSwitchNonModifiers) != default(KeyCode))
+                if (ConfigService.DoSwitchLanguage && (ConfigService.LanguageSwitchModifiers | ConfigService.LanguageSwitchNonModifiers) != default(KeyCode))
                     Hooker.HookedKeys.Add(new KeyStroke((Keys) ConfigService.LanguageSwitchNonModifiers, (Keys) ConfigService.LanguageSwitchModifiers));
-                if (ConfigService.DoSwitchLayout && (ConfigService.LayoutSwitchModifiers & ConfigService.LayoutSwitchNonModifiers) != default(KeyCode))
+                if (ConfigService.DoSwitchLayout && (ConfigService.LayoutSwitchModifiers | ConfigService.LayoutSwitchNonModifiers) != default(KeyCode))
                     Hooker.HookedKeys.Add(new KeyStroke((Keys) ConfigService.LayoutSwitchNonModifiers, (Keys) ConfigService.LayoutSwitchModifiers));
 
                 Hooker.KeyDown = Hooker_KeyDown;
