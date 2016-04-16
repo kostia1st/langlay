@@ -50,6 +50,10 @@ namespace Product
                         InputSimulator.SimulateKeyUp((VirtualKeyCode) savedKeyDown.Modifiers);
                         Trace.Unindent();
                         Trace.WriteLine("-- END Simulating full keystroke up");
+                        
+                        // This line (or equivalent) is necessary to avoid 
+                        // phantom KEY UP messages afterwards.
+                        Application.DoEvents();
                     }
                     else
                     {

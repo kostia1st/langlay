@@ -26,6 +26,14 @@ namespace Product.Common
             Keys.RControlKey,
             Keys.LMenu,
             Keys.RMenu,
+            Keys.LWin,
+            Keys.RWin
+        };
+
+        private static IList<Keys> Toggles = new[] {
+            Keys.CapsLock,
+            Keys.Scroll,
+            Keys.NumLock,
         };
 
         public static bool IsModifier(Keys key)
@@ -33,12 +41,20 @@ namespace Product.Common
             return Modifiers.Contains(key);
         }
 
+        public static Keys AddToggles(Keys key)
+        {
+            foreach (var toggle in Toggles)
+            {
+                if ((Win32.GetKeyState((int) toggle) & 0x0001) != 0) key = key | toggle;
+            }
+            return key;
+        }
+
         public static Keys AddModifiers(Keys key)
         {
-            //if ((SafeMethods.GetKeyState((int) Keys.CapsLock) & 0x0001) != 0) key = key | Keys.CapsLock;
             foreach (var modifier in Modifiers)
             {
-                if ((Win32.GetAsyncKeyState((int) modifier) & 0x8000) != 0) key = key | modifier;
+                if ((Win32.GetKeyState((int) modifier) & 0x8000) != 0) key = key | modifier;
             }
             return key;
         }
