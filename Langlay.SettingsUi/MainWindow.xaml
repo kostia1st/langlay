@@ -106,6 +106,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbkVersion" Margin="8" VerticalAlignment="Center" />
             <Button Grid.Column="1" Margin="10" Padding="10 5" Click="Button_Click">
                 <TextBlock Text="Close and Apply" />
             </Button>

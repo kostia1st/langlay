@@ -20,6 +20,7 @@ namespace Product.SettingsUi
             ViewModel.ShowSettingsOnce = false;
             DataContext = ViewModel;
             InitializeComponent();
+            tbkVersion.Text = string.Format("Version {0}", System.Windows.Forms.Application.ProductVersion);
         }
 
         private void DoOnViewModelChanged()
