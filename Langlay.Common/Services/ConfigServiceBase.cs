@@ -23,6 +23,7 @@ namespace Product.Common
         public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
         public bool ShowOverlay { get; set; }
         public long OverlayMilliseconds { get; set; }
+        public long OverlayOpacity { get; set; }
         public SwitchMethod SwitchMethod { get; set; }
         public bool DoRunAtWindowsStartup { get; set; }
         public bool DoShowSettingsOnce { get; set; }
@@ -37,6 +38,8 @@ namespace Product.Common
             SwitchMethod = SwitchMethod.InputSimulation;
             ShowOverlay = true;
             OverlayMilliseconds = 500;
+            OverlayOpacity = 80;
+
             DoRunAtWindowsStartup = true;
             DoSwitchLanguage = true;
             DoSwitchLayout = false;
@@ -67,7 +70,9 @@ namespace Product.Common
             else if (name == ArgumentNames.ShowOverlay)
                 ShowOverlay = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.OverlayMilliseconds)
-                OverlayMilliseconds = long.Parse(value);
+                OverlayMilliseconds = Utils.ParseInt(value, 300);
+            else if (name == ArgumentNames.OverlayOpacity)
+                OverlayOpacity = Utils.ParseInt(value, 80);
             else if (name == ArgumentNames.SwitchMethod)
                 SwitchMethod = string.Equals(value, SwitchMethod.Message.ToString(), StringComparison.InvariantCultureIgnoreCase)
                     ? SwitchMethod.Message : SwitchMethod.InputSimulation;

@@ -14,6 +14,7 @@ namespace Product
 
         bool ShowOverlay { get; }
         long OverlayMilliseconds { get; }
+        long OverlayOpacity { get; }
         bool DoRunAtWindowsStartup { get; }
         bool DoSwitchLanguage { get; }
         bool DoSwitchLayout { get; }

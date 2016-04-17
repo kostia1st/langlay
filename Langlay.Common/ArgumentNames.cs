@@ -8,6 +8,7 @@
         public const string LayoutSwitchKeys = "LayoutSwitchKeys";
         public const string ShowOverlay = "ShowOverlay";
         public const string OverlayMilliseconds = "OverlayMs";
+        public const string OverlayOpacity = "OverlayOpacity";
         public const string SwitchMethod = "SwitchMethod";
         public const string RunAtWindowsStartup = "RunAtWindowsStartup";
         public const string ShowSettingsOnce = "ShowSettingsOnce";

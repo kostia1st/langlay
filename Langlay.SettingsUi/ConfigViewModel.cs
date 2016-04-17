@@ -83,6 +83,19 @@ namespace Product.SettingsUi
             }
         }
 
+        public long OverlayOpacity
+        {
+            get { return ConfigService.OverlayOpacity; }
+            set
+            {
+                if (ConfigService.OverlayOpacity != value)
+                {
+                    ConfigService.OverlayOpacity = value;
+                    NotifyPropertyChanged("OverlayOpacity");
+                }
+            }
+        }
+
         public SwitchMethod SwitchMethod
         {
             get { return ConfigService.SwitchMethod; }
