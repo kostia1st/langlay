@@ -6,4 +6,4 @@ Whenever you press your custom keystroke (Caps Lock by default), it just changes
 
 Note, changing input language and changing keyboard layout - are different actions for this tool. And you are free to customize the most preferable way of working with all these matters.
 
-[>>> Installer download link <<<](https://github.com/estorski/langlay/releases/download/v1.1/Langlay.1.1.msi)
+[>>> Installer download link <<<](https://github.com/estorski/langlay/releases/download/v1.3/Langlay.1.3.msi)
