@@ -30,7 +30,7 @@ namespace Product
                 throw new NullReferenceException("LanguageSetterService");
         }
 
-        public bool SwitchLanguage(bool restoreSavedLayout)
+        protected bool SwitchLanguage(bool restoreSavedLayout)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Product
             return false;
         }
 
-        public bool SwitchLayout(bool doWrap)
+        protected bool SwitchLayout(bool doWrap)
         {
             try
             {
@@ -104,9 +104,27 @@ namespace Product
             return false;
         }
 
-        public bool SwitchLanguageAndLayout()
+        protected bool SwitchLanguageAndLayout()
         {
             return SwitchLayout(false) || SwitchLanguage(false);
+        }
+
+        public bool ConductSwitch(KeyboardSwitch keyboardSwitch)
+        {
+            switch (keyboardSwitch)
+            {
+                case KeyboardSwitch.Language:
+                    return SwitchLanguage(false);
+                case KeyboardSwitch.LanguageRestoreLayout:
+                    return SwitchLanguage(true);
+                case KeyboardSwitch.LayoutNoWrap:
+                    return SwitchLayout(false);                    
+                case KeyboardSwitch.Layout:
+                    return SwitchLayout(true);
+                case KeyboardSwitch.LanguageAndLayout:
+                    return SwitchLanguageAndLayout();
+            }
+            return false;
         }
     }
 }

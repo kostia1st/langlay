@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -23,9 +24,9 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>Langlay</ProductName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -38,6 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,9 +55,6 @@
     <ApplicationIcon>Keyboard-Filled-2-16.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="InputSimulator">
-      <HintPath>..\Langlay.Libs\InputSimulator.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -67,12 +66,19 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsInput">
+      <HintPath>..\Langlay.Libs\WindowsInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMessageFilter.cs" />
     <Compile Include="InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
+    <Compile Include="Services\Hotkey\KeyEventArgs2.cs" />
+    <Compile Include="Services\Hotkey\KeyEventHandler2.cs" />
+    <Compile Include="Services\Hotkey\KeyStroke.cs" />
     <Compile Include="Services\ISettingsService.cs" />
+    <Compile Include="Services\KeyboardSwitch.cs" />
     <Compile Include="Services\MouseCursorService.cs" />
     <Compile Include="Services\Overlay\OverlayForm.cs">
       <SubType>Form</SubType>
@@ -80,10 +86,10 @@
     <Compile Include="Services\Overlay\OverlayForm.Designer.cs">
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\Hotkey\GlobalKeyboardHook.cs" />
+    <Compile Include="Services\Hotkey\KeyboardHooker.cs" />
     <Compile Include="InputLayoutHelper.cs" />
     <Compile Include="Services\ConfigService.cs" />
-    <Compile Include="Services\Hotkey\HotkeyService.cs" />
+    <Compile Include="Services\Hotkey\HookedHotkeyService.cs" />
     <Compile Include="Services\IConfigService.cs" />
     <Compile Include="Services\ILanguageService.cs" />
     <Compile Include="Services\ILanguageSetterService.cs" />

@@ -20,6 +20,7 @@
                     IsStarted = true;
                     OverlayForm = new OverlayForm();
                     OverlayForm.MillisecondsToKeepVisible = ConfigService.OverlayMilliseconds;
+                    OverlayForm.OpacityWhenVisible = ConfigService.OverlayOpacity;
                 }
             }
         }

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
-using Product.Common;
 
 namespace Product
 {

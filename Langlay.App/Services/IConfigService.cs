@@ -6,11 +6,15 @@ namespace Product
     public interface IConfigService
     {
         IList<KeyCode> LanguageSwitchKeyArray { get; }
-        KeyCode LanguageSwitchKeys { get; }
+        KeyCode LanguageSwitchNonModifiers { get; }
+        KeyCode LanguageSwitchModifiers { get; }
         IList<KeyCode> LayoutSwitchKeyArray { get; }
-        KeyCode LayoutSwitchKeys { get; }
+        KeyCode LayoutSwitchNonModifiers { get; }
+        KeyCode LayoutSwitchModifiers { get; }
+
         bool ShowOverlay { get; }
         long OverlayMilliseconds { get; }
+        long OverlayOpacity { get; }
         bool DoRunAtWindowsStartup { get; }
         bool DoSwitchLanguage { get; }
         bool DoSwitchLayout { get; }

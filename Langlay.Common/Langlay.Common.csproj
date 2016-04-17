@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,6 +47,7 @@
   <ItemGroup>
     <Compile Include="ArgumentNames.cs" />
     <Compile Include="AppSpecific.cs" />
+    <Compile Include="KeyUtils.cs" />
     <Compile Include="PathUtils.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="Services\ConfigServiceBase.cs" />

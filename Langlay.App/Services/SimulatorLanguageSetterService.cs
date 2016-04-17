@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 using Microsoft.Win32;
 using Product.Common;
 using WindowsInput;
+using WindowsInput.Native;
 
 namespace Product
 {
@@ -16,43 +17,47 @@ namespace Product
         private int? CurrentLayoutSwitchSequence { get; set; }
 
         public IHotkeyService HotkeyService { get; set; }
+        private KeyboardSimulator KeyboardSimulator { get; set; }
 
         public SimulatorLanguageSetterService(IHotkeyService hotkeyService)
         {
             HotkeyService = hotkeyService;
+            KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
         private void SendCtrlShift(int amount = 1)
         {
-            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LControlKey);
+            KeyboardSimulator.KeyDown((VirtualKeyCode) KeyCode.LControlKey);
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LShiftKey);
+                KeyboardSimulator.KeyPress((VirtualKeyCode) KeyCode.LShiftKey);
             }
-            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LControlKey);
+            KeyboardSimulator.KeyUp((VirtualKeyCode) KeyCode.LControlKey);
         }
-        
+
         private void SendAltShift(int amount = 1)
         {
             // It's important to HOLD the Alt key first, not vice versa
-            InputSimulator.SimulateKeyDown((VirtualKeyCode) KeyCode.LMenu);
+            KeyboardSimulator.KeyDown((VirtualKeyCode) KeyCode.LMenu);
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.LShiftKey);
+                KeyboardSimulator.KeyPress((VirtualKeyCode) KeyCode.LShiftKey);
             }
-            InputSimulator.SimulateKeyUp((VirtualKeyCode) KeyCode.LMenu);
+            KeyboardSimulator.KeyUp((VirtualKeyCode) KeyCode.LMenu);
         }
 
         private void SendGraveAccent(int amount = 1)
         {
             for (int i = 0; i < amount; i++)
             {
-                InputSimulator.SimulateKeyPress((VirtualKeyCode) KeyCode.Oemtilde);
+                KeyboardSimulator.KeyPress((VirtualKeyCode) KeyCode.Oemtilde);
             }
         }
 
         private void SendSequence(int sequenceCode, int amount)
         {
+            Trace.WriteLine("-- START Simulating switch sequence");
+            Trace.Indent();
             switch (sequenceCode)
             {
                 case WindowsSequenceCode.CtrlShift:
@@ -65,6 +70,8 @@ namespace Product
                     SendGraveAccent(amount);
                     break;
             }
+            Trace.Unindent();
+            Trace.WriteLine("-- END Simulating switch sequence");
         }
 
         private const string ToggleKey = "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle";
@@ -84,6 +91,11 @@ namespace Product
                 CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue(
                     ToggleKey,
                     "Hotkey", null));
+                if (CurrentLanguageSwitchSequence == null)
+                {
+                    // this is by default (on Win10 at least)
+                    CurrentLanguageSwitchSequence = WindowsSequenceCode.AltShift; 
+                }
             }
             CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue(
                 ToggleKey,
@@ -93,10 +105,9 @@ namespace Product
         public bool SetCurrentLayout(IntPtr targetHandle)
         {
             var result = false;
+            HotkeyService.SetEnabled(false);
             try
             {
-                HotkeyService.SetEnabledState(false);
-
                 if (CurrentLanguageSwitchSequence == null && CurrentLayoutSwitchSequence == null)
                     ReadCurrentSwitchSequences();
 
@@ -164,9 +175,11 @@ namespace Product
                     // the current (new) layout from OS after this method finishes.
                     Thread.Sleep(InterruptionDelay);
                 }
-                HotkeyService.SetEnabledState(true);
             }
-            catch { /* ummm, logging must be here */ }
+            finally
+            {
+                HotkeyService.SetEnabled(true);
+            }
             return result;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using WinformsApp = System.Windows.Forms.Application;
 using Product.Common;
 
 namespace Product.SettingsUi
@@ -20,6 +21,8 @@ namespace Product.SettingsUi
             ViewModel.ShowSettingsOnce = false;
             DataContext = ViewModel;
             InitializeComponent();
+            tbrVersion.Text = string.Format("Version {0}", WinformsApp.ProductVersion);
+            tbrLocation.Text = WinformsApp.StartupPath;
         }
 
         private void DoOnViewModelChanged()

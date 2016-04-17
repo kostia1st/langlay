@@ -29,14 +29,25 @@
                           IsChecked="{Binding ShowOverlay}"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
-                    <TextBlock Text="Overlay stays visible for" Width="150" />
+                    <TextBlock Text="Stays visible for" Width="150" />
                     <Slider x:Name="sliderOverlayTime" Width="200" Minimum="0" Maximum="2000" 
                             IsSnapToTickEnabled="True"
                             TickFrequency="50"
                             Value="{Binding OverlayMilliseconds}" />
-                    <TextBlock x:Name="tbkOverlayTime" Width="50">
+                    <TextBlock x:Name="tbkOverlayTime" Width="50" Margin="4 0 0 0">
                         <Run Text="{Binding OverlayMilliseconds}" />
                         <Run Text="ms" />
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
+                    <TextBlock Text="Opacity when shown" Width="150" />
+                    <Slider x:Name="sliderOverlayOpacity" Width="200" Minimum="5" Maximum="100" 
+                            IsSnapToTickEnabled="True"
+                            TickFrequency="5"
+                            Value="{Binding OverlayOpacity}" />
+                    <TextBlock x:Name="tbkOverlayOpacity" Width="50" Margin="4 0 0 0">
+                        <Run Text="{Binding OverlayOpacity}" />
+                        <Run Text="%" />
                     </TextBlock>
                 </StackPanel>
                 <Rectangle Stroke="Silver" 
@@ -95,6 +106,11 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbkFooter" Margin="8" VerticalAlignment="Center" TextWrapping="Wrap" >
+                <Run x:Name="tbrVersion" />
+                <LineBreak />
+                <Run x:Name="tbrLocation" Foreground="Gray"/>
+            </TextBlock>
             <Button Grid.Column="1" Margin="10" Padding="10 5" Click="Button_Click">
                 <TextBlock Text="Close and Apply" />
             </Button>

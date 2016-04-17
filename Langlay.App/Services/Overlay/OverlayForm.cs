@@ -10,8 +10,8 @@ namespace Product
     {
         private Stopwatch WatchElapsed { get; set; }
         public long MillisecondsToKeepVisible { get; set; }
+        public long OpacityWhenVisible { get; set; }
         private const long MillisecondsToFadeOut = 200;
-        private const double VisibleOpacity = 0.8;
         private Brush BrushLanguage { get; set; }
         private Brush BrushLayout { get; set; }
         public string LanguageName { get; set; }
@@ -112,13 +112,13 @@ namespace Product
         {
             if (elapsed <= MillisecondsToKeepVisible)
             {
-                return VisibleOpacity;
+                return (double) OpacityWhenVisible / 100;
             }
             else if (elapsed <= MillisecondsToKeepVisible + MillisecondsToFadeOut)
             {
                 return ((double) Math.Max(MillisecondsToKeepVisible + MillisecondsToFadeOut - elapsed, 0))
                     / MillisecondsToFadeOut
-                    * VisibleOpacity;
+                    * OpacityWhenVisible / 100;
             }
             else
             {
