@@ -55,7 +55,12 @@
                     <local:OverlayLocationEditor x:Name="oleOverlayLocation" 
                                                  Width="100"
                                                  Height="100"
+                                                 Margin="0 0 50 0"
                                                  Value="{Binding OverlayLocation, Mode=TwoWay}" />
+                    <TextBlock x:Name="tbkOverlayLocation" Width="170" Margin="10 0 0 0" TextWrapping="Wrap">
+                        <Run Text="Consider the image to the left as your display." />
+                        <Run Text="Select a place for the overlay by clicking in the preferred area." />
+                    </TextBlock>
                 </StackPanel>
                 <Rectangle Stroke="Silver" 
                            HorizontalAlignment="Stretch" 

@@ -47,8 +47,8 @@ namespace Product.SettingsUi
 
         private void OnIsSelectedChanged(bool isSelected)
         {
-            Background = isSelected ? SystemColors.HighlightBrush : Brushes.Transparent;
-            Foreground = isSelected ? SystemColors.HighlightTextBrush : Brushes.Transparent;
+            //Background = isSelected ? SystemColors.HighlightBrush : Brushes.Transparent;
+            Foreground = isSelected ? SystemColors.HighlightBrush : Brushes.Transparent;
         }
 
         protected static void OnIsSelectedChanged(
