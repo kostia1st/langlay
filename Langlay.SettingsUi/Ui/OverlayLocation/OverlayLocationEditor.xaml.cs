@@ -24,7 +24,8 @@ namespace Product.SettingsUi
         public OverlayLocationEditor()
         {
             InitializeComponent();
-            Holders = new[] {
+            Holders = new[] 
+            {
                 hTopLeft, hTopCenter, hTopRight,
                 hMiddleLeft, hMiddleCenter, hMiddleRight,
                 hBottomLeft, hBottomCenter, hBottomRight
@@ -47,17 +48,20 @@ namespace Product.SettingsUi
             e.Handled = true;
         }
 
+        private void OnValueChanged(OverlayLocation location)
+        {
+            foreach (var holder in Holders)
+            {
+                holder.IsSelected = holder.Location == location;
+            }
+        }
         protected static void OnValueChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
             var control = (OverlayLocationEditor) d;
             if (control != null)
             {
-                var value = (OverlayLocation) args.NewValue;
-                foreach (var holder in control.Holders)
-                {
-                    holder.IsSelected = holder.Location == value;
-                }
+                control.OnValueChanged((OverlayLocation) args.NewValue);
             }
         }
     }

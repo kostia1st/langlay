@@ -21,6 +21,7 @@
                     OverlayForm = new OverlayForm();
                     OverlayForm.MillisecondsToKeepVisible = ConfigService.OverlayMilliseconds;
                     OverlayForm.OpacityWhenVisible = ConfigService.OverlayOpacity;
+                    OverlayForm.DisplayLocation = ConfigService.OverlayLocation;
                 }
             }
         }

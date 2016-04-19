@@ -11,6 +11,8 @@ namespace Product
         private Stopwatch WatchElapsed { get; set; }
         public long MillisecondsToKeepVisible { get; set; }
         public long OpacityWhenVisible { get; set; }
+        public OverlayLocation DisplayLocation { get; set; }
+
         private const long MillisecondsToFadeOut = 200;
         private Brush BrushLanguage { get; set; }
         private Brush BrushLayout { get; set; }
@@ -58,7 +60,7 @@ namespace Product
             Visible = true;
 
         }
-
+        private const int ScreenMargin = 20;
         private IntPtr RegionHandle { get; set; }
         private void UpdateRegionAndPosition()
         {
@@ -72,8 +74,44 @@ namespace Product
             }
 
             var screenBounds = Screen.PrimaryScreen.Bounds;
-            Top = screenBounds.Top + screenBounds.Height - (int) (screenBounds.Height * 0.2);
-            Left = screenBounds.Left + ((screenBounds.Width - Width) / 2);
+            switch (DisplayLocation)
+            {
+                case OverlayLocation.TopLeft:
+                case OverlayLocation.MiddleLeft:
+                case OverlayLocation.BottomLeft:
+                    Left = screenBounds.Left + ScreenMargin;
+                    break;
+                case OverlayLocation.TopCenter:
+                case OverlayLocation.MiddleCenter:
+                case OverlayLocation.BottomCenter:
+                    Left = screenBounds.Left + ((screenBounds.Width - Width) / 2);
+                    break;
+                case OverlayLocation.TopRight:
+                case OverlayLocation.MiddleRight:
+                case OverlayLocation.BottomRight:
+                    Left = screenBounds.Left + screenBounds.Width - Width - ScreenMargin;
+                    break;
+            }
+
+            switch (DisplayLocation)
+            {
+                case OverlayLocation.TopLeft:
+                case OverlayLocation.TopCenter:
+                case OverlayLocation.TopRight:
+                    Top = screenBounds.Top + ScreenMargin;
+                    break;
+                case OverlayLocation.MiddleLeft:
+                case OverlayLocation.MiddleCenter:
+                case OverlayLocation.MiddleRight:
+                    Top = screenBounds.Top + (screenBounds.Height - Height) / 2;
+                    break;
+                case OverlayLocation.BottomLeft:
+                case OverlayLocation.BottomCenter:
+                case OverlayLocation.BottomRight:
+                    Top = screenBounds.Top + screenBounds.Height - Height - ScreenMargin;
+                    break;
+            }
+
 
             SetRoundedRegion();
         }
