@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace Product.Common
 {
@@ -21,6 +23,14 @@ namespace Product.Common
                 return result;
             }
             return defaultValue;
+        }
+
+        public static string ToDisplayString<T>(this T enumValue) where T : struct
+        {
+            return enumValue.GetType()
+                .GetField(enumValue.ToString())
+                .GetCustomAttributes(typeof(DisplayAttribute), false)
+                .OfType<DisplayAttribute>().FirstOrDefault().GetValueOrDefault(x => x.Name);
         }
 
         public static int ParseInt(object value, int defaultValue)

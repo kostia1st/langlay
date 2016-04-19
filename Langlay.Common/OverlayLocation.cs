@@ -4,6 +4,7 @@ namespace Product.Common
 {
     public enum OverlayLocation
     {
+        None,
         [Display(Name = "Top Left")]
         TopLeft,
         [Display(Name = "Top Center")]
