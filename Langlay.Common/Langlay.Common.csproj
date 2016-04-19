@@ -48,6 +48,7 @@
     <Compile Include="ArgumentNames.cs" />
     <Compile Include="AppSpecific.cs" />
     <Compile Include="KeyUtils.cs" />
+    <Compile Include="OverlayLocation.cs" />
     <Compile Include="PathUtils.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="Services\ConfigServiceBase.cs" />

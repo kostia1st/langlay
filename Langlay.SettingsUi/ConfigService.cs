@@ -20,6 +20,7 @@ namespace Product.SettingsUi
             WriteArgument(ArgumentNames.SwitchLayout, DoSwitchLayout.ToString());
             WriteArgument(ArgumentNames.OverlayMilliseconds, OverlayMilliseconds.ToString());
             WriteArgument(ArgumentNames.OverlayOpacity, OverlayOpacity.ToString());
+            WriteArgument(ArgumentNames.OverlayLocation, OverlayLocation.ToString());
             WriteArgument(ArgumentNames.SwitchMethod, SwitchMethod.ToString());
             WriteArgument(ArgumentNames.LanguageSwitchKeys, ArrayToKeyString(LanguageSwitchKeyArray));
             WriteArgument(ArgumentNames.LayoutSwitchKeys, ArrayToKeyString(LayoutSwitchKeyArray));

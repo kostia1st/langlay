@@ -96,6 +96,19 @@ namespace Product.SettingsUi
             }
         }
 
+        public OverlayLocation OverlayLocation
+        {
+            get { return ConfigService.OverlayLocation; }
+            set
+            {
+                if (ConfigService.OverlayLocation != value)
+                {
+                    ConfigService.OverlayLocation = value;
+                    NotifyPropertyChanged("OverlayLocation");
+                }
+            }
+        }
+
         public SwitchMethod SwitchMethod
         {
             get { return ConfigService.SwitchMethod; }

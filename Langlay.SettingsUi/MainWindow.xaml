@@ -50,6 +50,13 @@
                         <Run Text="%" />
                     </TextBlock>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Visibility="Collapsed" >
+                    <TextBlock Text="Location on the screen" Width="150" />
+                    
+                    <TextBlock x:Name="tbkOverlayLocation" Width="50" Margin="4 0 0 0">
+                        <Run Text="{Binding OverlayOpacity}" />
+                    </TextBlock>
+                </StackPanel>
                 <Rectangle Stroke="Silver" 
                            HorizontalAlignment="Stretch" 
                            StrokeThickness="1" Height="1" 

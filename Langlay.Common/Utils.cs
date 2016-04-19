@@ -13,6 +13,16 @@ namespace Product.Common
             return first + rest;
         }
 
+        public static T ParseEnum<T>(string value, T defaultValue) where T : struct
+        {
+            T result;
+            if (Enum.TryParse(value, out result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
+
         public static int ParseInt(object value, int defaultValue)
         {
             return ParseInt(value, (int?) defaultValue).Value;
