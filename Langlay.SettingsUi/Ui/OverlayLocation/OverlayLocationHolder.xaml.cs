@@ -43,13 +43,6 @@ namespace Product.SettingsUi
         public OverlayLocationHolder()
         {
             InitializeComponent();
-            Loaded += OverlayLocationHolder_Loaded;
-        }
-
-        private void OverlayLocationHolder_Loaded(object sender, RoutedEventArgs e)
-        {
-            //OnLocationChanged(Location);
-            //OnIsSelectedChanged(Location == OverlayLocation.BottomCenter);
         }
 
         private void OnIsSelectedChanged(bool isSelected)

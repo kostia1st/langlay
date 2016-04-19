@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Product.Common;
 
 namespace Product.SettingsUi
@@ -44,7 +34,6 @@ namespace Product.SettingsUi
 
         private void OverlayLocationEditor_Loaded(object sender, RoutedEventArgs e)
         {
-            Value = OverlayLocation.BottomCenter;
             foreach (var holder in Holders)
             {
                 holder.MouseDown += Holder_MouseDown;

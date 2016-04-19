@@ -18,13 +18,13 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="0" Grid.Row="0" x:Name="hTopLeft"      Location="TopLeft" />
-        <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="0" Grid.Row="1" x:Name="hMiddleLeft"   Location="MiddleLeft" />
-        <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="0" Grid.Row="2" x:Name="hBottomLeft"   Location="BottomLeft" />
         <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="1" Grid.Row="0" x:Name="hTopCenter"    Location="TopCenter" />
-        <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="1" Grid.Row="1" x:Name="hMiddleCenter" Location="MiddleCenter" />
-        <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="1" Grid.Row="2" x:Name="hBottomCenter" Location="BottomCenter" />
         <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="2" Grid.Row="0" x:Name="hTopRight"     Location="TopRight" />
+        <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="0" Grid.Row="1" x:Name="hMiddleLeft"   Location="MiddleLeft" />
+        <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="1" Grid.Row="1" x:Name="hMiddleCenter" Location="MiddleCenter" />
         <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="2" Grid.Row="1" x:Name="hMiddleRight"  Location="MiddleRight" />
+        <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="0" Grid.Row="2" x:Name="hBottomLeft"   Location="BottomLeft" />
+        <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="1" Grid.Row="2" x:Name="hBottomCenter" Location="BottomCenter" />
         <local:OverlayLocationHolder Foreground="Transparent" Grid.Column="2" Grid.Row="2" x:Name="hBottomRight"  Location="BottomRight" />
     </Grid>
 </UserControl>
