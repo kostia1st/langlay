@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -12,23 +10,10 @@ namespace Product
     /// </summary>
     public class KeyboardHooker : IDisposable
     {
-        /// <summary>
-        /// The collections of keys to watch for
-        /// </summary>
-        public IList<KeyStroke> HookedKeys = new List<KeyStroke>();
-        /// <summary>
-        /// Handle to the hook, need this to unhook and call the next hook
-        /// </summary>
         private IntPtr HookHandle = IntPtr.Zero;
 
         #region Events
-        /// <summary>
-        /// Occurs when one of the hooked keys is pressed
-        /// </summary>
         public KeyEventHandler2 KeyDown;
-        /// <summary>
-        /// Occurs when one of the hooked keys is released
-        /// </summary>
         public KeyEventHandler2 KeyUp;
         #endregion
 
@@ -37,22 +22,19 @@ namespace Product
         /// </summary>
         private Win32.KeyboardHookProc HookProcedureHolder;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="KeyboardHooker"/> class and installs the keyboard hook.
-        /// </summary>
         public KeyboardHooker(bool doHookImmediately = true)
         {
             // This is a c# hack in order to keep a firm reference to a dynamically created delegate
             // so that it won't be collected by GC.
             HookProcedureHolder = HookProcedure;
             if (doHookImmediately)
-                Hook();
+                SetHook();
         }
 
         /// <summary>
         /// Installs the global hook
         /// </summary>
-        public void Hook()
+        public void SetHook()
         {
             var hInstance = Win32.LoadLibrary("User32");
             HookHandle = Win32.SetWindowsHookEx(
@@ -62,7 +44,7 @@ namespace Product
         /// <summary>
         /// Uninstalls the global hook
         /// </summary>
-        public void Unhook()
+        public void UnsetHook()
         {
             Win32.UnhookWindowsHookEx(HookHandle);
         }
@@ -74,7 +56,7 @@ namespace Product
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
         /// <returns></returns>
-        private int HookProcedure(int code, int wParam, ref Win32.KeyboardHookStruct lParam)
+        private int HookProcedure(int code, int wParam, ref Win32.KeyboardInfo lParam)
         {
             if (code >= 0)
             {
@@ -84,19 +66,13 @@ namespace Product
                 var kea = new KeyEventArgs2(nonModifiers, modifiers);
                 if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
                 {
-                    if (HookedKeys.Any(x => x.NonModifiers == nonModifiers && x.Modifiers == modifiers))
-                    {
-                        Trace.WriteLine("Hooked keyDOWN " + modifiers.ToString() + " + " + nonModifiers.ToString());
-                        KeyDown(this, kea);
-                    }
+                    Trace.WriteLine("Hooked keyDOWN " + modifiers.ToString() + " + " + nonModifiers.ToString());
+                    KeyDown(this, kea);
                 }
                 else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
                 {
-                    if (HookedKeys.Any(x => x.NonModifiers == nonModifiers && x.Modifiers == modifiers || x.Modifiers == modifiers))
-                    {
-                        Trace.WriteLine("Hooked keyUP " + modifiers.ToString() + " + " + nonModifiers.ToString());
-                        KeyUp(this, kea);
-                    }
+                    Trace.WriteLine("Hooked keyUP " + modifiers.ToString() + " + " + nonModifiers.ToString());
+                    KeyUp(this, kea);
                 }
                 if (kea.Handled)
                     return 1;
@@ -120,7 +96,7 @@ namespace Product
                     // TODO: dispose managed state (managed objects).
                 }
 
-                Unhook();
+                UnsetHook();
                 disposedValue = true;
             }
         }

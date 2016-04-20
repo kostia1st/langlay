@@ -14,5 +14,6 @@
         public const string SwitchMethod = "SwitchMethod";
         public const string RunAtWindowsStartup = "RunAtWindowsStartup";
         public const string ShowSettingsOnce = "ShowSettingsOnce";
+        public const string ShowCursorTooltip = "ShowCursorTooltip";
     }
 }

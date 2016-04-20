@@ -59,12 +59,12 @@ namespace Product.SettingsUi
 
         public bool ShowOverlay
         {
-            get { return ConfigService.ShowOverlay; }
+            get { return ConfigService.DoShowOverlay; }
             set
             {
-                if (ConfigService.ShowOverlay != value)
+                if (ConfigService.DoShowOverlay != value)
                 {
-                    ConfigService.ShowOverlay = value;
+                    ConfigService.DoShowOverlay = value;
                     NotifyPropertyChanged("ShowOverlay");
                 }
             }
@@ -72,13 +72,26 @@ namespace Product.SettingsUi
 
         public bool ShowOverlayOnMainDisplayOnly
         {
-            get { return ConfigService.ShowOverlayOnMainDisplayOnly; }
+            get { return ConfigService.DoShowOverlayOnMainDisplayOnly; }
             set
             {
-                if (ConfigService.ShowOverlayOnMainDisplayOnly != value)
+                if (ConfigService.DoShowOverlayOnMainDisplayOnly != value)
                 {
-                    ConfigService.ShowOverlayOnMainDisplayOnly = value;
+                    ConfigService.DoShowOverlayOnMainDisplayOnly = value;
                     NotifyPropertyChanged("ShowOverlayOnMainDisplayOnly");
+                }
+            }
+        }
+
+        public bool ShowCursorTooltip
+        {
+            get { return ConfigService.DoShowCursorTooltip; }
+            set
+            {
+                if (ConfigService.DoShowCursorTooltip != value)
+                {
+                    ConfigService.DoShowCursorTooltip = value;
+                    NotifyPropertyChanged("ShowCursorTooltip");
                 }
             }
         }

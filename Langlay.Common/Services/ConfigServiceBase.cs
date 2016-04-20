@@ -21,8 +21,8 @@ namespace Product.Common
         public KeyCode LayoutSwitchNonModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, false); } }
         public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
 
-        public bool ShowOverlay { get; set; }
-        public bool ShowOverlayOnMainDisplayOnly { get; set; }        
+        public bool DoShowOverlay { get; set; }
+        public bool DoShowOverlayOnMainDisplayOnly { get; set; }        
         public long OverlayMilliseconds { get; set; }
         public long OverlayOpacity { get; set; }
         public OverlayLocation OverlayLocation { get; set; }
@@ -30,6 +30,8 @@ namespace Product.Common
         public SwitchMethod SwitchMethod { get; set; }
         public bool DoRunAtWindowsStartup { get; set; }
         public bool DoShowSettingsOnce { get; set; }
+
+        public bool DoShowCursorTooltip { get; set; }
 
         public ConfigServiceBase()
         {
@@ -39,7 +41,7 @@ namespace Product.Common
             LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
             LayoutSwitchKeyArray = new KeyCode[] { };
             SwitchMethod = SwitchMethod.InputSimulation;
-            ShowOverlay = true;
+            DoShowOverlay = true;
             OverlayMilliseconds = 500;
             OverlayOpacity = 80;
             OverlayLocation = OverlayLocation.BottomCenter;
@@ -73,9 +75,9 @@ namespace Product.Common
                 LayoutSwitchKeyArray = KeyStringToArray(value);
 
             else if (name == ArgumentNames.ShowOverlay)
-                ShowOverlay = Utils.ParseBool(value, false);
+                DoShowOverlay = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.ShowOverlayOnMainDisplayOnly)
-                ShowOverlayOnMainDisplayOnly = Utils.ParseBool(value, false);
+                DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.OverlayMilliseconds)
                 OverlayMilliseconds = Utils.ParseInt(value, 300);
             else if (name == ArgumentNames.OverlayOpacity)
@@ -89,6 +91,8 @@ namespace Product.Common
                 DoRunAtWindowsStartup = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.ShowSettingsOnce)
                 DoShowSettingsOnce = Utils.ParseBool(value, true);
+            else if (name == ArgumentNames.ShowCursorTooltip)
+                DoShowCursorTooltip = Utils.ParseBool(value, false);
         }
 
         private void ReadArgument(string argument)

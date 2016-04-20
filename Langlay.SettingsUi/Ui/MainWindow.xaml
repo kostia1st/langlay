@@ -69,6 +69,15 @@
                            HorizontalAlignment="Stretch" 
                            StrokeThickness="1" Height="1" 
                            Margin="0 10 0 0" />
+
+                <CheckBox x:Name="chbShowCursorTooltip" 
+                          Content="Show a tooltip next to cursor when clicking a textbox" Margin="0 10 0 0" 
+                          IsChecked="{Binding ShowCursorTooltip}"/>
+
+                <Rectangle Stroke="Silver" 
+                           HorizontalAlignment="Stretch" 
+                           StrokeThickness="1" Height="1" 
+                           Margin="0 10 0 0" />
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
                     <TextBlock Text="Switch method:" Width="150" VerticalAlignment="Top" Margin="0 2 0 0" />
                     <ComboBox x:Name="cbSwitchMethod" 

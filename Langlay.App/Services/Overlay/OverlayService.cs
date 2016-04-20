@@ -29,12 +29,12 @@ namespace Product
         {
             if (!IsStarted)
             {
-                if (ConfigService.ShowOverlay)
+                if (ConfigService.DoShowOverlay)
                 {
                     IsStarted = true;
                     foreach (var screen in Screen.AllScreens)
                     {
-                        if (!ConfigService.ShowOverlayOnMainDisplayOnly || screen.Primary)
+                        if (!ConfigService.DoShowOverlayOnMainDisplayOnly || screen.Primary)
                         {
                             Overlays[screen.DeviceName] = CreateOverlay(screen);
                         }

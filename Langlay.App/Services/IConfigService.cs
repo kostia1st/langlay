@@ -12,8 +12,8 @@ namespace Product
         KeyCode LayoutSwitchNonModifiers { get; }
         KeyCode LayoutSwitchModifiers { get; }
 
-        bool ShowOverlay { get; }
-        bool ShowOverlayOnMainDisplayOnly { get; }
+        bool DoShowOverlay { get; }
+        bool DoShowOverlayOnMainDisplayOnly { get; }
         long OverlayMilliseconds { get; }
         long OverlayOpacity { get; }
         OverlayLocation OverlayLocation { get; }
@@ -21,5 +21,6 @@ namespace Product
         bool DoSwitchLanguage { get; }
         bool DoSwitchLayout { get; }
         bool DoShowSettingsOnce { get; }
+        bool DoShowCursorTooltip { get; }
     }
 }

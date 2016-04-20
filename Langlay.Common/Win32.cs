@@ -11,6 +11,28 @@ namespace Product.Common
         public const int WM_SYSKEYDOWN = 0x104;
         public const int WM_SYSKEYUP = 0x105;
 
+        public const int WH_MOUSE = 7;
+        public const int WH_MOUSE_LL = 14;
+        public const int WM_MOUSEMOVE = 0x200;
+        public const int WM_LBUTTONDOWN = 0x201;
+        public const int WM_LBUTTONUP = 0x202;
+        public const int WM_LBUTTONDBLCLK = 0x203;
+        public const int WM_RBUTTONDOWN = 0x204;
+        public const int WM_RBUTTONUP = 0x205;
+        public const int WM_RBUTTONDBLCLK = 0x206;
+        public const int WM_MBUTTONDOWN = 0x207;
+        public const int WM_MBUTTONUP = 0x208;
+        public const int WM_MBUTTONDBLCLK = 0x209;
+        public const int WM_MOUSEWHEEL = 0x20A;
+        public const int WM_MOUSEHWHEEL = 0x20E;
+        public const int WM_XBUTTONDOWN = 0x20B;
+        public const int WM_XBUTTONUP = 0x20C;
+        public const int WM_XBUTTONDBLCLK = 0x20D;
+        public const int WM_NCXBUTTONDOWN = 0xAB;
+        public const int WM_NCXBUTTONUP = 0xAC;
+        public const int WM_NCXBUTTONDBLCLK = 0xAD;
+
+
         public const int WM_INPUTLANGCHANGEREQUEST = 0x0050;
         public const int WM_CLOSE = 0x0010;
         public const int WM_DESTROY = 0x0002;
@@ -98,6 +120,8 @@ namespace Product.Common
         [DllImport("user32.dll")]
         public static extern IntPtr SetWindowsHookEx(int idHook, KeyboardHookProc callback, IntPtr hInstance, uint threadId);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetWindowsHookEx(int idHook, MouseHookProc callback, IntPtr hInstance, uint threadId);
         /// <summary>
         /// Unhooks the windows hook.
         /// </summary>
@@ -115,8 +139,10 @@ namespace Product.Common
         /// <param name="lParam">The lparam.</param>
         /// <returns></returns>
         [DllImport("user32.dll")]
-        public static extern int CallNextHookEx(IntPtr idHook, int nCode, int wParam, ref KeyboardHookStruct lParam);
+        public static extern int CallNextHookEx(IntPtr idHook, int nCode, int wParam, ref KeyboardInfo lParam);
 
+        [DllImport("user32.dll")]
+        public static extern int CallNextHookEx(IntPtr idHook, int nCode, int wParam, ref MouseInfo lParam);
         /// <summary>
         /// Loads the library.
         /// </summary>
@@ -132,26 +158,37 @@ namespace Product.Common
         /// <summary>
         /// defines the callback type for the hook
         /// </summary>
-        public delegate int KeyboardHookProc(int code, int wParam, ref KeyboardHookStruct lParam);
+        public delegate int KeyboardHookProc(int code, int wParam, ref KeyboardInfo lParam);
 
-        public struct KeyboardHookStruct
+        public delegate int MouseHookProc(int nCode, int wParam, ref MouseInfo lParam);
+
+        public struct KeyboardInfo
         {
             public int vkCode;
             public int scanCode;
             public int flags;
             public int time;
-            public int dwExtraInfo;
+            public IntPtr dwExtraInfo;
+        }
+
+        public struct MouseInfo
+        {
+            public Point pt;
+            public int mouseData;
+            public int dwFlags;
+            public int time;
+            public IntPtr dwExtraInfo;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
+        public struct Point
         {
             public int x;
             public int y;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct CURSORINFO
+        public struct CursorInfo
         {
             public int cbSize;        // Specifies the size, in bytes, of the structure. 
                                         // The caller must set this to Marshal.SizeOf(typeof(CURSORINFO)).
@@ -159,10 +196,10 @@ namespace Product.Common
                                         //    0             The cursor is hidden.
                                         //    CURSOR_SHOWING    The cursor is showing.
             public IntPtr hCursor;          // Handle to the cursor. 
-            public POINT ptScreenPos;       // A POINT structure that receives the screen coordinates of the cursor. 
+            public Point ptScreenPos;       // A POINT structure that receives the screen coordinates of the cursor. 
         }
 
         [DllImport("user32.dll")]
-        public static extern bool GetCursorInfo(out CURSORINFO pci);
+        public static extern bool GetCursorInfo(out CursorInfo pci);
     }
 }
