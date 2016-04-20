@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace Product.Common
 {
@@ -23,6 +22,7 @@ namespace Product.Common
         public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
 
         public bool ShowOverlay { get; set; }
+        public bool ShowOverlayOnMainDisplayOnly { get; set; }        
         public long OverlayMilliseconds { get; set; }
         public long OverlayOpacity { get; set; }
         public OverlayLocation OverlayLocation { get; set; }
@@ -74,6 +74,8 @@ namespace Product.Common
 
             else if (name == ArgumentNames.ShowOverlay)
                 ShowOverlay = Utils.ParseBool(value, false);
+            else if (name == ArgumentNames.ShowOverlayOnMainDisplayOnly)
+                ShowOverlayOnMainDisplayOnly = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.OverlayMilliseconds)
                 OverlayMilliseconds = Utils.ParseInt(value, 300);
             else if (name == ArgumentNames.OverlayOpacity)

@@ -78,7 +78,7 @@
     <Compile Include="Services\Hotkey\KeyEventHandler2.cs" />
     <Compile Include="Services\Hotkey\KeyStroke.cs" />
     <Compile Include="Services\ISettingsService.cs" />
-    <Compile Include="Services\KeyboardSwitch.cs" />
+    <Compile Include="Services\Language\KeyboardSwitch.cs" />
     <Compile Include="Services\MouseCursorService.cs" />
     <Compile Include="Services\Overlay\OverlayForm.cs">
       <SubType>Form</SubType>
@@ -91,10 +91,10 @@
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\Hotkey\HookedHotkeyService.cs" />
     <Compile Include="Services\IConfigService.cs" />
-    <Compile Include="Services\ILanguageService.cs" />
+    <Compile Include="Services\Language\ILanguageService.cs" />
     <Compile Include="Services\ILanguageSetterService.cs" />
     <Compile Include="Services\Overlay\IOverlayService.cs" />
-    <Compile Include="Services\LanguageService.cs" />
+    <Compile Include="Services\Language\LanguageService.cs" />
     <Compile Include="Services\MessageLanguageSetterService.cs" />
     <Compile Include="Services\Overlay\OverlayService.cs" />
     <Compile Include="Program.cs" />

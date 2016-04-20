@@ -16,6 +16,7 @@ namespace Product.SettingsUi
         {
             WriteArgument(ArgumentNames.RunAtWindowsStartup, DoRunAtWindowsStartup.ToString());
             WriteArgument(ArgumentNames.ShowOverlay, ShowOverlay.ToString());
+            WriteArgument(ArgumentNames.ShowOverlayOnMainDisplayOnly, ShowOverlayOnMainDisplayOnly.ToString());
             WriteArgument(ArgumentNames.SwitchLanguage, DoSwitchLanguage.ToString());
             WriteArgument(ArgumentNames.SwitchLayout, DoSwitchLayout.ToString());
             WriteArgument(ArgumentNames.OverlayMilliseconds, OverlayMilliseconds.ToString());

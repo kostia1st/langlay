@@ -12,6 +12,7 @@ namespace Product
         public long MillisecondsToKeepVisible { get; set; }
         public long OpacityWhenVisible { get; set; }
         public OverlayLocation DisplayLocation { get; set; }
+        public Screen Screen { get; set; }
 
         private const long MillisecondsToFadeOut = 200;
         private Brush BrushLanguage { get; set; }
@@ -73,7 +74,7 @@ namespace Product
                     (int) sizeLanguage.Height + (int) sizeLayout.Height + 20);
             }
 
-            var screenBounds = Screen.PrimaryScreen.Bounds;
+            var screenBounds = Screen.Bounds;
             switch (DisplayLocation)
             {
                 case OverlayLocation.TopLeft:

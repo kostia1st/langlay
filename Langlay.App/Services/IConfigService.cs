@@ -13,6 +13,7 @@ namespace Product
         KeyCode LayoutSwitchModifiers { get; }
 
         bool ShowOverlay { get; }
+        bool ShowOverlayOnMainDisplayOnly { get; }
         long OverlayMilliseconds { get; }
         long OverlayOpacity { get; }
         OverlayLocation OverlayLocation { get; }

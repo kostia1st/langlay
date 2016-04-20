@@ -44,6 +44,19 @@ namespace Product.SettingsUi
             NotifyLanguageSequenceChanged();
         }
 
+        public bool RunAtWindowsStartup
+        {
+            get { return ConfigService.DoRunAtWindowsStartup; }
+            set
+            {
+                if (value != ConfigService.DoRunAtWindowsStartup)
+                {
+                    ConfigService.DoRunAtWindowsStartup = value;
+                    NotifyPropertyChanged("RunAtWindowsStartup");
+                }
+            }
+        }
+
         public bool ShowOverlay
         {
             get { return ConfigService.ShowOverlay; }
@@ -57,15 +70,15 @@ namespace Product.SettingsUi
             }
         }
 
-        public bool RunAtWindowsStartup
+        public bool ShowOverlayOnMainDisplayOnly
         {
-            get { return ConfigService.DoRunAtWindowsStartup; }
+            get { return ConfigService.ShowOverlayOnMainDisplayOnly; }
             set
             {
-                if (value != ConfigService.DoRunAtWindowsStartup)
+                if (ConfigService.ShowOverlayOnMainDisplayOnly != value)
                 {
-                    ConfigService.DoRunAtWindowsStartup = value;
-                    NotifyPropertyChanged("RunAtWindowsStartup");
+                    ConfigService.ShowOverlayOnMainDisplayOnly = value;
+                    NotifyPropertyChanged("ShowOverlayOnMainDisplayOnly");
                 }
             }
         }

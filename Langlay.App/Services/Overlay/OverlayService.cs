@@ -1,14 +1,28 @@
-﻿namespace Product
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace Product
 {
     public class OverlayService : IOverlayService
     {
         private IConfigService ConfigService { get; set; }
         private bool IsStarted { get; set; }
-        private OverlayForm OverlayForm { get; set; }
+        private IDictionary<string, OverlayForm> Overlays { get; set; }
 
         public OverlayService(IConfigService configService)
         {
             ConfigService = configService;
+            Overlays = new Dictionary<string, OverlayForm>();
+        }
+
+        private OverlayForm CreateOverlay(Screen screen)
+        {
+            var overlayForm = new OverlayForm();
+            overlayForm.MillisecondsToKeepVisible = ConfigService.OverlayMilliseconds;
+            overlayForm.OpacityWhenVisible = ConfigService.OverlayOpacity;
+            overlayForm.DisplayLocation = ConfigService.OverlayLocation;
+            overlayForm.Screen = screen;
+            return overlayForm;
         }
 
         public void Start()
@@ -18,10 +32,13 @@
                 if (ConfigService.ShowOverlay)
                 {
                     IsStarted = true;
-                    OverlayForm = new OverlayForm();
-                    OverlayForm.MillisecondsToKeepVisible = ConfigService.OverlayMilliseconds;
-                    OverlayForm.OpacityWhenVisible = ConfigService.OverlayOpacity;
-                    OverlayForm.DisplayLocation = ConfigService.OverlayLocation;
+                    foreach (var screen in Screen.AllScreens)
+                    {
+                        if (!ConfigService.ShowOverlayOnMainDisplayOnly || screen.Primary)
+                        {
+                            Overlays[screen.DeviceName] = CreateOverlay(screen);
+                        }
+                    }
                 }
             }
         }
@@ -31,11 +48,14 @@
             if (IsStarted)
             {
                 IsStarted = false;
-                if (OverlayForm != null)
+                foreach (var pair in Overlays)
                 {
-                    OverlayForm.Dispose();
-                    OverlayForm = null;
+                    if (pair.Value != null)
+                    {
+                        pair.Value.Dispose();
+                    }
                 }
+                Overlays.Clear();
             }
         }
 
@@ -43,7 +63,10 @@
         {
             if (IsStarted)
             {
-                OverlayForm.PushMessage(languageName, layoutName);
+                foreach (var overlay in Overlays.Values)
+                {
+                    overlay.PushMessage(languageName, layoutName);
+                }
             }
         }
     }
