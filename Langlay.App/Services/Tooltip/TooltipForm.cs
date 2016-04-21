@@ -19,7 +19,7 @@ namespace Product
         private const int OpacityWhenVisible = 80;
         private Font TextFont { get; set; }
         private Brush TextBrush { get; set; }
-        private Point PivotLocation { get; set; }
+        private Point PivotPosition { get; set; }
 
         private const int MinWidth = 10;
 
@@ -46,7 +46,7 @@ namespace Product
 
         public void Push(string str, Point position, bool resetTimer)
         {
-            PivotLocation = position;
+            PivotPosition = position;
             if (resetTimer)
             {
                 DisplayString = string.Empty;
@@ -60,8 +60,13 @@ namespace Product
             }
             else
             {
-                DisplayString = str;
-                Invalidate();
+                PivotPosition = position;
+                UpdateRegionAndPosition();
+                if (DisplayString != str)
+                {
+                    DisplayString = str;
+                    Invalidate();
+                }
                 Application.DoEvents();
             }
         }
@@ -90,8 +95,8 @@ namespace Product
                     Math.Max((int) sizeOfText.Width + 8, MinWidth),
                     (int) sizeOfText.Height + 8);
             }
-            Left = PivotLocation.X + 20;
-            Top = PivotLocation.Y + 20;
+            Left = PivotPosition.X + 20;
+            Top = PivotPosition.Y + 20;
         }
 
         public bool GetIsVisible()

@@ -67,6 +67,12 @@ namespace Product
 
         protected void Hooker_MouseMove(object sender, MouseEventArgs2 e)
         {
+            if (TooltipService.GetIsVisible())
+            {
+                var currentLayout = InputLayoutHelper.GetCurrentLayout();
+                var text = currentLayout.LanguageNameTwoLetter;
+                TooltipService.Push(text, new System.Drawing.Point(e.Point.x, e.Point.y), false);
+            }
         }
 
         public bool GetIsCurrentCursorBeam()
