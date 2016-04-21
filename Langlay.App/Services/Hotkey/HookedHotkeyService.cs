@@ -55,7 +55,7 @@ namespace Product
                             KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
                         Trace.Unindent();
                         Trace.WriteLine("-- END Simulating full keystroke up");
-                        
+
                         // This line (or equivalent) is necessary to avoid 
                         // phantom KEY UP messages afterwards.
                         Application.DoEvents();
@@ -185,17 +185,17 @@ namespace Product
 
         private void Hooker_KeyUp(object sender, KeyEventArgs2 e)
         {
-            var isLanguageNonModifiersUp = ((KeyCode) e.KeyStroke.NonModifiers & ConfigService.LanguageSwitchNonModifiers) == ConfigService.LanguageSwitchNonModifiers;
-            var isLanguageModifiersUp = ((KeyCode) e.KeyStroke.Modifiers & ConfigService.LanguageSwitchModifiers) == ConfigService.LanguageSwitchModifiers;
-            
-            var isLayoutNonModifiersUp = ((KeyCode) e.KeyStroke.NonModifiers & ConfigService.LayoutSwitchNonModifiers) == ConfigService.LayoutSwitchNonModifiers;
-            var isLayoutModifiersUp = ((KeyCode) e.KeyStroke.Modifiers & ConfigService.LayoutSwitchModifiers) == ConfigService.LayoutSwitchModifiers;
+            var isLanguageNonModifiersUp = (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LanguageSwitchNonModifiers;
+            var isLanguageModifiersUp = (KeyCode) e.KeyStroke.Modifiers == ConfigService.LanguageSwitchModifiers;
+
+            var isLayoutNonModifiersUp = (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LayoutSwitchNonModifiers;
+            var isLayoutModifiersUp = (KeyCode) e.KeyStroke.Modifiers == ConfigService.LayoutSwitchModifiers;
 
             // We're supposed to handle the key-up as well as the key-down
             // otherwise the target app will face a strange situation,
             // which is not guaranteed to work properly.
             var triggeredLanguageSwitch = ConfigService.DoSwitchLanguage
-                && (isLanguageNonModifiersUp && isLanguageModifiersUp 
+                && (isLanguageNonModifiersUp && isLanguageModifiersUp
                 || isLanguageModifiersUp && GetPrevKeyDownEffective());
 
             var triggeredLayoutSwitch = ConfigService.DoSwitchLayout

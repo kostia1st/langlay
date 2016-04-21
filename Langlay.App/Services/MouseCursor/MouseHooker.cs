@@ -110,7 +110,7 @@ namespace Product
                     return 1;
                 else
                 {
-                    Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": ");
+                    //Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": ");
                 }
             }
             return Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
