@@ -15,15 +15,18 @@ namespace Product.SettingsUi
         public void SaveToFile()
         {
             WriteArgument(ArgumentNames.RunAtWindowsStartup, DoRunAtWindowsStartup.ToString());
-            WriteArgument(ArgumentNames.ShowOverlay, ShowOverlay.ToString());
-            WriteArgument(ArgumentNames.SwitchLanguage, DoSwitchLanguage.ToString());
-            WriteArgument(ArgumentNames.SwitchLayout, DoSwitchLayout.ToString());
+            WriteArgument(ArgumentNames.ShowOverlay, DoShowOverlay.ToString());
+            WriteArgument(ArgumentNames.ShowOverlayOnMainDisplayOnly, DoShowOverlayOnMainDisplayOnly.ToString());
             WriteArgument(ArgumentNames.OverlayMilliseconds, OverlayMilliseconds.ToString());
             WriteArgument(ArgumentNames.OverlayOpacity, OverlayOpacity.ToString());
+            WriteArgument(ArgumentNames.OverlayLocation, OverlayLocation.ToString());
             WriteArgument(ArgumentNames.SwitchMethod, SwitchMethod.ToString());
+            WriteArgument(ArgumentNames.SwitchLanguage, DoSwitchLanguage.ToString());
             WriteArgument(ArgumentNames.LanguageSwitchKeys, ArrayToKeyString(LanguageSwitchKeyArray));
+            WriteArgument(ArgumentNames.SwitchLayout, DoSwitchLayout.ToString());
             WriteArgument(ArgumentNames.LayoutSwitchKeys, ArrayToKeyString(LayoutSwitchKeyArray));
             WriteArgument(ArgumentNames.ShowSettingsOnce, DoShowSettingsOnce.ToString());
+            WriteArgument(ArgumentNames.ShowCursorTooltip, DoShowCursorTooltip.ToString());
             UserConfig.Save(ConfigurationSaveMode.Minimal, false);
         }
 

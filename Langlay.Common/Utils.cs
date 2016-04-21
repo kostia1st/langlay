@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace Product.Common
 {
@@ -11,6 +13,24 @@ namespace Product.Common
             var first = str.Substring(0, 1).ToUpper();
             var rest = str.Substring(1);
             return first + rest;
+        }
+
+        public static T ParseEnum<T>(string value, T defaultValue) where T : struct
+        {
+            T result;
+            if (Enum.TryParse(value, out result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
+
+        public static string ToDisplayString<T>(this T enumValue) where T : struct
+        {
+            return enumValue.GetType()
+                .GetField(enumValue.ToString())
+                .GetCustomAttributes(typeof(DisplayAttribute), false)
+                .OfType<DisplayAttribute>().FirstOrDefault().GetValueOrDefault(x => x.Name);
         }
 
         public static int ParseInt(object value, int defaultValue)

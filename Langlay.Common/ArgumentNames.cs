@@ -7,10 +7,13 @@
         public const string LanguageSwitchKeys = "LanguageSwitchKeys";
         public const string LayoutSwitchKeys = "LayoutSwitchKeys";
         public const string ShowOverlay = "ShowOverlay";
+        public const string ShowOverlayOnMainDisplayOnly = "ShowOverlayOnMainDisplayOnly";
         public const string OverlayMilliseconds = "OverlayMs";
         public const string OverlayOpacity = "OverlayOpacity";
+        public const string OverlayLocation = "OverlayLocation";
         public const string SwitchMethod = "SwitchMethod";
         public const string RunAtWindowsStartup = "RunAtWindowsStartup";
         public const string ShowSettingsOnce = "ShowSettingsOnce";
+        public const string ShowCursorTooltip = "ShowCursorTooltip";
     }
 }

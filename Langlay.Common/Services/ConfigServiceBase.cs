@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace Product.Common
 {
@@ -21,12 +20,18 @@ namespace Product.Common
         public IList<KeyCode> LayoutSwitchKeyArray { get; set; }
         public KeyCode LayoutSwitchNonModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, false); } }
         public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
-        public bool ShowOverlay { get; set; }
+
+        public bool DoShowOverlay { get; set; }
+        public bool DoShowOverlayOnMainDisplayOnly { get; set; }        
         public long OverlayMilliseconds { get; set; }
         public long OverlayOpacity { get; set; }
+        public OverlayLocation OverlayLocation { get; set; }
+
         public SwitchMethod SwitchMethod { get; set; }
         public bool DoRunAtWindowsStartup { get; set; }
         public bool DoShowSettingsOnce { get; set; }
+
+        public bool DoShowCursorTooltip { get; set; }
 
         public ConfigServiceBase()
         {
@@ -36,9 +41,10 @@ namespace Product.Common
             LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
             LayoutSwitchKeyArray = new KeyCode[] { };
             SwitchMethod = SwitchMethod.InputSimulation;
-            ShowOverlay = true;
+            DoShowOverlay = true;
             OverlayMilliseconds = 500;
             OverlayOpacity = 80;
+            OverlayLocation = OverlayLocation.BottomCenter;
 
             DoRunAtWindowsStartup = true;
             DoSwitchLanguage = true;
@@ -67,19 +73,26 @@ namespace Product.Common
                 LanguageSwitchKeyArray = KeyStringToArray(value);
             else if (name == ArgumentNames.LayoutSwitchKeys)
                 LayoutSwitchKeyArray = KeyStringToArray(value);
+
             else if (name == ArgumentNames.ShowOverlay)
-                ShowOverlay = Utils.ParseBool(value, false);
+                DoShowOverlay = Utils.ParseBool(value, false);
+            else if (name == ArgumentNames.ShowOverlayOnMainDisplayOnly)
+                DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.OverlayMilliseconds)
                 OverlayMilliseconds = Utils.ParseInt(value, 300);
             else if (name == ArgumentNames.OverlayOpacity)
                 OverlayOpacity = Utils.ParseInt(value, 80);
+            else if (name == ArgumentNames.OverlayLocation)
+                OverlayLocation = Utils.ParseEnum(value, OverlayLocation.BottomCenter);
+                    
             else if (name == ArgumentNames.SwitchMethod)
-                SwitchMethod = string.Equals(value, SwitchMethod.Message.ToString(), StringComparison.InvariantCultureIgnoreCase)
-                    ? SwitchMethod.Message : SwitchMethod.InputSimulation;
+                SwitchMethod = Utils.ParseEnum(value, SwitchMethod.InputSimulation);
             else if (name == ArgumentNames.RunAtWindowsStartup)
                 DoRunAtWindowsStartup = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.ShowSettingsOnce)
                 DoShowSettingsOnce = Utils.ParseBool(value, true);
+            else if (name == ArgumentNames.ShowCursorTooltip)
+                DoShowCursorTooltip = Utils.ParseBool(value, false);
         }
 
         private void ReadArgument(string argument)

@@ -8,26 +8,31 @@ namespace Product
 {
     public partial class OverlayForm : Form
     {
-        private Stopwatch WatchElapsed { get; set; }
+        private Stopwatch PeriodElapsed { get; set; }
         public long MillisecondsToKeepVisible { get; set; }
         public long OpacityWhenVisible { get; set; }
+        public OverlayLocation DisplayLocation { get; set; }
+        public Screen Screen { get; set; }
+
         private const long MillisecondsToFadeOut = 200;
-        private Brush BrushLanguage { get; set; }
-        private Brush BrushLayout { get; set; }
         public string LanguageName { get; set; }
         public string LayoutName { get; set; }
-        private Font FontLanguage { get; set; }
-        private Font FontLayout { get; set; }
+
+        private Font LanguageFont { get; set; }
+        private Brush LanguageBrush { get; set; }
+        private Font LayoutFont { get; set; }
+        private Brush LayoutBrush { get; set; }
+
         private const int MinWidth = 140;
 
         public OverlayForm()
         {
             InitializeComponent();
-            WatchElapsed = new Stopwatch();
-            BrushLanguage = new SolidBrush(Color.White);
-            BrushLayout = new SolidBrush(Color.Gray);
-            FontLanguage = new Font(Font.FontFamily, 28);
-            FontLayout = new Font(Font.FontFamily, 14);
+            PeriodElapsed = new Stopwatch();
+            LanguageBrush = new SolidBrush(Color.White);
+            LayoutBrush = new SolidBrush(Color.Gray);
+            LanguageFont = new Font(Font.FontFamily, 28);
+            LayoutFont = new Font(Font.FontFamily, 14);
         }
 
         protected override bool ShowWithoutActivation { get { return true; } }
@@ -50,7 +55,7 @@ namespace Product
             if (timerOverlay.Enabled)
                 timerOverlay.Stop();
 
-            WatchElapsed.Restart();
+            PeriodElapsed.Restart();
 
             UpdateRegionAndPosition();
             timerOverlay.Start();
@@ -58,22 +63,58 @@ namespace Product
             Visible = true;
 
         }
-
+        private const int ScreenMargin = 20;
         private IntPtr RegionHandle { get; set; }
         private void UpdateRegionAndPosition()
         {
             using (var g = this.CreateGraphics())
             {
-                var sizeLanguage = g.MeasureString(LanguageName, FontLanguage);
-                var sizeLayout = g.MeasureString(LayoutName, FontLayout);
+                var sizeLanguage = g.MeasureString(LanguageName, LanguageFont);
+                var sizeLayout = g.MeasureString(LayoutName, LayoutFont);
                 this.Size = new Size(
                     Math.Max((int) Math.Max(sizeLanguage.Width, sizeLayout.Width) + 40, MinWidth), 
                     (int) sizeLanguage.Height + (int) sizeLayout.Height + 20);
             }
 
-            var screenBounds = Screen.PrimaryScreen.Bounds;
-            Top = screenBounds.Top + screenBounds.Height - (int) (screenBounds.Height * 0.2);
-            Left = screenBounds.Left + ((screenBounds.Width - Width) / 2);
+            var screenBounds = Screen.Bounds;
+            switch (DisplayLocation)
+            {
+                case OverlayLocation.TopLeft:
+                case OverlayLocation.MiddleLeft:
+                case OverlayLocation.BottomLeft:
+                    Left = screenBounds.Left + ScreenMargin;
+                    break;
+                case OverlayLocation.TopCenter:
+                case OverlayLocation.MiddleCenter:
+                case OverlayLocation.BottomCenter:
+                    Left = screenBounds.Left + ((screenBounds.Width - Width) / 2);
+                    break;
+                case OverlayLocation.TopRight:
+                case OverlayLocation.MiddleRight:
+                case OverlayLocation.BottomRight:
+                    Left = screenBounds.Left + screenBounds.Width - Width - ScreenMargin;
+                    break;
+            }
+
+            switch (DisplayLocation)
+            {
+                case OverlayLocation.TopLeft:
+                case OverlayLocation.TopCenter:
+                case OverlayLocation.TopRight:
+                    Top = screenBounds.Top + ScreenMargin;
+                    break;
+                case OverlayLocation.MiddleLeft:
+                case OverlayLocation.MiddleCenter:
+                case OverlayLocation.MiddleRight:
+                    Top = screenBounds.Top + (screenBounds.Height - Height) / 2;
+                    break;
+                case OverlayLocation.BottomLeft:
+                case OverlayLocation.BottomCenter:
+                case OverlayLocation.BottomRight:
+                    Top = screenBounds.Top + screenBounds.Height - Height - ScreenMargin;
+                    break;
+            }
+
 
             SetRoundedRegion();
         }
@@ -98,13 +139,18 @@ namespace Product
 
         public void PushMessage(string languageName, string layoutName)
         {
-            this.LanguageName = "";
-            this.LayoutName = "";
-            this.Invalidate();
+            LanguageName = "";
+            LayoutName = "";
+
+            // Make sure the window has redrawn itself empty
+            Invalidate();
             Application.DoEvents();
             Visible = false;
-            this.LanguageName = languageName;
-            this.LayoutName = layoutName;
+
+            // Put the new content into the window
+            LanguageName = languageName;
+            LayoutName = layoutName;
+
             ResetAndRun();
         }
 
@@ -128,11 +174,11 @@ namespace Product
 
         private void OnTimer()
         {
-            Opacity = GetOpacity(WatchElapsed.ElapsedMilliseconds);
+            Opacity = GetOpacity(PeriodElapsed.ElapsedMilliseconds);
             if (Opacity == 0)
             {
                 timerOverlay.Stop();
-                WatchElapsed.Stop();
+                PeriodElapsed.Stop();
                 Visible = false;
             }
         }
@@ -144,12 +190,12 @@ namespace Product
 
         private void OverlayForm_Paint(object sender, PaintEventArgs e)
         {
-            var sizeLanguage = e.Graphics.MeasureString(LanguageName, FontLanguage);
-            var sizeLayout = e.Graphics.MeasureString(LayoutName, FontLayout);
+            var sizeLanguage = e.Graphics.MeasureString(LanguageName, LanguageFont);
+            var sizeLayout = e.Graphics.MeasureString(LayoutName, LayoutFont);
             var pointLanguage = new PointF((Width - sizeLanguage.Width) / 2, (Height - sizeLanguage.Height - sizeLayout.Height) / 2);
             var pointLayout = new PointF((Width - sizeLayout.Width) / 2, pointLanguage.Y + sizeLanguage.Height);
-            e.Graphics.DrawString(this.LanguageName, this.FontLanguage, this.BrushLanguage, pointLanguage);
-            e.Graphics.DrawString(this.LayoutName, this.FontLayout, this.BrushLayout, pointLayout);
+            e.Graphics.DrawString(this.LanguageName, this.LanguageFont, this.LanguageBrush, pointLanguage);
+            e.Graphics.DrawString(this.LayoutName, this.LayoutFont, this.LayoutBrush, pointLayout);
         }
     }
 }

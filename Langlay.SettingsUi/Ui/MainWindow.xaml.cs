@@ -21,6 +21,11 @@ namespace Product.SettingsUi
             ViewModel.ShowSettingsOnce = false;
             DataContext = ViewModel;
             InitializeComponent();
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
             tbrVersion.Text = string.Format("Version {0}", WinformsApp.ProductVersion);
             tbrLocation.Text = WinformsApp.StartupPath;
         }

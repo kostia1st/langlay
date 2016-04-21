@@ -26,6 +26,8 @@ namespace Product
                     var overlayService = new OverlayService(configService);
                     var languageService = new LanguageService(configService, overlayService);
                     var hotkeyService = new HookedHotkeyService(configService, languageService);
+                    var tooltipService = new TooltipService(configService);
+                    var mouseCursorService = new MouseCursorService(configService, tooltipService);
 
                     ILanguageSetterService languageSetterService;
                     if (configService.SwitchMethod == SwitchMethod.InputSimulation)
@@ -49,6 +51,8 @@ namespace Product
                     hotkeyService.Start();
                     trayService.Start();
                     overlayService.Start();
+                    tooltipService.Start();
+                    mouseCursorService.Start();
                     startupService.ResolveStartup();
                     settingsService.ResolveFirstRun();
 
@@ -66,6 +70,8 @@ namespace Product
                     }
                     finally
                     {
+                        mouseCursorService.Stop();
+                        tooltipService.Stop();
                         trayService.Stop();
                         hotkeyService.Stop();
                         overlayService.Stop();

@@ -44,19 +44,6 @@ namespace Product.SettingsUi
             NotifyLanguageSequenceChanged();
         }
 
-        public bool ShowOverlay
-        {
-            get { return ConfigService.ShowOverlay; }
-            set
-            {
-                if (ConfigService.ShowOverlay != value)
-                {
-                    ConfigService.ShowOverlay = value;
-                    NotifyPropertyChanged("ShowOverlay");
-                }
-            }
-        }
-
         public bool RunAtWindowsStartup
         {
             get { return ConfigService.DoRunAtWindowsStartup; }
@@ -66,6 +53,45 @@ namespace Product.SettingsUi
                 {
                     ConfigService.DoRunAtWindowsStartup = value;
                     NotifyPropertyChanged("RunAtWindowsStartup");
+                }
+            }
+        }
+
+        public bool ShowOverlay
+        {
+            get { return ConfigService.DoShowOverlay; }
+            set
+            {
+                if (ConfigService.DoShowOverlay != value)
+                {
+                    ConfigService.DoShowOverlay = value;
+                    NotifyPropertyChanged("ShowOverlay");
+                }
+            }
+        }
+
+        public bool ShowOverlayOnMainDisplayOnly
+        {
+            get { return ConfigService.DoShowOverlayOnMainDisplayOnly; }
+            set
+            {
+                if (ConfigService.DoShowOverlayOnMainDisplayOnly != value)
+                {
+                    ConfigService.DoShowOverlayOnMainDisplayOnly = value;
+                    NotifyPropertyChanged("ShowOverlayOnMainDisplayOnly");
+                }
+            }
+        }
+
+        public bool ShowCursorTooltip
+        {
+            get { return ConfigService.DoShowCursorTooltip; }
+            set
+            {
+                if (ConfigService.DoShowCursorTooltip != value)
+                {
+                    ConfigService.DoShowCursorTooltip = value;
+                    NotifyPropertyChanged("ShowCursorTooltip");
                 }
             }
         }
@@ -92,6 +118,19 @@ namespace Product.SettingsUi
                 {
                     ConfigService.OverlayOpacity = value;
                     NotifyPropertyChanged("OverlayOpacity");
+                }
+            }
+        }
+
+        public OverlayLocation OverlayLocation
+        {
+            get { return ConfigService.OverlayLocation; }
+            set
+            {
+                if (ConfigService.OverlayLocation != value)
+                {
+                    ConfigService.OverlayLocation = value;
+                    NotifyPropertyChanged("OverlayLocation");
                 }
             }
         }

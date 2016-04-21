@@ -69,18 +69,24 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ui\OverlayLocation\OverlayLocationEditor.xaml.cs">
+      <DependentUpon>OverlayLocationEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\OverlayLocation\OverlayLocationHolder.xaml.cs">
+      <DependentUpon>OverlayLocationHolder.xaml</DependentUpon>
+    </Compile>
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="HotkeyComposer.xaml">
+    <Page Include="Ui\Hotkey\HotkeyComposer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="HotkeyEditor.xaml">
+    <Page Include="Ui\Hotkey\HotkeyEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Ui\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -90,17 +96,25 @@
     </Compile>
     <Compile Include="ConfigService.cs" />
     <Compile Include="ConfigViewModel.cs" />
-    <Compile Include="HotkeyComposer.xaml.cs">
+    <Compile Include="Ui\Hotkey\HotkeyComposer.xaml.cs">
       <DependentUpon>HotkeyComposer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HotkeyEditor.xaml.cs">
+    <Compile Include="Ui\Hotkey\HotkeyEditor.xaml.cs">
       <DependentUpon>HotkeyEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="KeyCodeViewModel.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Ui\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Ui\OverlayLocation\OverlayLocationEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\OverlayLocation\OverlayLocationHolder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
