@@ -95,8 +95,15 @@ namespace Product
                     Math.Max((int) sizeOfText.Width + 8, MinWidth),
                     (int) sizeOfText.Height + 8);
             }
-            Left = PivotPosition.X + 20;
-            Top = PivotPosition.Y + 20;
+            var screen = Screen.FromPoint(PivotPosition);
+            var proposedLeft = PivotPosition.X + 20;
+            var proposedTop = PivotPosition.Y + 20;
+            if (proposedLeft + Size.Width > screen.Bounds.Right)
+                proposedLeft = PivotPosition.X - Size.Width;
+            if (proposedTop + Size.Height > screen.Bounds.Bottom)
+                proposedTop = PivotPosition.Y - Size.Height;
+            Left = proposedLeft;
+            Top = proposedTop;
         }
 
         public bool GetIsVisible()
