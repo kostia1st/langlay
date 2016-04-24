@@ -194,6 +194,8 @@ namespace Product
             var sizeLayout = e.Graphics.MeasureString(LayoutName, LayoutFont);
             var pointLanguage = new PointF((Width - sizeLanguage.Width) / 2, (Height - sizeLanguage.Height - sizeLayout.Height) / 2);
             var pointLayout = new PointF((Width - sizeLayout.Width) / 2, pointLanguage.Y + sizeLanguage.Height);
+
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
             e.Graphics.DrawString(this.LanguageName, this.LanguageFont, this.LanguageBrush, pointLanguage);
             e.Graphics.DrawString(this.LayoutName, this.LayoutFont, this.LayoutBrush, pointLayout);
         }

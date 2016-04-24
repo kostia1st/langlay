@@ -81,10 +81,15 @@ namespace Product.Common
             else if (name == ArgumentNames.OverlayMilliseconds)
                 OverlayMilliseconds = Utils.ParseInt(value, 300);
             else if (name == ArgumentNames.OverlayOpacity)
+            {
                 OverlayOpacity = Utils.ParseInt(value, 80);
+                // Enforcing the constraints
+                if (OverlayOpacity < 0 || OverlayOpacity > 100)
+                    OverlayOpacity = 80;
+            }
             else if (name == ArgumentNames.OverlayLocation)
                 OverlayLocation = Utils.ParseEnum(value, OverlayLocation.BottomCenter);
-                    
+
             else if (name == ArgumentNames.SwitchMethod)
                 SwitchMethod = Utils.ParseEnum(value, SwitchMethod.InputSimulation);
             else if (name == ArgumentNames.RunAtWindowsStartup)

@@ -143,6 +143,9 @@ namespace Product
         {
             var sizeOfText = e.Graphics.MeasureString(DisplayString, TextFont);
             var positionOfText = new PointF((Width - sizeOfText.Width - 1) / 2, (Height - sizeOfText.Height - 1) / 2);
+            
+            // Commented out because small text does not seem to benefit from AA, actually it's vice versa
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             e.Graphics.DrawString(this.DisplayString, this.TextFont, this.TextBrush, positionOfText);
 
         }
