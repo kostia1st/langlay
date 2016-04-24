@@ -21,6 +21,7 @@ namespace Product
             overlayForm.MillisecondsToKeepVisible = ConfigService.OverlayMilliseconds;
             overlayForm.OpacityWhenVisible = ConfigService.OverlayOpacity;
             overlayForm.DisplayLocation = ConfigService.OverlayLocation;
+            overlayForm.RoundCorners = ConfigService.DoShowOverlayRoundCorners;
             overlayForm.Screen = screen;
             return overlayForm;
         }

@@ -8,6 +8,7 @@
         public const string LayoutSwitchKeys = "LayoutSwitchKeys";
         public const string ShowOverlay = "ShowOverlay";
         public const string ShowOverlayOnMainDisplayOnly = "ShowOverlayOnMainDisplayOnly";
+        public const string ShowOverlayRoundCorners = "ShowOverlayRoundCorners";
         public const string OverlayMilliseconds = "OverlayMs";
         public const string OverlayOpacity = "OverlayOpacity";
         public const string OverlayLocation = "OverlayLocation";

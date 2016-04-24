@@ -11,7 +11,9 @@ namespace Product
         private Stopwatch PeriodElapsed { get; set; }
         public long MillisecondsToKeepVisible { get; set; }
         public long OpacityWhenVisible { get; set; }
+        public bool RoundCorners { get; set; }
         public OverlayLocation DisplayLocation { get; set; }
+
         public Screen Screen { get; set; }
 
         private const long MillisecondsToFadeOut = 200;
@@ -22,6 +24,7 @@ namespace Product
         private Brush LanguageBrush { get; set; }
         private Font LayoutFont { get; set; }
         private Brush LayoutBrush { get; set; }
+
 
         private const int MinWidth = 140;
 
@@ -115,8 +118,8 @@ namespace Product
                     break;
             }
 
-
-            SetRoundedRegion();
+            if (RoundCorners)
+                SetRoundedRegion();
         }
 
         private void SetRoundedRegion()

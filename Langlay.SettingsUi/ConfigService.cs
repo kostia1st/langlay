@@ -17,6 +17,7 @@ namespace Product.SettingsUi
             WriteArgument(ArgumentNames.RunAtWindowsStartup, DoRunAtWindowsStartup.ToString());
             WriteArgument(ArgumentNames.ShowOverlay, DoShowOverlay.ToString());
             WriteArgument(ArgumentNames.ShowOverlayOnMainDisplayOnly, DoShowOverlayOnMainDisplayOnly.ToString());
+            WriteArgument(ArgumentNames.ShowOverlayRoundCorners, DoShowOverlayRoundCorners.ToString());
             WriteArgument(ArgumentNames.OverlayMilliseconds, OverlayMilliseconds.ToString());
             WriteArgument(ArgumentNames.OverlayOpacity, OverlayOpacity.ToString());
             WriteArgument(ArgumentNames.OverlayLocation, OverlayLocation.ToString());

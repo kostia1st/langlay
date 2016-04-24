@@ -14,6 +14,7 @@ namespace Product
 
         bool DoShowOverlay { get; }
         bool DoShowOverlayOnMainDisplayOnly { get; }
+        bool DoShowOverlayRoundCorners { get; }
         long OverlayMilliseconds { get; }
         long OverlayOpacity { get; }
         OverlayLocation OverlayLocation { get; }
