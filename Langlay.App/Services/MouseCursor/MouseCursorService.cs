@@ -55,7 +55,7 @@ namespace Product
             {
                 var currentLayout = InputLayoutHelper.GetCurrentLayout();
                 var text = currentLayout.LanguageNameTwoLetter;
-                TooltipService.Push(text, new System.Drawing.Point(e.Point.x, e.Point.y), true);
+                TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
             }
 
         }
@@ -71,17 +71,17 @@ namespace Product
             {
                 var currentLayout = InputLayoutHelper.GetCurrentLayout();
                 var text = currentLayout.LanguageNameTwoLetter;
-                TooltipService.Push(text, new System.Drawing.Point(e.Point.x, e.Point.y), false);
+                TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), false);
             }
         }
 
         public bool GetIsCurrentCursorBeam()
         {
             Win32.CursorInfo pci;
-            pci.cbSize = Marshal.SizeOf(typeof(Win32.CursorInfo));
+            pci.Size = Marshal.SizeOf(typeof(Win32.CursorInfo));
             Win32.GetCursorInfo(out pci);
 
-            return pci.hCursor == Cursors.IBeam.Handle;
+            return pci.Handle == Cursors.IBeam.Handle;
         }
 
         #region IDisposable Support

@@ -1,8 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using WinformsApp = System.Windows.Forms.Application;
 using Product.Common;
+using WinformsApp = System.Windows.Forms.Application;
 
 namespace Product.SettingsUi
 {
@@ -55,7 +56,7 @@ namespace Product.SettingsUi
                 var thread = process.Threads.Cast<ProcessThread>().FirstOrDefault();
                 if (thread != null)
                 {
-                    Win32.PostThreadMessage(thread.Id, Win32.WM_USER_RESTART, 0, 0);
+                    Win32.PostThreadMessage(thread.Id, Win32.WM_USER_RESTART, IntPtr.Zero, IntPtr.Zero);
                 }
                 else
                 {

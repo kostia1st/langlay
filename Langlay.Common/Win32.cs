@@ -39,7 +39,7 @@ namespace Product.Common
         public const int WM_QUIT = 0x0012;
         public const int WM_USER_RESTART = 0x0400 + 20;
 
-        public static string MessageToString(int message)
+        public static string MessageToString(uint message)
         {
             switch (message)
             {
@@ -71,23 +71,23 @@ namespace Product.Common
         public const int WS_EX_TOPMOST = 0x00000008;
 
         [DllImport("user32.dll")]
-        public static extern IntPtr GetKeyboardLayout(int idThread);
+        public static extern IntPtr GetKeyboardLayout(int threadId);
         [DllImport("user32.dll")]
-        public static extern int GetWindowThreadProcessId(IntPtr hWnd, int id);
+        public static extern int GetWindowThreadProcessId(IntPtr windowHandle, IntPtr id);
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
         [DllImport("user32.dll")]
         public static extern IntPtr GetActiveWindow();
         [DllImport("user32.dll")]
-        public static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+        public static extern bool PostMessage(IntPtr hWnd, uint messageId, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll")]
-        public static extern bool SendMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+        public static extern bool SendMessage(IntPtr hWnd, uint messageId, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessageTimeout(
             IntPtr windowHandle,
-            uint Msg,
-            int wParam,
-            int lParam,
+            uint messageId,
+            IntPtr wParam,
+            IntPtr lParam,
             SendMessageTimeoutFlags flags,
             uint timeout,
             out IntPtr result);
@@ -95,15 +95,15 @@ namespace Product.Common
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         public static extern IntPtr CreateRoundRectRgn
         (
-            int nLeftRect, // x-coordinate of upper-left corner
-            int nTopRect, // y-coordinate of upper-left corner
-            int nRightRect, // x-coordinate of lower-right corner
-            int nBottomRect, // y-coordinate of lower-right corner
-            int nWidthEllipse, // height of ellipse
-            int nHeightEllipse // width of ellipse
+            int topLeftX, // x-coordinate of upper-left corner
+            int topLeftY, // y-coordinate of upper-left corner
+            int bottomRightX, // x-coordinate of lower-right corner
+            int bottomRightY, // y-coordinate of lower-right corner
+            int roundingWidth, // height of ellipse
+            int roundingHeight // width of ellipse
          );
         [DllImport("gdi32.dll")]
-        public static extern bool DeleteObject(IntPtr hObject);
+        public static extern bool DeleteObject(IntPtr objectHandle);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
@@ -125,10 +125,10 @@ namespace Product.Common
         /// <summary>
         /// Unhooks the windows hook.
         /// </summary>
-        /// <param name="hInstance">The hook handle that was returned from SetWindowsHookEx</param>
+        /// <param name="hookHandle">The hook handle that was returned from SetWindowsHookEx</param>
         /// <returns>True if successful, false otherwise</returns>
         [DllImport("user32.dll")]
-        public static extern bool UnhookWindowsHookEx(IntPtr hInstance);
+        public static extern bool UnhookWindowsHookEx(IntPtr hookHandle);
 
         /// <summary>
         /// Calls the next hook.
@@ -139,10 +139,10 @@ namespace Product.Common
         /// <param name="lParam">The lparam.</param>
         /// <returns></returns>
         [DllImport("user32.dll")]
-        public static extern int CallNextHookEx(IntPtr idHook, int nCode, int wParam, ref KeyboardInfo lParam);
+        public static extern int CallNextHookEx(IntPtr idHook, int nCode, uint wParam, ref KeyboardInfo lParam);
 
         [DllImport("user32.dll")]
-        public static extern int CallNextHookEx(IntPtr idHook, int nCode, int wParam, ref MouseInfo lParam);
+        public static extern int CallNextHookEx(IntPtr idHook, int nCode, uint wParam, ref MouseInfo lParam);
         /// <summary>
         /// Loads the library.
         /// </summary>
@@ -152,51 +152,53 @@ namespace Product.Common
         public static extern IntPtr LoadLibrary(string lpFileName);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool PostThreadMessage(int threadId, uint msg, int wParam, int lParam);
+        public static extern bool PostThreadMessage(int threadId, uint messageId, IntPtr wParam, IntPtr lParam);
 
 
         /// <summary>
         /// defines the callback type for the hook
         /// </summary>
-        public delegate int KeyboardHookProc(int code, int wParam, ref KeyboardInfo lParam);
+        public delegate int KeyboardHookProc(int code, uint wParam, ref KeyboardInfo lParam);
 
-        public delegate int MouseHookProc(int nCode, int wParam, ref MouseInfo lParam);
+        public delegate int MouseHookProc(int nCode, uint wParam, ref MouseInfo lParam);
 
         public struct KeyboardInfo
         {
-            public int vkCode;
-            public int scanCode;
-            public int flags;
-            public int time;
-            public IntPtr dwExtraInfo;
+            public int VirtualKeyCode;
+            public int ScanCode;
+            public int Flags;
+            public int Time;
+            private IntPtr ExtraInfo;
         }
 
         public struct MouseInfo
         {
-            public Point pt;
-            public int mouseData;
-            public int dwFlags;
-            public int time;
-            public IntPtr dwExtraInfo;
+            public Point Point;
+            public int MouseData;
+            public int Flags;
+            public int Time;
+            private IntPtr ExtraInfo;
         }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct Point
         {
-            public int x;
-            public int y;
+            public int X;
+            public int Y;
         }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct CursorInfo
         {
-            public int cbSize;        // Specifies the size, in bytes, of the structure. 
+            public int Size;        // Specifies the size, in bytes, of the structure. 
                                         // The caller must set this to Marshal.SizeOf(typeof(CURSORINFO)).
-            public int flags;         // Specifies the cursor state. This parameter can be one of the following values:
+            public int Flags;         // Specifies the cursor state. This parameter can be one of the following values:
                                         //    0             The cursor is hidden.
                                         //    CURSOR_SHOWING    The cursor is showing.
-            public IntPtr hCursor;          // Handle to the cursor. 
-            public Point ptScreenPos;       // A POINT structure that receives the screen coordinates of the cursor. 
+            private IntPtr m_CursorHandle;          // Handle to the cursor. 
+            public Point ScreenPosition;       // A POINT structure that receives the screen coordinates of the cursor. 
+
+            public IntPtr Handle { get { return m_CursorHandle; } }
         }
 
         [DllImport("user32.dll")]

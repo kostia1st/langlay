@@ -60,7 +60,7 @@ namespace Product
                     {
                         Application.Run();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
 #if DEBUG
                         throw;

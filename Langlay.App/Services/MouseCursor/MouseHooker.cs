@@ -58,7 +58,7 @@ namespace Product
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The mousehook event information</param>
         /// <returns></returns>
-        private int HookProcedure(int code, int wParam, ref Win32.MouseInfo lParam)
+        private int HookProcedure(int code, uint wParam, ref Win32.MouseInfo lParam)
         {
             if (code >= 0)
             {
@@ -67,15 +67,15 @@ namespace Product
                 {
                     if (wParam == Win32.WM_LBUTTONDOWN)
                     {
-                        args = new MouseEventArgs2(MouseButtons.Left, lParam.pt);
+                        args = new MouseEventArgs2(MouseButtons.Left, lParam.Point);
                     }
                     if (wParam == Win32.WM_RBUTTONDOWN)
                     {
-                        args = new MouseEventArgs2(MouseButtons.Right, lParam.pt);
+                        args = new MouseEventArgs2(MouseButtons.Right, lParam.Point);
                     }
                     if (wParam == Win32.WM_MBUTTONDOWN)
                     {
-                        args = new MouseEventArgs2(MouseButtons.Middle, lParam.pt);
+                        args = new MouseEventArgs2(MouseButtons.Middle, lParam.Point);
                     }
                     if (args != null)
                         ButtonDown(this, args);
@@ -84,15 +84,15 @@ namespace Product
                 {
                     if (wParam == Win32.WM_LBUTTONUP)
                     {
-                        args = new MouseEventArgs2(MouseButtons.Left, lParam.pt);
+                        args = new MouseEventArgs2(MouseButtons.Left, lParam.Point);
                     }
                     if (wParam == Win32.WM_RBUTTONUP)
                     {
-                        args = new MouseEventArgs2(MouseButtons.Right, lParam.pt);
+                        args = new MouseEventArgs2(MouseButtons.Right, lParam.Point);
                     }
                     if (wParam == Win32.WM_MBUTTONUP)
                     {
-                        args = new MouseEventArgs2(MouseButtons.Middle, lParam.pt);
+                        args = new MouseEventArgs2(MouseButtons.Middle, lParam.Point);
                     }
                     if (args != null)
                         ButtonUp(this, args);
@@ -102,7 +102,7 @@ namespace Product
                 {
                     if (wParam == Win32.WM_MOUSEMOVE)
                     {
-                        args = new MouseEventArgs2(MouseButtons.None, lParam.pt);
+                        args = new MouseEventArgs2(MouseButtons.None, lParam.Point);
                         MouseMove(this, args);
                     }
                 }
