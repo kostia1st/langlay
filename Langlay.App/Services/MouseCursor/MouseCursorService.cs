@@ -66,16 +66,29 @@ namespace Product
             }
         }
 
+        private bool IsLastDownHandled;
+
         protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e)
         {
-            if (e.Buttons == MouseButtons.Left && GetIsCurrentCursorBeam())
+            if (e.Buttons == MouseButtons.Left
+                && GetIsCurrentCursorBeam())
+            {
                 ShowTooltip(e);
+                IsLastDownHandled = true;
+            }
+            else
+                IsLastDownHandled = false;
         }
 
         protected void Hooker_ButtonUp(object sender, MouseEventArgs2 e)
         {
-            if (e.Buttons == MouseButtons.Left && GetIsCurrentCursorBeam())
+            if (e.Buttons == MouseButtons.Left
+                && !IsLastDownHandled
+                && !TooltipService.GetIsVisible()
+                && GetIsCurrentCursorBeam())
+            {
                 ShowTooltip(e);
+            }
         }
 
         protected void Hooker_MouseMove(object sender, MouseEventArgs2 e)
