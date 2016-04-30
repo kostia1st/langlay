@@ -60,6 +60,7 @@ namespace Product
         /// <returns></returns>
         private int HookProcedure(int code, uint wParam, ref Win32.MouseInfo lParam)
         {
+            int? result = null;
             if (code >= 0)
             {
                 MouseEventArgs2 args = null;
@@ -107,13 +108,15 @@ namespace Product
                     }
                 }
                 if (args != null && args.Handled)
-                    return 1;
+                    result = 1;
                 else
                 {
                     //Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": ");
                 }
             }
-            return Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
+            if (result == null)
+                result = Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
+            return result.Value;
         }
 
         #region IDisposable Support

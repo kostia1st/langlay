@@ -49,23 +49,14 @@ namespace Product
             }
         }
 
-        protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e)
+        private void ShowTooltip(MouseEventArgs2 e)
         {
-            if (GetIsCurrentCursorBeam())
-            {
-                var currentLayout = InputLayoutHelper.GetCurrentLayout();
-                var text = currentLayout.LanguageNameTwoLetter;
-                TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
-            }
-
+            var currentLayout = InputLayoutHelper.GetCurrentLayout();
+            var text = currentLayout.LanguageNameTwoLetter;
+            TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
         }
 
-        protected void Hooker_ButtonUp(object sender, MouseEventArgs2 e)
-        {
-
-        }
-
-        protected void Hooker_MouseMove(object sender, MouseEventArgs2 e)
+        private void UpdateTooltip(MouseEventArgs2 e)
         {
             if (TooltipService.GetIsVisible())
             {
@@ -73,6 +64,23 @@ namespace Product
                 var text = currentLayout.LanguageNameTwoLetter;
                 TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), false);
             }
+        }
+
+        protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e)
+        {
+            if (e.Buttons == MouseButtons.Left && GetIsCurrentCursorBeam())
+                ShowTooltip(e);
+        }
+
+        protected void Hooker_ButtonUp(object sender, MouseEventArgs2 e)
+        {
+            if (e.Buttons == MouseButtons.Left && GetIsCurrentCursorBeam())
+                ShowTooltip(e);
+        }
+
+        protected void Hooker_MouseMove(object sender, MouseEventArgs2 e)
+        {
+            UpdateTooltip(e);
         }
 
         public bool GetIsCurrentCursorBeam()
