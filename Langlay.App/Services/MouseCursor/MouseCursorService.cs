@@ -49,39 +49,60 @@ namespace Product
             }
         }
 
-        protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e)
+        private void ShowTooltip(MouseEventArgs2 e)
         {
-            if (GetIsCurrentCursorBeam())
-            {
-                var currentLayout = InputLayoutHelper.GetCurrentLayout();
-                var text = currentLayout.LanguageNameTwoLetter;
-                TooltipService.Push(text, new System.Drawing.Point(e.Point.x, e.Point.y), true);
-            }
-
+            var currentLayout = InputLayoutHelper.GetCurrentLayout();
+            var text = currentLayout.LanguageNameTwoLetter;
+            TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
         }
 
-        protected void Hooker_ButtonUp(object sender, MouseEventArgs2 e)
-        {
-
-        }
-
-        protected void Hooker_MouseMove(object sender, MouseEventArgs2 e)
+        private void UpdateTooltip(MouseEventArgs2 e)
         {
             if (TooltipService.GetIsVisible())
             {
                 var currentLayout = InputLayoutHelper.GetCurrentLayout();
                 var text = currentLayout.LanguageNameTwoLetter;
-                TooltipService.Push(text, new System.Drawing.Point(e.Point.x, e.Point.y), false);
+                TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), false);
             }
+        }
+
+        private bool IsLastDownHandled;
+
+        protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e)
+        {
+            if (e.Buttons == MouseButtons.Left
+                && GetIsCurrentCursorBeam())
+            {
+                ShowTooltip(e);
+                IsLastDownHandled = true;
+            }
+            else
+                IsLastDownHandled = false;
+        }
+
+        protected void Hooker_ButtonUp(object sender, MouseEventArgs2 e)
+        {
+            if (e.Buttons == MouseButtons.Left
+                && !IsLastDownHandled
+                && !TooltipService.GetIsVisible()
+                && GetIsCurrentCursorBeam())
+            {
+                ShowTooltip(e);
+            }
+        }
+
+        protected void Hooker_MouseMove(object sender, MouseEventArgs2 e)
+        {
+            UpdateTooltip(e);
         }
 
         public bool GetIsCurrentCursorBeam()
         {
             Win32.CursorInfo pci;
-            pci.cbSize = Marshal.SizeOf(typeof(Win32.CursorInfo));
+            pci.Size = Marshal.SizeOf(typeof(Win32.CursorInfo));
             Win32.GetCursorInfo(out pci);
 
-            return pci.hCursor == Cursors.IBeam.Handle;
+            return pci.Handle == Cursors.IBeam.Handle;
         }
 
         #region IDisposable Support

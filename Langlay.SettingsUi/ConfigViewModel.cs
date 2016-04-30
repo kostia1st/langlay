@@ -83,6 +83,19 @@ namespace Product.SettingsUi
             }
         }
 
+        public bool ShowOverlayRoundCorners
+        {
+            get { return ConfigService.DoShowOverlayRoundCorners; }
+            set
+            {
+                if (ConfigService.DoShowOverlayRoundCorners != value)
+                {
+                    ConfigService.DoShowOverlayRoundCorners = value;
+                    NotifyPropertyChanged("ShowOverlayRoundCorners");
+                }
+            }
+        }
+
         public bool ShowCursorTooltip
         {
             get { return ConfigService.DoShowCursorTooltip; }

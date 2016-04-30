@@ -11,7 +11,9 @@ namespace Product
         private Stopwatch PeriodElapsed { get; set; }
         public long MillisecondsToKeepVisible { get; set; }
         public long OpacityWhenVisible { get; set; }
+        public bool RoundCorners { get; set; }
         public OverlayLocation DisplayLocation { get; set; }
+
         public Screen Screen { get; set; }
 
         private const long MillisecondsToFadeOut = 200;
@@ -22,6 +24,7 @@ namespace Product
         private Brush LanguageBrush { get; set; }
         private Font LayoutFont { get; set; }
         private Brush LayoutBrush { get; set; }
+
 
         private const int MinWidth = 140;
 
@@ -115,8 +118,8 @@ namespace Product
                     break;
             }
 
-
-            SetRoundedRegion();
+            if (RoundCorners)
+                SetRoundedRegion();
         }
 
         private void SetRoundedRegion()
@@ -194,6 +197,8 @@ namespace Product
             var sizeLayout = e.Graphics.MeasureString(LayoutName, LayoutFont);
             var pointLanguage = new PointF((Width - sizeLanguage.Width) / 2, (Height - sizeLanguage.Height - sizeLayout.Height) / 2);
             var pointLayout = new PointF((Width - sizeLayout.Width) / 2, pointLanguage.Y + sizeLanguage.Height);
+
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
             e.Graphics.DrawString(this.LanguageName, this.LanguageFont, this.LanguageBrush, pointLanguage);
             e.Graphics.DrawString(this.LayoutName, this.LayoutFont, this.LayoutBrush, pointLayout);
         }

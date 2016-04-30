@@ -56,11 +56,11 @@ namespace Product
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
         /// <returns></returns>
-        private int HookProcedure(int code, int wParam, ref Win32.KeyboardInfo lParam)
+        private int HookProcedure(int code, uint wParam, ref Win32.KeyboardInfo lParam)
         {
             if (code >= 0)
             {
-                var nonModifiers = (Keys) lParam.vkCode;
+                var nonModifiers = (Keys) lParam.VirtualKeyCode;
                 var modifiers = KeyUtils.AddModifiers();
 
                 var kea = new KeyEventArgs2(nonModifiers, modifiers);

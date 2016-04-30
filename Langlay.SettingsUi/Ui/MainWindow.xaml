@@ -30,6 +30,9 @@
                 <CheckBox x:Name="chbShowOverlayMainDisplayOnly" 
                           Content="on main display only" Margin="0 10 0 0" 
                           IsChecked="{Binding ShowOverlayOnMainDisplayOnly}"/>
+                <CheckBox x:Name="chbRoundOverlayCorner" 
+                          Content="with round corners" Margin="0 10 0 0" 
+                          IsChecked="{Binding ShowOverlayRoundCorners}"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
                     <TextBlock Text="Stays visible for" Width="150" />
@@ -114,7 +117,7 @@
                                           Changed="HotkeyComposer_Language_Changed"/>
 
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                     <CheckBox Content="Layout:"
                               IsChecked="{Binding SwitchLayout}"
                               VerticalAlignment="Top"

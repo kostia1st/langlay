@@ -23,6 +23,7 @@ namespace Product.Common
 
         public bool DoShowOverlay { get; set; }
         public bool DoShowOverlayOnMainDisplayOnly { get; set; }        
+        public bool DoShowOverlayRoundCorners { get; set; }        
         public long OverlayMilliseconds { get; set; }
         public long OverlayOpacity { get; set; }
         public OverlayLocation OverlayLocation { get; set; }
@@ -78,13 +79,20 @@ namespace Product.Common
                 DoShowOverlay = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.ShowOverlayOnMainDisplayOnly)
                 DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(value, false);
+            else if (name == ArgumentNames.ShowOverlayRoundCorners)
+                DoShowOverlayRoundCorners = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.OverlayMilliseconds)
                 OverlayMilliseconds = Utils.ParseInt(value, 300);
             else if (name == ArgumentNames.OverlayOpacity)
+            {
                 OverlayOpacity = Utils.ParseInt(value, 80);
+                // Enforcing the constraints
+                if (OverlayOpacity < 0 || OverlayOpacity > 100)
+                    OverlayOpacity = 80;
+            }
             else if (name == ArgumentNames.OverlayLocation)
                 OverlayLocation = Utils.ParseEnum(value, OverlayLocation.BottomCenter);
-                    
+
             else if (name == ArgumentNames.SwitchMethod)
                 SwitchMethod = Utils.ParseEnum(value, SwitchMethod.InputSimulation);
             else if (name == ArgumentNames.RunAtWindowsStartup)

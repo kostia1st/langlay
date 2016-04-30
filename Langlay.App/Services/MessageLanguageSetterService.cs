@@ -15,7 +15,7 @@ namespace Product
             // TODO: this does not work with Skype, for some reason.
             IntPtr result;
             Win32.SendMessageTimeout(
-                foregroundWindowHandle, Win32.WM_INPUTLANGCHANGEREQUEST, 0, handle.ToInt32(),
+                foregroundWindowHandle, Win32.WM_INPUTLANGCHANGEREQUEST, IntPtr.Zero, handle,
                 Win32.SendMessageTimeoutFlags.SMTO_ABORTIFHUNG, 500, out result);
             return true;
         }
