@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Product.SettingsUi"
         mc:Ignorable="d"
+        
         Title="Settings" Height="600" Width="550" 
         ResizeMode="NoResize" SizeToContent="Manual" 
+        Background="{x:Static SystemColors.ControlBrush}"
         ScrollViewer.VerticalScrollBarVisibility="Disabled" 
         VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -15,15 +17,18 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" Padding="20 0" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Vertical">
+        <ScrollViewer Grid.Row="0" Padding="20 0" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                      Grid.ColumnSpan="2">
+            <StackPanel Orientation="Vertical" Margin="0 0 0 10">
                 <TextBlock Text="Feel free to change the settings below. They get saved immediately after you change them. However, you must 'Close and Apply' if you have the application currently running." 
                            Margin="0 10 0 0" TextWrapping="Wrap"  />
                 <CheckBox x:Name="chbRunAtStartup" 
                           Content="Run at Windows startup" 
                           Margin="0 20 0 0"
                           IsChecked="{Binding RunAtWindowsStartup}"/>
-                <Rectangle Stroke="Silver" HorizontalAlignment="Stretch" StrokeThickness="1" Height="1" Margin="0 10 0 0" />
+                <Rectangle Style="{StaticResource separator}"
+                           Margin="0 10 0 0" />
                 <CheckBox x:Name="chbShowOverlay" 
                           Content="Show overlay" Margin="0 10 0 0" 
                           IsChecked="{Binding ShowOverlay}"/>
@@ -68,24 +73,18 @@
                         <Run Text="Select a place for the overlay by clicking in the preferred area." />
                     </TextBlock>
                 </StackPanel>
-                <Rectangle Stroke="Silver" 
-                           HorizontalAlignment="Stretch" 
-                           StrokeThickness="1" Height="1" 
+                <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
-
                 <CheckBox x:Name="chbShowCursorTooltip" 
                           Margin="0 10 0 0" 
                           IsChecked="{Binding ShowCursorTooltip}">
                     <TextBlock TextWrapping="Wrap">
                         <Run>Show a tooltip with the language name next to mouse pointer when clicking an input area</Run>
-                        
                         <Run>(when the mouse cursor is a beam)</Run>
                     </TextBlock>
                 </CheckBox>
 
-                <Rectangle Stroke="Silver" 
-                           HorizontalAlignment="Stretch" 
-                           StrokeThickness="1" Height="1" 
+                <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
                     <TextBlock Text="Switch method:" Width="150" VerticalAlignment="Top" Margin="0 2 0 0" />
@@ -102,7 +101,8 @@
                                Margin="10 2 0 0"
                                Width="170" MinWidth="0"/>
                 </StackPanel>
-                <Rectangle Stroke="Silver" HorizontalAlignment="Stretch" StrokeThickness="1" Height="1" Margin="0 10 0 0" />
+                <Rectangle Style="{StaticResource separator}"
+                           Margin="0 10 0 0" />
                 <TextBlock Text="Here you can set up a key sequence for switching either language or layout, or both." 
                            VerticalAlignment="Center"
                            Margin="0 10 0 0"/>
@@ -129,10 +129,8 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-        <Rectangle Stroke="Gray" 
-                   HorizontalAlignment="Stretch" 
-                   StrokeThickness="1" 
-                   Height="1" Margin="0 10 0 0"
+        <Rectangle Style="{StaticResource separator}"
+                   Margin="0 0 0 0"
                    Grid.Row="1"/>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
