@@ -12,7 +12,6 @@ namespace Product
         private KeyboardHooker Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
         private ILanguageService LanguageService { get; set; }
-        private ISystemSettingService SystemSettingService { get; set; }
 
         private bool IsStarted { get; set; }
         private bool IsEnabled { get; set; }
@@ -21,19 +20,15 @@ namespace Product
 
         public HookedHotkeyService(
             IConfigService configService,
-            ILanguageService languageService,
-            ISystemSettingService systemSettingService)
+            ILanguageService languageService)
         {
             if (configService == null)
                 throw new ArgumentNullException("configService");
             if (languageService == null)
                 throw new ArgumentNullException("languageService");
-            if (systemSettingService == null)
-                throw new ArgumentNullException("systemSettingService");
 
             ConfigService = configService;
             LanguageService = languageService;
-            SystemSettingService = systemSettingService;
 
             IsEnabled = true;
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
@@ -247,7 +242,7 @@ namespace Product
                     && (e.KeyStroke.NonModifiers | e.KeyStroke.Modifiers) == Keys.CapsLock)
                 {
                     // Here we disable the Caps by fake-pressing Shift
-                    if (SystemSettingService.GetIsShiftToDisableCapsLock())
+                    if (SystemSettings.GetIsShiftToDisableCapsLock())
                         KeyboardSimulator.KeyPress(VirtualKeyCode.LSHIFT);
 
                     var switchToApply = GetSwitchToApply(e);

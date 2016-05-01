@@ -48,6 +48,11 @@ namespace Product.Common
             return (uint) ParseLong(value, defaultValue);
         }
 
+        public static uint? ParseUInt(object value, uint? defaultValue = null)
+        {
+            return (uint?) ParseLong(value, defaultValue);
+        }
+
         public static long ParseLong(object value, long defaultValue)
         {
             return ParseLong(value, (long?) defaultValue).Value;

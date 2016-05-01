@@ -1,15 +1,14 @@
 ﻿using Microsoft.Win32;
-using Product.Common;
 
-namespace Product
+namespace Product.Common
 {
-    public class SystemSettingService : ISystemSettingService
+    public static class SystemSettings
     {
         private const string KeyboardLayoutKey = "HKEY_CURRENT_USER\\Keyboard Layout";
         private const string ToggleKey = KeyboardLayoutKey + "\\Toggle";
         private const int ShiftFlag = 0x00010000;
 
-        public bool GetIsShiftToDisableCapsLock()
+        public static bool GetIsShiftToDisableCapsLock()
         {
             var value = Utils.ParseInt(Registry.GetValue(
                 KeyboardLayoutKey, "Attributes", null), 0);
@@ -19,7 +18,7 @@ namespace Product
             return false;
         }
 
-        public WindowsSequenceCode? GetLanguageSwitchSequence()
+        public static WindowsSequenceCode? GetLanguageSwitchSequence()
         {
             var result =
                 (WindowsSequenceCode?) Utils.ParseInt(Registry.GetValue(
@@ -40,7 +39,7 @@ namespace Product
             return result;
         }
 
-        public WindowsSequenceCode? GetLayoutSwitchSequence()
+        public static WindowsSequenceCode? GetLayoutSwitchSequence()
         {
             return (WindowsSequenceCode?) Utils.ParseInt(Registry.GetValue(
                 ToggleKey,

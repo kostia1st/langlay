@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -10,6 +9,9 @@ namespace Product
         private MouseHooker Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
         private ITooltipService TooltipService { get; set; }
+
+        private bool IsStarted { get; set; }
+        private bool IsLastDownHandled;
 
         public MouseCursorService(
             IConfigService configService, ITooltipService tooltipService)
@@ -22,7 +24,6 @@ namespace Product
             TooltipService = tooltipService;
         }
 
-        private bool IsStarted { get; set; }
         public void Start()
         {
             if (!IsStarted)
@@ -66,12 +67,10 @@ namespace Product
             }
         }
 
-        private bool IsLastDownHandled;
-
         protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e)
         {
             if (e.Buttons == MouseButtons.Left
-                && GetIsCurrentCursorBeam())
+                && CursorUtils.GetIsCurrentCursorBeam())
             {
                 ShowTooltip(e);
                 IsLastDownHandled = true;
@@ -85,7 +84,7 @@ namespace Product
             if (e.Buttons == MouseButtons.Left
                 && !IsLastDownHandled
                 && !TooltipService.GetIsVisible()
-                && GetIsCurrentCursorBeam())
+                && CursorUtils.GetIsCurrentCursorBeam())
             {
                 ShowTooltip(e);
             }
@@ -96,14 +95,6 @@ namespace Product
             UpdateTooltip(e);
         }
 
-        public bool GetIsCurrentCursorBeam()
-        {
-            Win32.CursorInfo pci;
-            pci.Size = Marshal.SizeOf(typeof(Win32.CursorInfo));
-            Win32.GetCursorInfo(out pci);
-
-            return pci.Handle == Cursors.IBeam.Handle;
-        }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

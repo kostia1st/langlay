@@ -5,9 +5,14 @@ namespace Product.Common
 {
     public static class PathUtils
     {
+        public static string GetAppExecutable()
+        {
+            return Assembly.GetEntryAssembly().Location;
+        }
+
         public static string GetAppDirectory()
         {
-            return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            return Path.GetDirectoryName(GetAppExecutable());
         }
     }
 }

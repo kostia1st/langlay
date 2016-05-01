@@ -22,8 +22,8 @@ namespace Product.Common
         public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
 
         public bool DoShowOverlay { get; set; }
-        public bool DoShowOverlayOnMainDisplayOnly { get; set; }        
-        public bool DoShowOverlayRoundCorners { get; set; }        
+        public bool DoShowOverlayOnMainDisplayOnly { get; set; }
+        public bool DoShowOverlayRoundCorners { get; set; }
         public uint OverlayMilliseconds { get; set; }
         public uint OverlayOpacity { get; set; }
         public uint OverlayScale { get; set; }
@@ -84,20 +84,24 @@ namespace Product.Common
             else if (name == ArgumentNames.ShowOverlayRoundCorners)
                 DoShowOverlayRoundCorners = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.OverlayMilliseconds)
-                OverlayMilliseconds = Utils.ParseUInt(value, 300);
+            {
+                var overlayMilliseconds = Utils.ParseUInt(value);
+                if (overlayMilliseconds != null)
+                    OverlayMilliseconds = overlayMilliseconds.Value;
+            }
             else if (name == ArgumentNames.OverlayOpacity)
             {
-                OverlayOpacity = Utils.ParseUInt(value, 80);
+                var overlayOpacity = Utils.ParseUInt(value);
                 // Enforcing the constraints
-                if (OverlayOpacity < 0 || OverlayOpacity > 100)
-                    OverlayOpacity = 80;
+                if (overlayOpacity != null && overlayOpacity > 0 && overlayOpacity <= 100)
+                    OverlayOpacity = overlayOpacity.Value;
             }
             else if (name == ArgumentNames.OverlayScale)
             {
-                OverlayScale = Utils.ParseUInt(value, 100);
+                var overlayScale = Utils.ParseUInt(value);
                 // Enforcing the constraints
-                if (OverlayScale < 10 || OverlayScale > 500)
-                    OverlayScale = 100;
+                if (overlayScale != null && overlayScale >= 50 && overlayScale <= 500)
+                    OverlayScale = overlayScale.Value;
             }
             else if (name == ArgumentNames.OverlayLocation)
                 OverlayLocation = Utils.ParseEnum(value, OverlayLocation.BottomCenter);

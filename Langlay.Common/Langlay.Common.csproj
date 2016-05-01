@@ -45,11 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppUtils.cs" />
     <Compile Include="ArgumentNames.cs" />
     <Compile Include="AppSpecific.cs" />
+    <Compile Include="CursorUtils.cs" />
     <Compile Include="KeyUtils.cs" />
     <Compile Include="OverlayLocation.cs" />
     <Compile Include="PathUtils.cs" />
+    <Compile Include="SystemSettings.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="Services\ConfigServiceBase.cs" />
     <Compile Include="EnumItem.cs" />
@@ -59,6 +62,8 @@
     <Compile Include="SwitchMethod.cs" />
     <Compile Include="Services\UniquenessService.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="WindowsSequenceCode.cs" />
+    <Compile Include="WindowsStartupUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

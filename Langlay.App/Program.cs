@@ -20,29 +20,21 @@ namespace Product
                     configService.ReadFromConfigFile(true);
                     configService.ReadFromCommandLineArguments();
 
-                    var systemSettingService = new SystemSettingService();
-                    var startupService = new WinStartupService(configService);
-                    var settingsService = new SettingsService(configService);
-
                     var overlayService = new OverlayService(configService);
                     var languageService = new LanguageService(configService, overlayService);
-                    var hotkeyService = new HookedHotkeyService(configService, languageService, systemSettingService);
+                    var hotkeyService = new HookedHotkeyService(configService, languageService);
                     var tooltipService = new TooltipService(configService);
                     var mouseCursorService = new MouseCursorService(configService, tooltipService);
 
                     ILanguageSetterService languageSetterService;
                     if (configService.SwitchMethod == SwitchMethod.InputSimulation)
-                        languageSetterService = new SimulatorLanguageSetterService(
-                            hotkeyService, systemSettingService);
+                        languageSetterService = new SimulatorLanguageSetterService(hotkeyService);
                     else
                         languageSetterService = new MessageLanguageSetterService();
 
                     languageService.LanguageSetterService = languageSetterService;
 
-                    var trayService = new TrayService(configService, settingsService)
-                    {
-                        OnExit = delegate { Application.Exit(); }
-                    };
+                    var trayService = new TrayService(configService);
 
                     Application.AddMessageFilter(new AppMessageFilter
                     {
@@ -55,8 +47,11 @@ namespace Product
                     overlayService.Start();
                     tooltipService.Start();
                     mouseCursorService.Start();
-                    startupService.ResolveStartup();
-                    settingsService.ResolveFirstRun();
+
+                    WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
+
+                    if (configService.DoShowSettingsOnce)
+                        AppUtils.ShowSettings();
 
                     try
                     {

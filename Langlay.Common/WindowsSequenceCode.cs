@@ -1,4 +1,4 @@
-﻿namespace Product
+﻿namespace Product.Common
 {
     public enum WindowsSequenceCode : int
     {

@@ -2,23 +2,20 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using Product.Common;
 
 namespace Product
 {
     public class TrayService
     {
         private IConfigService ConfigService { get; set; }
-        private ISettingsService SettingsService { get; set; }
         private ContextMenu ContextMenu { get; set; }
         private NotifyIcon Icon { get; set; }
         private bool IsStarted { get; set; }
 
-        public Action OnExit { get; set; }
-
-        public TrayService(IConfigService configService, ISettingsService settingsService)
+        public TrayService(IConfigService configService)
         {
             ConfigService = configService;
-            SettingsService = settingsService;
         }
 
         private void OpenHomepage()
@@ -41,6 +38,11 @@ namespace Product
             Process.Start(psi);
         }
 
+        private void ExitApplication()
+        {
+            Application.Exit();
+        }
+
         public void Start()
         {
             if (!IsStarted)
@@ -48,12 +50,12 @@ namespace Product
                 IsStarted = true;
                 ContextMenu = new ContextMenu(new[]
                 {
-                    new MenuItem("Settings", delegate { SettingsService.ShowSettings(); }) { DefaultItem = true },
+                    new MenuItem("Settings", delegate { AppUtils.ShowSettings(); }) { DefaultItem = true },
                     new MenuItem("-"),
                     new MenuItem("Report a bug", delegate { OpenIssues(); }),
                     new MenuItem("Visit homepage", delegate { OpenHomepage(); }),
                     new MenuItem("-"),
-                    new MenuItem("Quit", delegate { if (OnExit != null) OnExit(); })
+                    new MenuItem("Quit", delegate { ExitApplication(); })
                 });
                 Icon = new NotifyIcon()
                 {
@@ -62,7 +64,7 @@ namespace Product
                     Visible = true,
                     ContextMenu = ContextMenu,
                 };
-                Icon.MouseDoubleClick += delegate { SettingsService.ShowSettings(); };
+                Icon.MouseDoubleClick += delegate { AppUtils.ShowSettings(); };
             }
         }
 

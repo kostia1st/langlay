@@ -17,14 +17,12 @@ namespace Product
         private WindowsSequenceCode? CurrentLayoutSwitchSequence { get; set; }
 
         public IHotkeyService HotkeyService { get; set; }
-        public ISystemSettingService SystemSettingService { get; set; }
         private KeyboardSimulator KeyboardSimulator { get; set; }
 
         public SimulatorLanguageSetterService(
-            IHotkeyService hotkeyService, ISystemSettingService systemSettingService)
+            IHotkeyService hotkeyService)
         {
             HotkeyService = hotkeyService;
-            SystemSettingService = systemSettingService;
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
@@ -88,8 +86,8 @@ namespace Product
                 // if no standard hotkeys set at all).
                 if (CurrentLanguageSwitchSequence == null && CurrentLayoutSwitchSequence == null)
                 {
-                    CurrentLanguageSwitchSequence = SystemSettingService.GetLanguageSwitchSequence();
-                    CurrentLayoutSwitchSequence = SystemSettingService.GetLayoutSwitchSequence();
+                    CurrentLanguageSwitchSequence = SystemSettings.GetLanguageSwitchSequence();
+                    CurrentLayoutSwitchSequence = SystemSettings.GetLayoutSwitchSequence();
                 }
 
                 var inputLayouts = InputLayoutHelper.InputLayouts;
