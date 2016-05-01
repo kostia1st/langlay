@@ -21,6 +21,16 @@ namespace Product
             SettingsService = settingsService;
         }
 
+        private void OpenHomepage()
+        {
+            var psi = new ProcessStartInfo()
+            {
+                UseShellExecute = true,
+                FileName = "https://github.com/estorski/langlay",
+            };
+            Process.Start(psi);
+        }
+
         private void OpenIssues()
         {
             var psi = new ProcessStartInfo()
@@ -38,8 +48,10 @@ namespace Product
                 IsStarted = true;
                 ContextMenu = new ContextMenu(new[]
                 {
-                    new MenuItem("Settings", delegate { SettingsService.ShowSettings(); }),
+                    new MenuItem("Settings", delegate { SettingsService.ShowSettings(); }) { DefaultItem = true },
+                    new MenuItem("-"),
                     new MenuItem("Report a bug", delegate { OpenIssues(); }),
+                    new MenuItem("Visit homepage", delegate { OpenHomepage(); }),
                     new MenuItem("-"),
                     new MenuItem("Quit", delegate { if (OnExit != null) OnExit(); })
                 });
@@ -48,7 +60,7 @@ namespace Product
                     Text = Application.ProductName,
                     Icon = new Icon(typeof(Program), "Keyboard-Filled-2-16.ico"),
                     Visible = true,
-                    ContextMenu = ContextMenu,                    
+                    ContextMenu = ContextMenu,
                 };
                 Icon.MouseDoubleClick += delegate { SettingsService.ShowSettings(); };
             }

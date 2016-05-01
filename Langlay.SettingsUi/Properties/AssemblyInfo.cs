@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using Product.Common;
 
 [assembly: AssemblyTitle("Langlay Settings")]
 [assembly: AssemblyDescription("")]
@@ -15,6 +16,5 @@ using System.Windows;
 
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
-
-[assembly: AssemblyVersion("1.5.*")]
-[assembly: AssemblyFileVersion("1.5.0.0")]
+[assembly: AssemblyVersion(AppSpecific.AppVersion + ".*")]
+[assembly: AssemblyFileVersion(AppSpecific.AppVersion + ".0.0")]
