@@ -15,8 +15,9 @@ namespace Product
         bool DoShowOverlay { get; }
         bool DoShowOverlayOnMainDisplayOnly { get; }
         bool DoShowOverlayRoundCorners { get; }
-        long OverlayMilliseconds { get; }
-        long OverlayOpacity { get; }
+        uint OverlayMilliseconds { get; }
+        uint OverlayOpacity { get; }
+        uint OverlayScale { get; }
         OverlayLocation OverlayLocation { get; }
         bool DoRunAtWindowsStartup { get; }
         bool DoSwitchLanguage { get; }

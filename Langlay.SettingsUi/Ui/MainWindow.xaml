@@ -51,7 +51,18 @@
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
-                    <TextBlock Text="Opacity when shown" Width="150" />
+                    <TextBlock Text="scaled to" Width="150" />
+                    <Slider x:Name="sliderOverlayScale" Width="200" Minimum="50" Maximum="500" 
+                            IsSnapToTickEnabled="True"
+                            TickFrequency="5"
+                            Value="{Binding OverlayScale}" />
+                    <TextBlock x:Name="tbkOverlayScale" Width="50" Margin="4 0 0 0">
+                        <Run Text="{Binding OverlayScale}" />
+                        <Run Text="%" />
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
+                    <TextBlock Text="with opacity" Width="150" />
                     <Slider x:Name="sliderOverlayOpacity" Width="200" Minimum="5" Maximum="100" 
                             IsSnapToTickEnabled="True"
                             TickFrequency="5"

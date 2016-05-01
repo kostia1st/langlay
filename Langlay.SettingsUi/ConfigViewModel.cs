@@ -109,7 +109,7 @@ namespace Product.SettingsUi
             }
         }
 
-        public long OverlayMilliseconds
+        public uint OverlayMilliseconds
         {
             get { return ConfigService.OverlayMilliseconds; }
             set
@@ -122,7 +122,7 @@ namespace Product.SettingsUi
             }
         }
 
-        public long OverlayOpacity
+        public uint OverlayOpacity
         {
             get { return ConfigService.OverlayOpacity; }
             set
@@ -131,6 +131,19 @@ namespace Product.SettingsUi
                 {
                     ConfigService.OverlayOpacity = value;
                     NotifyPropertyChanged("OverlayOpacity");
+                }
+            }
+        }
+
+        public uint OverlayScale
+        {
+            get { return ConfigService.OverlayScale; }
+            set
+            {
+                if (ConfigService.OverlayScale != value)
+                {
+                    ConfigService.OverlayScale = value;
+                    NotifyPropertyChanged("OverlayScale");
                 }
             }
         }

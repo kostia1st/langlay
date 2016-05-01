@@ -24,8 +24,9 @@ namespace Product.Common
         public bool DoShowOverlay { get; set; }
         public bool DoShowOverlayOnMainDisplayOnly { get; set; }        
         public bool DoShowOverlayRoundCorners { get; set; }        
-        public long OverlayMilliseconds { get; set; }
-        public long OverlayOpacity { get; set; }
+        public uint OverlayMilliseconds { get; set; }
+        public uint OverlayOpacity { get; set; }
+        public uint OverlayScale { get; set; }
         public OverlayLocation OverlayLocation { get; set; }
 
         public SwitchMethod SwitchMethod { get; set; }
@@ -45,6 +46,7 @@ namespace Product.Common
             DoShowOverlay = true;
             OverlayMilliseconds = 500;
             OverlayOpacity = 80;
+            OverlayScale = 100;
             OverlayLocation = OverlayLocation.BottomCenter;
 
             DoRunAtWindowsStartup = true;
@@ -82,13 +84,20 @@ namespace Product.Common
             else if (name == ArgumentNames.ShowOverlayRoundCorners)
                 DoShowOverlayRoundCorners = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.OverlayMilliseconds)
-                OverlayMilliseconds = Utils.ParseInt(value, 300);
+                OverlayMilliseconds = Utils.ParseUInt(value, 300);
             else if (name == ArgumentNames.OverlayOpacity)
             {
-                OverlayOpacity = Utils.ParseInt(value, 80);
+                OverlayOpacity = Utils.ParseUInt(value, 80);
                 // Enforcing the constraints
                 if (OverlayOpacity < 0 || OverlayOpacity > 100)
                     OverlayOpacity = 80;
+            }
+            else if (name == ArgumentNames.OverlayScale)
+            {
+                OverlayScale = Utils.ParseUInt(value, 100);
+                // Enforcing the constraints
+                if (OverlayScale < 10 || OverlayScale > 500)
+                    OverlayScale = 100;
             }
             else if (name == ArgumentNames.OverlayLocation)
                 OverlayLocation = Utils.ParseEnum(value, OverlayLocation.BottomCenter);

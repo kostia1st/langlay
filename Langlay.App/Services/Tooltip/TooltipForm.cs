@@ -23,8 +23,8 @@ namespace Product
             InitializeComponent();
 
             PeriodElapsed = new Stopwatch();
-            TextFont = new Font(Font.FontFamily, 10);
             TextBrush = new SolidBrush(Color.White);
+            TextFont = new Font(Font.FontFamily, 10);
         }
 
         protected override CreateParams CreateParams

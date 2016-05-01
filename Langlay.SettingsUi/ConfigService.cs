@@ -20,6 +20,7 @@ namespace Product.SettingsUi
             WriteArgument(ArgumentNames.ShowOverlayRoundCorners, DoShowOverlayRoundCorners.ToString());
             WriteArgument(ArgumentNames.OverlayMilliseconds, OverlayMilliseconds.ToString());
             WriteArgument(ArgumentNames.OverlayOpacity, OverlayOpacity.ToString());
+            WriteArgument(ArgumentNames.OverlayScale, OverlayScale.ToString());
             WriteArgument(ArgumentNames.OverlayLocation, OverlayLocation.ToString());
             WriteArgument(ArgumentNames.SwitchMethod, SwitchMethod.ToString());
             WriteArgument(ArgumentNames.SwitchLanguage, DoSwitchLanguage.ToString());
