@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Microsoft.Win32;
 using Product.Common;
 using WindowsInput;
 using WindowsInput.Native;
@@ -75,6 +74,53 @@ namespace Product
             Trace.WriteLine("-- END Simulating switch sequence");
         }
 
+        private int GetAmountOfLanguageSwitchesRequired(IntPtr targetHandle)
+        {
+            var result = 0;
+
+            var inputLayouts = InputLayoutHelper.GetInputLayouts();
+            var currentLayout = InputLayoutHelper.GetCurrentLayout();
+            var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
+
+            var inputLanguageNames = inputLayouts
+                .Select(x => x.LanguageName)
+                .Distinct().ToList();
+            var indexOfCurrentLanguage = inputLanguageNames.IndexOf(currentLayout.LanguageName);
+            if (indexOfCurrentLanguage >= 0)
+            {
+                var indexOfTargetLanguage = inputLanguageNames.IndexOf(targetLayout.LanguageName);
+                result = indexOfTargetLanguage - indexOfCurrentLanguage;
+                if (result < 0)
+                    result += inputLanguageNames.Count;
+            }
+            return result;
+        }
+
+        private int GetAmountOfLayoutSwitchesRequired(IntPtr targetHandle)
+        {
+            var result = 0;
+
+            var inputLayouts = InputLayoutHelper.GetInputLayouts();
+            // Re-read the current layout, to find out what layout the system language manager 
+            // has selected within the layout group of the language.
+            var currentLayout = InputLayoutHelper.GetCurrentLayout();
+
+            var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
+            var inputLayoutNamesWithinLanguage = inputLayouts
+                .Where(x => x.LanguageName == targetLayout.LanguageName)
+                .Select(x => x.Name)
+                .ToList();
+            var indexOfCurrentLayout = inputLayoutNamesWithinLanguage.IndexOf(currentLayout.Name);
+            if (indexOfCurrentLayout >= 0)
+            {
+                var indexOfTargetLayout = inputLayoutNamesWithinLanguage.IndexOf(targetLayout.Name);
+                result = indexOfTargetLayout - indexOfCurrentLayout;
+                if (result < 0)
+                    result += inputLayoutNamesWithinLanguage.Count;
+            }
+            return result;
+        }
+
         public bool SetCurrentLayout(IntPtr targetHandle)
         {
             var result = false;
@@ -90,62 +136,31 @@ namespace Product
                     CurrentLayoutSwitchSequence = SystemSettings.GetLayoutSwitchSequence();
                 }
 
-                var inputLayouts = InputLayoutHelper.InputLayouts;
-                var currentLayout = InputLayoutHelper.GetCurrentLayout();
-                var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
-
-                var inputLanguageNames = inputLayouts
-                    .Select(x => x.LanguageName)
-                    .Distinct().ToList();
-                var indexOfCurrentLanguage = inputLanguageNames.IndexOf(currentLayout.LanguageName);
-                if (indexOfCurrentLanguage >= 0)
+                var amountOfLanguageSwitches = GetAmountOfLanguageSwitchesRequired(targetHandle);
+                if (amountOfLanguageSwitches > 0)
                 {
-                    var indexOfTargetLanguage = inputLanguageNames.IndexOf(targetLayout.LanguageName);
-                    var amountOfLanguageSwitches = indexOfTargetLanguage - indexOfCurrentLanguage;
-                    if (amountOfLanguageSwitches < 0)
-                        amountOfLanguageSwitches += inputLanguageNames.Count;
+                    if (CurrentLanguageSwitchSequence == null)
+                        throw new Exception(
+                            "cannot enumerate languages 'cause the system key sequence was not set");
 
-                    if (amountOfLanguageSwitches > 0)
-                    {
-                        if (CurrentLanguageSwitchSequence == null)
-                            throw new Exception(
-                                "cannot enumerate languages 'cause the system key sequence was not set");
-
-                        SendSequence(CurrentLanguageSwitchSequence.Value, amountOfLanguageSwitches);
-                        result = true;
-                    }
-
-                    if (result)
-                    {
-                        // Simulate "interruption" so that the system can process the key sequence.
-                        Thread.Sleep(InterruptionDelay);
-                    }
+                    SendSequence(CurrentLanguageSwitchSequence.Value, amountOfLanguageSwitches);
+                    result = true;
                 }
 
-                // Re-read the current layout, to know the layout the default switcher selected
-                // for the language.
-                currentLayout = InputLayoutHelper.GetCurrentLayout();
-
-                var inputLayoutNamesWithinLanguage = inputLayouts
-                    .Where(x => x.LanguageName == targetLayout.LanguageName)
-                    .Select(x => x.Name)
-                    .ToList();
-                var indexOfCurrentLayout = inputLayoutNamesWithinLanguage.IndexOf(currentLayout.Name);
-                if (indexOfCurrentLayout >= 0)
+                if (result)
                 {
-                    var indexOfTargetLayout = inputLayoutNamesWithinLanguage.IndexOf(targetLayout.Name);
-                    var amountOfLayoutSwitches = indexOfTargetLayout - indexOfCurrentLayout;
-                    if (amountOfLayoutSwitches < 0)
-                        amountOfLayoutSwitches += inputLayoutNamesWithinLanguage.Count;
+                    // Simulate "interruption" so that the system can process the key sequence.
+                    Thread.Sleep(InterruptionDelay);
+                }
 
-                    if (amountOfLayoutSwitches > 0)
-                    {
-                        if (CurrentLayoutSwitchSequence == null)
-                            throw new Exception(
-                                "cannot enumerate layouts, because the system key sequence was not set");
-                        SendSequence(CurrentLayoutSwitchSequence.Value, amountOfLayoutSwitches);
-                        result = true;
-                    }
+                var amountOfLayoutSwitches = GetAmountOfLayoutSwitchesRequired(targetHandle);
+                if (amountOfLayoutSwitches > 0)
+                {
+                    if (CurrentLayoutSwitchSequence == null)
+                        throw new Exception(
+                            "cannot enumerate layouts, because the system key sequence was not set");
+                    SendSequence(CurrentLayoutSwitchSequence.Value, amountOfLayoutSwitches);
+                    result = true;
                 }
 
                 if (result)

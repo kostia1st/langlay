@@ -49,6 +49,7 @@
     <Compile Include="ArgumentNames.cs" />
     <Compile Include="AppSpecific.cs" />
     <Compile Include="CursorUtils.cs" />
+    <Compile Include="ExpressionUtils.cs" />
     <Compile Include="KeyUtils.cs" />
     <Compile Include="OverlayLocation.cs" />
     <Compile Include="PathUtils.cs" />
