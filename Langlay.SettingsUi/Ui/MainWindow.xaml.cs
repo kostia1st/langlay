@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using Product.Common;
-using WinformsApp = System.Windows.Forms.Application;
 
 namespace Product.SettingsUi
 {
@@ -27,8 +27,8 @@ namespace Product.SettingsUi
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            tbrVersion.Text = string.Format("Version {0}", WinformsApp.ProductVersion);
-            tbrLocation.Text = WinformsApp.StartupPath;
+            tbrVersion.Text = string.Format("Version {0}", AppSpecific.AppVersion);
+            tbrLocation.Text = PathUtils.GetAppDirectory();
         }
 
         private void DoOnViewModelChanged()

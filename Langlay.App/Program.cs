@@ -20,9 +20,6 @@ namespace Product
                     configService.ReadFromConfigFile(true);
                     configService.ReadFromCommandLineArguments();
 
-                    var startupService = new WinStartupService(configService);
-                    var settingsService = new SettingsService(configService);
-
                     var overlayService = new OverlayService(configService);
                     var languageService = new LanguageService(configService, overlayService);
                     var hotkeyService = new HookedHotkeyService(configService, languageService);
@@ -37,10 +34,7 @@ namespace Product
 
                     languageService.LanguageSetterService = languageSetterService;
 
-                    var trayService = new TrayService(configService, settingsService)
-                    {
-                        OnExit = delegate { Application.Exit(); }
-                    };
+                    var trayService = new TrayService(configService);
 
                     Application.AddMessageFilter(new AppMessageFilter
                     {
@@ -53,8 +47,11 @@ namespace Product
                     overlayService.Start();
                     tooltipService.Start();
                     mouseCursorService.Start();
-                    startupService.ResolveStartup();
-                    settingsService.ResolveFirstRun();
+
+                    WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
+
+                    if (configService.DoShowSettingsOnce)
+                        AppUtils.ShowSettings();
 
                     try
                     {

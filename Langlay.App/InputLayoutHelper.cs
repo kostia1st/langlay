@@ -8,20 +8,20 @@ namespace Product
 {
     public static class InputLayoutHelper
     {
-        public static IList<InputLayout> InputLayouts
+        public static IList<InputLayout> GetInputLayouts()
         {
-            get
-            {
-                return InputLanguage.InstalledInputLanguages
-                  .Cast<InputLanguage>()
-                  .Select(x => new InputLayout(x))
-                  .ToList();
-            }
+            // Surprisingly, this is quite expensive.
+            // According to ILSpy there're lots of unsafe method and registry usage
+            // each time you read the property and sub-properties.
+            return InputLanguage.InstalledInputLanguages
+              .Cast<InputLanguage>()
+              .Select(x => new InputLayout(x))
+              .ToList();
         }
 
         public static IList<InputLayout> GetLayoutsByLanguage(string languageName)
         {
-            return InputLayouts.Where(x => x.LanguageName == languageName).ToList();
+            return GetInputLayouts().Where(x => x.LanguageName == languageName).ToList();
         }
 
         public static string GetNextInputLayoutName(string currentLanguageName, string currentLayoutName, bool doWrap)
@@ -42,19 +42,19 @@ namespace Product
 
         public static InputLayout GetInputLanguageByHandle(IntPtr handle)
         {
-            return InputLayouts.FirstOrDefault(x => x.Handle == handle);
+            return GetInputLayouts().FirstOrDefault(x => x.Handle == handle);
         }
 
         public static InputLayout GetCurrentLayout()
         {
             var currentLayoutHandle = Win32.GetKeyboardLayout(
                Win32.GetWindowThreadProcessId(Win32.GetForegroundWindow(), IntPtr.Zero));
-            return InputLayouts.FirstOrDefault(x => x.Handle == currentLayoutHandle);
+            return GetInputLayouts().FirstOrDefault(x => x.Handle == currentLayoutHandle);
         }
 
         public static string GetNextInputLanguageName(string currentLanguageName)
         {
-            var languageNames = InputLayouts.Select(x => x.LanguageName).Distinct().ToList();
+            var languageNames = GetInputLayouts().Select(x => x.LanguageName).Distinct().ToList();
             var indexOfNext = languageNames.IndexOf(currentLanguageName) + 1;
             if (indexOfNext >= languageNames.Count)
                 indexOfNext = 0;
@@ -64,7 +64,7 @@ namespace Product
         public static IntPtr GetDefaultLayoutForLanguage(string languageName)
         {
             // Avoid re-evaluating properties
-            var inputLanguages = InputLayouts;
+            var inputLanguages = GetInputLayouts();
             var firstLanguageLayout = inputLanguages.FirstOrDefault(x => x.LanguageName == languageName);
             if (firstLanguageLayout == null)
                 firstLanguageLayout = inputLanguages.FirstOrDefault();
@@ -76,7 +76,7 @@ namespace Product
 
         public static InputLayout GetLayoutByLanguageAndLayoutName(string languageName, string layoutName)
         {
-            return InputLayouts.FirstOrDefault(x => x.LanguageName == languageName && x.Name == layoutName);
+            return GetInputLayouts().FirstOrDefault(x => x.LanguageName == languageName && x.Name == layoutName);
         }
 
     }

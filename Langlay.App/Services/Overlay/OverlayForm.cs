@@ -9,8 +9,10 @@ namespace Product
     public partial class OverlayForm : Form
     {
         private Stopwatch PeriodElapsed { get; set; }
-        public long MillisecondsToKeepVisible { get; set; }
-        public long OpacityWhenVisible { get; set; }
+        public uint MillisecondsToKeepVisible { get; set; }
+        public uint OpacityWhenVisible { get; set; }
+        public uint ScalingPercent { get; set; }
+
         public bool RoundCorners { get; set; }
         public OverlayLocation DisplayLocation { get; set; }
 
@@ -25,8 +27,11 @@ namespace Product
         private Font LayoutFont { get; set; }
         private Brush LayoutBrush { get; set; }
 
+        private float RenderingCoefficient { get; set; }
 
-        private const int MinWidth = 140;
+        private int MinWidth;
+        private int ScreenMargin;
+        private IntPtr RegionHandle { get; set; }
 
         public OverlayForm()
         {
@@ -34,11 +39,7 @@ namespace Product
             PeriodElapsed = new Stopwatch();
             LanguageBrush = new SolidBrush(Color.White);
             LayoutBrush = new SolidBrush(Color.Gray);
-            LanguageFont = new Font(Font.FontFamily, 28);
-            LayoutFont = new Font(Font.FontFamily, 14);
         }
-
-        protected override bool ShowWithoutActivation { get { return true; } }
 
         protected override CreateParams CreateParams
         {
@@ -61,22 +62,44 @@ namespace Product
             PeriodElapsed.Restart();
 
             UpdateRegionAndPosition();
-            timerOverlay.Start();
-            OnTimer();
+
             Visible = true;
+            OnTimer();
+            timerOverlay.Start();
 
         }
-        private const int ScreenMargin = 20;
-        private IntPtr RegionHandle { get; set; }
+
+        private int ToPixels(float relativeValue)
+        {
+            return (int) (relativeValue * RenderingCoefficient);
+        }
+
+        internal void InitializeRenderingCoefficient()
+        {
+            if (Screen == null)
+                throw new NullReferenceException("Screen property must not be null");
+            var minAxisValue = Math.Min(Screen.Bounds.Width, Screen.Bounds.Height);
+            RenderingCoefficient = (float) minAxisValue / 768 * ((float) ScalingPercent / 100);
+
+            MinWidth = ToPixels(140);
+            ScreenMargin = ToPixels(20);
+
+            LanguageFont = new Font(Font.FontFamily, ToPixels(48), GraphicsUnit.Pixel);
+            LayoutFont = new Font(Font.FontFamily, ToPixels(24), GraphicsUnit.Pixel);
+        }
+
         private void UpdateRegionAndPosition()
         {
+            if (RenderingCoefficient == 0)
+                InitializeRenderingCoefficient();
+
             using (var g = this.CreateGraphics())
             {
                 var sizeLanguage = g.MeasureString(LanguageName, LanguageFont);
                 var sizeLayout = g.MeasureString(LayoutName, LayoutFont);
                 this.Size = new Size(
-                    Math.Max((int) Math.Max(sizeLanguage.Width, sizeLayout.Width) + 40, MinWidth), 
-                    (int) sizeLanguage.Height + (int) sizeLayout.Height + 20);
+                    Math.Max((int) Math.Max(sizeLanguage.Width, sizeLayout.Width) + ToPixels(40), MinWidth),
+                    (int) sizeLanguage.Height + (int) sizeLayout.Height + ToPixels(20));
             }
 
             var screenBounds = Screen.Bounds;
@@ -135,15 +158,15 @@ namespace Product
                 Win32.DeleteObject(RegionHandle);
                 RegionHandle = IntPtr.Zero;
             }
-            RegionHandle = Win32.CreateRoundRectRgn(0, 0, Width, Height, 20, 20);
+            RegionHandle = Win32.CreateRoundRectRgn(0, 0, Width, Height, ToPixels(20), ToPixels(20));
             Region = System.Drawing.Region.FromHrgn(RegionHandle);
             UpdateBounds();
         }
 
         public void PushMessage(string languageName, string layoutName)
         {
-            LanguageName = "";
-            LayoutName = "";
+            LanguageName = string.Empty;
+            LayoutName = string.Empty;
 
             // Make sure the window has redrawn itself empty
             Invalidate();

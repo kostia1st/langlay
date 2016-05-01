@@ -35,24 +35,44 @@ namespace Product.Common
 
         public static int ParseInt(object value, int defaultValue)
         {
-            return ParseInt(value, (int?) defaultValue).Value;
+            return (int) ParseLong(value, defaultValue);
         }
 
         public static int? ParseInt(object value, int? defaultValue = null)
+        {
+            return (int?) ParseLong(value, defaultValue);
+        }
+
+        public static uint ParseUInt(object value, uint defaultValue)
+        {
+            return (uint) ParseLong(value, defaultValue);
+        }
+
+        public static uint? ParseUInt(object value, uint? defaultValue = null)
+        {
+            return (uint?) ParseLong(value, defaultValue);
+        }
+
+        public static long ParseLong(object value, long defaultValue)
+        {
+            return ParseLong(value, (long?) defaultValue).Value;
+        }
+
+        public static long? ParseLong(object value, long? defaultValue = null)
         {
             if (value != null)
             {
                 if (value is string)
                 {
-                    int result;
-                    if (int.TryParse((string) value, out result))
+                    long result;
+                    if (long.TryParse((string) value, out result))
                         return result;
                 }
                 else
                 {
                     try
                     {
-                        return Convert.ToInt32(value);
+                        return Convert.ToInt64(value);
                     }
                     catch { }
                 }

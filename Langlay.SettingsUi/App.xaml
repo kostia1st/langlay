@@ -6,5 +6,12 @@
              StartupUri="Ui/MainWindow.xaml">
     <Application.Resources>
         <common:EnumValueConverter x:Key="enumConverter" />
+        <Style x:Key="separator" TargetType="Rectangle">
+            <Setter Property="Stroke" Value="{x:Static SystemColors.ControlDarkBrush}" />
+            <Setter Property="StrokeThickness" Value="0.5" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Height" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
     </Application.Resources>
 </Application>

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using Product.Common;
 
 [assembly: AssemblyTitle("Langlay")]
 [assembly: AssemblyDescription("")]
@@ -13,5 +14,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("764b8166-cdce-4c65-bfdd-ddbbd4789870")]
 
-[assembly: AssemblyVersion("1.5.*")]
-[assembly: AssemblyFileVersion("1.5.0.0")]
+[assembly: AssemblyVersion(AppSpecific.AppVersion + ".*")]
+[assembly: AssemblyFileVersion(AppSpecific.AppVersion + ".0.0")]

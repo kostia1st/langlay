@@ -9,8 +9,9 @@
         public const string ShowOverlay = "ShowOverlay";
         public const string ShowOverlayOnMainDisplayOnly = "ShowOverlayOnMainDisplayOnly";
         public const string ShowOverlayRoundCorners = "ShowOverlayRoundCorners";
-        public const string OverlayMilliseconds = "OverlayMs";
+        public const string OverlayDuration = "OverlayDuration";
         public const string OverlayOpacity = "OverlayOpacity";
+        public const string OverlayScale = "OverlayScale";
         public const string OverlayLocation = "OverlayLocation";
         public const string SwitchMethod = "SwitchMethod";
         public const string RunAtWindowsStartup = "RunAtWindowsStartup";

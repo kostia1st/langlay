@@ -22,10 +22,11 @@ namespace Product.Common
         public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
 
         public bool DoShowOverlay { get; set; }
-        public bool DoShowOverlayOnMainDisplayOnly { get; set; }        
-        public bool DoShowOverlayRoundCorners { get; set; }        
-        public long OverlayMilliseconds { get; set; }
-        public long OverlayOpacity { get; set; }
+        public bool DoShowOverlayOnMainDisplayOnly { get; set; }
+        public bool DoShowOverlayRoundCorners { get; set; }
+        public uint OverlayDuration { get; set; }
+        public uint OverlayOpacity { get; set; }
+        public uint OverlayScale { get; set; }
         public OverlayLocation OverlayLocation { get; set; }
 
         public SwitchMethod SwitchMethod { get; set; }
@@ -39,18 +40,20 @@ namespace Product.Common
             GlobalConfig = OpenConfiguration(false);
             UserConfig = OpenConfiguration(true);
 
-            LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
-            LayoutSwitchKeyArray = new KeyCode[] { };
-            SwitchMethod = SwitchMethod.InputSimulation;
-            DoShowOverlay = true;
-            OverlayMilliseconds = 500;
-            OverlayOpacity = 80;
-            OverlayLocation = OverlayLocation.BottomCenter;
-
             DoRunAtWindowsStartup = true;
+            DoShowSettingsOnce = true;
+
             DoSwitchLanguage = true;
             DoSwitchLayout = false;
-            DoShowSettingsOnce = true;
+            LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
+            LayoutSwitchKeyArray = new KeyCode[] { };
+
+            SwitchMethod = SwitchMethod.InputSimulation;
+            DoShowOverlay = true;
+            OverlayDuration = 300;
+            OverlayOpacity = 80;
+            OverlayScale = 100;
+            OverlayLocation = OverlayLocation.BottomCenter;
         }
 
         private void ReadFromString(string str)
@@ -81,14 +84,25 @@ namespace Product.Common
                 DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.ShowOverlayRoundCorners)
                 DoShowOverlayRoundCorners = Utils.ParseBool(value, false);
-            else if (name == ArgumentNames.OverlayMilliseconds)
-                OverlayMilliseconds = Utils.ParseInt(value, 300);
+            else if (name == ArgumentNames.OverlayDuration)
+            {
+                var overlayDuration = Utils.ParseUInt(value);
+                if (overlayDuration != null)
+                    OverlayDuration = overlayDuration.Value;
+            }
             else if (name == ArgumentNames.OverlayOpacity)
             {
-                OverlayOpacity = Utils.ParseInt(value, 80);
+                var overlayOpacity = Utils.ParseUInt(value);
                 // Enforcing the constraints
-                if (OverlayOpacity < 0 || OverlayOpacity > 100)
-                    OverlayOpacity = 80;
+                if (overlayOpacity != null && overlayOpacity > 0 && overlayOpacity <= 100)
+                    OverlayOpacity = overlayOpacity.Value;
+            }
+            else if (name == ArgumentNames.OverlayScale)
+            {
+                var overlayScale = Utils.ParseUInt(value);
+                // Enforcing the constraints
+                if (overlayScale != null && overlayScale >= 50 && overlayScale <= 500)
+                    OverlayScale = overlayScale.Value;
             }
             else if (name == ArgumentNames.OverlayLocation)
                 OverlayLocation = Utils.ParseEnum(value, OverlayLocation.BottomCenter);

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Drawing.Text;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -28,8 +24,8 @@ namespace Product
             InitializeComponent();
 
             PeriodElapsed = new Stopwatch();
-            TextFont = new Font(Font.FontFamily, 10);
             TextBrush = new SolidBrush(Color.White);
+            TextFont = new Font(Font.FontFamily, 10);
         }
 
         protected override CreateParams CreateParams
@@ -80,10 +76,10 @@ namespace Product
             PeriodElapsed.Restart();
 
             UpdateRegionAndPosition();
-            timerTooltip.Start();
-            OnTimer();
 
             Visible = true;
+            OnTimer();
+            timerTooltip.Start();
         }
 
         private void UpdateRegionAndPosition()
@@ -144,9 +140,8 @@ namespace Product
             var sizeOfText = e.Graphics.MeasureString(DisplayString, TextFont);
             var positionOfText = new PointF((Width - sizeOfText.Width - 1) / 2, (Height - sizeOfText.Height - 1) / 2);
             
-            // Commented out because small text does not seem to benefit from AA, actually it's vice versa
-            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            e.Graphics.DrawString(this.DisplayString, this.TextFont, this.TextBrush, positionOfText);
+            e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            e.Graphics.DrawString(DisplayString, TextFont, TextBrush, positionOfText);
 
         }
     }

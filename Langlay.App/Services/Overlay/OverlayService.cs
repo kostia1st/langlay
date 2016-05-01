@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace Product
 {
@@ -18,11 +19,15 @@ namespace Product
         private OverlayForm CreateOverlay(Screen screen)
         {
             var overlayForm = new OverlayForm();
-            overlayForm.MillisecondsToKeepVisible = ConfigService.OverlayMilliseconds;
+            overlayForm.MillisecondsToKeepVisible = ConfigService.OverlayDuration;
             overlayForm.OpacityWhenVisible = ConfigService.OverlayOpacity;
+            overlayForm.ScalingPercent = ConfigService.OverlayScale;
             overlayForm.DisplayLocation = ConfigService.OverlayLocation;
             overlayForm.RoundCorners = ConfigService.DoShowOverlayRoundCorners;
             overlayForm.Screen = screen;
+
+            overlayForm.InitializeRenderingCoefficient();
+
             return overlayForm;
         }
 
@@ -40,7 +45,17 @@ namespace Product
                             Overlays[screen.DeviceName] = CreateOverlay(screen);
                         }
                     }
+                    SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
                 }
+            }
+        }
+
+        private void SystemEvents_DisplaySettingsChanged(object sender, System.EventArgs e)
+        {
+            if (IsStarted)
+            {
+                Stop();
+                Start();
             }
         }
 
@@ -48,6 +63,8 @@ namespace Product
         {
             if (IsStarted)
             {
+                SystemEvents.DisplaySettingsChanged -= SystemEvents_DisplaySettingsChanged;
+
                 IsStarted = false;
                 foreach (var pair in Overlays)
                 {

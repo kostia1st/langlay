@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Linq.Expressions;
 using Product.Common;
 
 namespace Product.SettingsUi
@@ -14,10 +16,16 @@ namespace Product.SettingsUi
                 if (_keyCode != value)
                 {
                     _keyCode = value;
-                    NotifyPropertyChanged("KeyCode");
+                    NotifyPropertyChanged(x => x.KeyCode);
                 }
             }
         }
+
+        private void NotifyPropertyChanged<T1>(Expression<Func<KeyCodeViewModel, T1>> expression)
+        {
+            NotifyPropertyChanged(ExpressionUtils.GetMemberName(expression));
+        }
+
         private void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
