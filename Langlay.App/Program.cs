@@ -20,18 +20,20 @@ namespace Product
                     configService.ReadFromConfigFile(true);
                     configService.ReadFromCommandLineArguments();
 
+                    var systemSettingService = new SystemSettingService();
                     var startupService = new WinStartupService(configService);
                     var settingsService = new SettingsService(configService);
 
                     var overlayService = new OverlayService(configService);
                     var languageService = new LanguageService(configService, overlayService);
-                    var hotkeyService = new HookedHotkeyService(configService, languageService);
+                    var hotkeyService = new HookedHotkeyService(configService, languageService, systemSettingService);
                     var tooltipService = new TooltipService(configService);
                     var mouseCursorService = new MouseCursorService(configService, tooltipService);
 
                     ILanguageSetterService languageSetterService;
                     if (configService.SwitchMethod == SwitchMethod.InputSimulation)
-                        languageSetterService = new SimulatorLanguageSetterService(hotkeyService);
+                        languageSetterService = new SimulatorLanguageSetterService(
+                            hotkeyService, systemSettingService);
                     else
                         languageSetterService = new MessageLanguageSetterService();
 

@@ -1,9 +1,9 @@
 ﻿namespace Product
 {
-    public static class WindowsSequenceCode
+    public enum WindowsSequenceCode : int
     {
-        public const int CtrlShift = 2;
-        public const int AltShift = 1;
-        public const int GraveAccent = 4;
+        CtrlShift = 2,
+        AltShift = 1,
+        GraveAccent = 4
     }
 }

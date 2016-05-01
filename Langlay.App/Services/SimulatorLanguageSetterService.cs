@@ -13,15 +13,18 @@ namespace Product
     {
         private const int InterruptionDelay = 10;
 
-        private int? CurrentLanguageSwitchSequence { get; set; }
-        private int? CurrentLayoutSwitchSequence { get; set; }
+        private WindowsSequenceCode? CurrentLanguageSwitchSequence { get; set; }
+        private WindowsSequenceCode? CurrentLayoutSwitchSequence { get; set; }
 
         public IHotkeyService HotkeyService { get; set; }
+        public ISystemSettingService SystemSettingService { get; set; }
         private KeyboardSimulator KeyboardSimulator { get; set; }
 
-        public SimulatorLanguageSetterService(IHotkeyService hotkeyService)
+        public SimulatorLanguageSetterService(
+            IHotkeyService hotkeyService, ISystemSettingService systemSettingService)
         {
             HotkeyService = hotkeyService;
+            SystemSettingService = systemSettingService;
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
@@ -54,7 +57,7 @@ namespace Product
             }
         }
 
-        private void SendSequence(int sequenceCode, int amount)
+        private void SendSequence(WindowsSequenceCode sequenceCode, int amount)
         {
             Trace.WriteLine("-- START Simulating switch sequence");
             Trace.Indent();
@@ -74,42 +77,20 @@ namespace Product
             Trace.WriteLine("-- END Simulating switch sequence");
         }
 
-        private const string ToggleKey = "HKEY_CURRENT_USER\\Keyboard Layout\\Toggle";
-
-        private void ReadCurrentSwitchSequences()
-        {
-            // If those values are not set, we suppose we need to read this cache
-            // for the first time (guessing it's pointless to use this switch mode
-            // if no standard hotkeys set at all).
-            CurrentLanguageSwitchSequence =
-                Utils.ParseInt(Registry.GetValue(
-                    ToggleKey,
-                    "Language Hotkey", null));
-            // Fallback to perhaps "old"-Windows-version key for the language sequence
-            if (CurrentLanguageSwitchSequence == null)
-            {
-                CurrentLanguageSwitchSequence = Utils.ParseInt(Registry.GetValue(
-                    ToggleKey,
-                    "Hotkey", null));
-                if (CurrentLanguageSwitchSequence == null)
-                {
-                    // this is by default (on Win10 at least)
-                    CurrentLanguageSwitchSequence = WindowsSequenceCode.AltShift; 
-                }
-            }
-            CurrentLayoutSwitchSequence = Utils.ParseInt(Registry.GetValue(
-                ToggleKey,
-                "Layout Hotkey", null));
-        }
-
         public bool SetCurrentLayout(IntPtr targetHandle)
         {
             var result = false;
             HotkeyService.SetEnabled(false);
             try
             {
+                // If those values are not set, we suppose we need to read this cache
+                // for the first time (guessing it's pointless to use this switch mode
+                // if no standard hotkeys set at all).
                 if (CurrentLanguageSwitchSequence == null && CurrentLayoutSwitchSequence == null)
-                    ReadCurrentSwitchSequences();
+                {
+                    CurrentLanguageSwitchSequence = SystemSettingService.GetLanguageSwitchSequence();
+                    CurrentLayoutSwitchSequence = SystemSettingService.GetLayoutSwitchSequence();
+                }
 
                 var inputLayouts = InputLayoutHelper.InputLayouts;
                 var currentLayout = InputLayoutHelper.GetCurrentLayout();

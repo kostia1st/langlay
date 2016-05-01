@@ -12,6 +12,8 @@ namespace Product
         private KeyboardHooker Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
         private ILanguageService LanguageService { get; set; }
+        private ISystemSettingService SystemSettingService { get; set; }
+
         private bool IsStarted { get; set; }
         private bool IsEnabled { get; set; }
 
@@ -19,14 +21,20 @@ namespace Product
 
         public HookedHotkeyService(
             IConfigService configService,
-            ILanguageService languageService)
+            ILanguageService languageService,
+            ISystemSettingService systemSettingService)
         {
             if (configService == null)
                 throw new ArgumentNullException("configService");
             if (languageService == null)
                 throw new ArgumentNullException("languageService");
+            if (systemSettingService == null)
+                throw new ArgumentNullException("systemSettingService");
+
             ConfigService = configService;
             LanguageService = languageService;
+            SystemSettingService = systemSettingService;
+
             IsEnabled = true;
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
@@ -136,19 +144,31 @@ namespace Product
             InactiveTill = DateTime.Now.AddMilliseconds(InactivePeriod);
         }
 
-        private void Hooker_KeyDown(object sender, KeyEventArgs2 e)
+        private KeyboardSwitch? GetSwitchToApply(KeyEventArgs2 e)
         {
-            KeyboardSwitch? switchToApply = null;
+            var switchToApply = (KeyboardSwitch?) null;
 
-            var triggeredLanguageSwitch = ConfigService.DoSwitchLanguage
-                && ((ConfigService.LanguageSwitchNonModifiers | ConfigService.LanguageSwitchModifiers) != KeyCode.None)
-                && (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LanguageSwitchNonModifiers
-                && (KeyCode) e.KeyStroke.Modifiers == ConfigService.LanguageSwitchModifiers;
+            var triggeredLanguageSwitch = false;
+            var triggeredLayoutSwitch = false;
 
-            var triggeredLayoutSwitch = ConfigService.DoSwitchLayout
-                && ((ConfigService.LayoutSwitchNonModifiers | ConfigService.LayoutSwitchModifiers) != KeyCode.None)
-                && (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LayoutSwitchNonModifiers
-                && (KeyCode) e.KeyStroke.Modifiers == ConfigService.LayoutSwitchModifiers;
+            var isLanguageSequenceConfigured = ConfigService.DoSwitchLanguage
+                && (ConfigService.LanguageSwitchNonModifiers | ConfigService.LanguageSwitchModifiers) != KeyCode.None;
+            var isLayoutSequenceConfigured = ConfigService.DoSwitchLayout
+                && (ConfigService.LayoutSwitchNonModifiers | ConfigService.LayoutSwitchModifiers) != KeyCode.None;
+
+            if (isLanguageSequenceConfigured)
+            {
+                var isLanguageNonModifiersSet = (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LanguageSwitchNonModifiers;
+                var isLanguageModifiersSet = (KeyCode) e.KeyStroke.Modifiers == ConfigService.LanguageSwitchModifiers;
+                triggeredLanguageSwitch = isLanguageNonModifiersSet && isLanguageModifiersSet;
+            }
+
+            if (isLayoutSequenceConfigured)
+            {
+                var isLayoutNonModifiersSet = (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LayoutSwitchNonModifiers;
+                var isLayoutModifiersSet = (KeyCode) e.KeyStroke.Modifiers == ConfigService.LayoutSwitchModifiers;
+                triggeredLayoutSwitch = isLayoutNonModifiersSet && isLayoutModifiersSet;
+            }
 
             if (triggeredLanguageSwitch)
             {
@@ -162,6 +182,12 @@ namespace Product
                 switchToApply = KeyboardSwitch.Layout;
             }
 
+            return switchToApply;
+        }
+
+        private void Hooker_KeyDown(object sender, KeyEventArgs2 e)
+        {
+            var switchToApply = GetSwitchToApply(e);
             if (switchToApply != null)
             {
                 if (!GetPrevKeyDownEffective())
@@ -204,12 +230,31 @@ namespace Product
 
             if (triggeredLanguageSwitch || triggeredLayoutSwitch)
             {
+                var isKeyDownHandled = SavedKeyDown != null;
+
                 // Since the sequence is fully owned by the app, we should never pass it thru.
                 e.Handled = true;
 
                 if (IsEnabled)
                     // Reset the previous key down only when allowed to.
                     ResetKeyDown();
+
+                // This is a work around for this single case:
+                // - the hotkey is Caps Lock 
+                // - and there's a system setting to disable Caps using the Shift key only.
+                // See issue #65 on GitHub for details.
+                if (!isKeyDownHandled
+                    && (e.KeyStroke.NonModifiers | e.KeyStroke.Modifiers) == Keys.CapsLock)
+                {
+                    // Here we disable the Caps by fake-pressing Shift
+                    if (SystemSettingService.GetIsShiftToDisableCapsLock())
+                        KeyboardSimulator.KeyPress(VirtualKeyCode.LSHIFT);
+
+                    var switchToApply = GetSwitchToApply(e);
+                    if (switchToApply != null)
+                        HandleSwitch(switchToApply.Value);
+                }
+                // -- end of workaround
             }
         }
 
