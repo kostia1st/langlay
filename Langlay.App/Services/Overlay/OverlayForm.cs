@@ -29,7 +29,9 @@ namespace Product
 
         private float RenderingCoefficient { get; set; }
 
-        private static int MinWidth;
+        private int MinWidth;
+        private int ScreenMargin;
+        private IntPtr RegionHandle { get; set; }
 
         public OverlayForm()
         {
@@ -38,8 +40,6 @@ namespace Product
             LanguageBrush = new SolidBrush(Color.White);
             LayoutBrush = new SolidBrush(Color.Gray);
         }
-
-        protected override bool ShowWithoutActivation { get { return true; } }
 
         protected override CreateParams CreateParams
         {
@@ -62,13 +62,12 @@ namespace Product
             PeriodElapsed.Restart();
 
             UpdateRegionAndPosition();
-            timerOverlay.Start();
-            OnTimer();
+
             Visible = true;
+            OnTimer();
+            timerOverlay.Start();
 
         }
-        private int ScreenMargin;
-        private IntPtr RegionHandle { get; set; }
 
         private int ToPixels(float relativeValue)
         {
@@ -166,8 +165,8 @@ namespace Product
 
         public void PushMessage(string languageName, string layoutName)
         {
-            LanguageName = "";
-            LayoutName = "";
+            LanguageName = string.Empty;
+            LayoutName = string.Empty;
 
             // Make sure the window has redrawn itself empty
             Invalidate();

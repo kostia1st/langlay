@@ -133,11 +133,6 @@ namespace Product.Common
         /// <summary>
         /// Calls the next hook.
         /// </summary>
-        /// <param name="idHook">The hook id</param>
-        /// <param name="nCode">The hook code</param>
-        /// <param name="wParam">The wparam.</param>
-        /// <param name="lParam">The lparam.</param>
-        /// <returns></returns>
         [DllImport("user32.dll")]
         public static extern int CallNextHookEx(IntPtr idHook, int nCode, uint wParam, ref KeyboardInfo lParam);
 
@@ -156,7 +151,7 @@ namespace Product.Common
 
 
         /// <summary>
-        /// defines the callback type for the hook
+        /// Defines the callback type for the hook
         /// </summary>
         public delegate int KeyboardHookProc(int code, uint wParam, ref KeyboardInfo lParam);
 
@@ -168,7 +163,9 @@ namespace Product.Common
             public int ScanCode;
             public int Flags;
             public int Time;
-            private IntPtr ExtraInfo;
+            private IntPtr _extraInfo;
+
+            public IntPtr ExtraInfo { get { return _extraInfo; } }
         }
 
         public struct MouseInfo
@@ -177,7 +174,9 @@ namespace Product.Common
             public int MouseData;
             public int Flags;
             public int Time;
-            private IntPtr ExtraInfo;
+            private IntPtr _extraInfo;
+
+            public IntPtr ExtraInfo { get { return _extraInfo; } }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -190,15 +189,12 @@ namespace Product.Common
         [StructLayout(LayoutKind.Sequential)]
         public struct CursorInfo
         {
-            public int Size;        // Specifies the size, in bytes, of the structure. 
-                                        // The caller must set this to Marshal.SizeOf(typeof(CURSORINFO)).
-            public int Flags;         // Specifies the cursor state. This parameter can be one of the following values:
-                                        //    0             The cursor is hidden.
-                                        //    CURSOR_SHOWING    The cursor is showing.
-            private IntPtr m_CursorHandle;          // Handle to the cursor. 
-            public Point ScreenPosition;       // A POINT structure that receives the screen coordinates of the cursor. 
+            public int Size;
+            public int Flags;
+            private IntPtr _cursorHandle; 
+            public Point ScreenPosition;
 
-            public IntPtr Handle { get { return m_CursorHandle; } }
+            public IntPtr Handle { get { return _cursorHandle; } }
         }
 
         [DllImport("user32.dll")]

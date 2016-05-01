@@ -19,7 +19,7 @@ namespace Product
         private OverlayForm CreateOverlay(Screen screen)
         {
             var overlayForm = new OverlayForm();
-            overlayForm.MillisecondsToKeepVisible = ConfigService.OverlayMilliseconds;
+            overlayForm.MillisecondsToKeepVisible = ConfigService.OverlayDuration;
             overlayForm.OpacityWhenVisible = ConfigService.OverlayOpacity;
             overlayForm.ScalingPercent = ConfigService.OverlayScale;
             overlayForm.DisplayLocation = ConfigService.OverlayLocation;
@@ -38,7 +38,6 @@ namespace Product
                 if (ConfigService.DoShowOverlay)
                 {
                     IsStarted = true;
-                    SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
                     foreach (var screen in Screen.AllScreens)
                     {
                         if (!ConfigService.DoShowOverlayOnMainDisplayOnly || screen.Primary)
@@ -46,6 +45,7 @@ namespace Product
                             Overlays[screen.DeviceName] = CreateOverlay(screen);
                         }
                     }
+                    SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
                 }
             }
         }

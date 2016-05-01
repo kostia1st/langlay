@@ -24,7 +24,7 @@ namespace Product.Common
         public bool DoShowOverlay { get; set; }
         public bool DoShowOverlayOnMainDisplayOnly { get; set; }
         public bool DoShowOverlayRoundCorners { get; set; }
-        public uint OverlayMilliseconds { get; set; }
+        public uint OverlayDuration { get; set; }
         public uint OverlayOpacity { get; set; }
         public uint OverlayScale { get; set; }
         public OverlayLocation OverlayLocation { get; set; }
@@ -40,19 +40,20 @@ namespace Product.Common
             GlobalConfig = OpenConfiguration(false);
             UserConfig = OpenConfiguration(true);
 
+            DoRunAtWindowsStartup = true;
+            DoShowSettingsOnce = true;
+
+            DoSwitchLanguage = true;
+            DoSwitchLayout = false;
             LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
             LayoutSwitchKeyArray = new KeyCode[] { };
+
             SwitchMethod = SwitchMethod.InputSimulation;
             DoShowOverlay = true;
-            OverlayMilliseconds = 500;
+            OverlayDuration = 300;
             OverlayOpacity = 80;
             OverlayScale = 100;
             OverlayLocation = OverlayLocation.BottomCenter;
-
-            DoRunAtWindowsStartup = true;
-            DoSwitchLanguage = true;
-            DoSwitchLayout = false;
-            DoShowSettingsOnce = true;
         }
 
         private void ReadFromString(string str)
@@ -83,11 +84,11 @@ namespace Product.Common
                 DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(value, false);
             else if (name == ArgumentNames.ShowOverlayRoundCorners)
                 DoShowOverlayRoundCorners = Utils.ParseBool(value, false);
-            else if (name == ArgumentNames.OverlayMilliseconds)
+            else if (name == ArgumentNames.OverlayDuration)
             {
-                var overlayMilliseconds = Utils.ParseUInt(value);
-                if (overlayMilliseconds != null)
-                    OverlayMilliseconds = overlayMilliseconds.Value;
+                var overlayDuration = Utils.ParseUInt(value);
+                if (overlayDuration != null)
+                    OverlayDuration = overlayDuration.Value;
             }
             else if (name == ArgumentNames.OverlayOpacity)
             {

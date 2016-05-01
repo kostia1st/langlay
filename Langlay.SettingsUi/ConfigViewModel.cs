@@ -113,12 +113,12 @@ namespace Product.SettingsUi
 
         public uint OverlayMilliseconds
         {
-            get { return ConfigService.OverlayMilliseconds; }
+            get { return ConfigService.OverlayDuration; }
             set
             {
-                if (ConfigService.OverlayMilliseconds != value)
+                if (ConfigService.OverlayDuration != value)
                 {
-                    ConfigService.OverlayMilliseconds = value;
+                    ConfigService.OverlayDuration = value;
                     NotifyPropertyChanged(x => x.OverlayMilliseconds);
                 }
             }
