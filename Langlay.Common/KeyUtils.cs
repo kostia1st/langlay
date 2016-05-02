@@ -56,5 +56,15 @@ namespace Product.Common
             }
             return key;
         }
+
+        public static bool IsEmpty(this Keys key)
+        {
+            return key == Keys.None;
+        }
+
+        public static bool IsEmpty(this KeyCode key)
+        {
+            return key == KeyCode.None;
+        }
     }
 }

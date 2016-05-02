@@ -217,11 +217,11 @@ namespace Product
             // which is not guaranteed to work properly.
             var triggeredLanguageSwitch = ConfigService.DoSwitchLanguage
                 && (isLanguageNonModifiersUp && isLanguageModifiersUp
-                || isLanguageModifiersUp && GetPrevKeyDownEffective());
+                || !e.KeyStroke.Modifiers.IsEmpty() && isLanguageModifiersUp && GetPrevKeyDownEffective());
 
             var triggeredLayoutSwitch = ConfigService.DoSwitchLayout
                 && (isLayoutNonModifiersUp && isLayoutModifiersUp
-                || isLayoutModifiersUp && GetPrevKeyDownEffective());
+                || !e.KeyStroke.Modifiers.IsEmpty() && isLayoutModifiersUp && GetPrevKeyDownEffective());
 
             if (triggeredLanguageSwitch || triggeredLayoutSwitch)
             {
@@ -238,9 +238,11 @@ namespace Product
                 // - the hotkey is Caps Lock 
                 // - and there's a system setting to disable Caps using the Shift key only.
                 // See issue #65 on GitHub for details.
-                if (!isKeyDownHandled
+                if (!isKeyDownHandled && IsEnabled
                     && (e.KeyStroke.NonModifiers | e.KeyStroke.Modifiers) == Keys.CapsLock)
                 {
+                    Trace.WriteLine("-- START #65 case");
+                    Trace.Indent();
                     // Here we disable the Caps by fake-pressing Shift
                     if (SystemSettings.GetIsShiftToDisableCapsLock())
                         KeyboardSimulator.KeyPress(VirtualKeyCode.LSHIFT);
@@ -248,6 +250,8 @@ namespace Product
                     var switchToApply = GetSwitchToApply(e);
                     if (switchToApply != null)
                         HandleSwitch(switchToApply.Value);
+                    Trace.Unindent();
+                    Trace.WriteLine("-- END #65 case");
                 }
                 // -- end of workaround
             }
