@@ -592,5 +592,8 @@ namespace Product.Common
         // Summary:
         //     A constant reserved for future use.
         NoName = 252,
+
+        [Display(Name = "Fn key")]
+        FnKey = 255
     }
 }

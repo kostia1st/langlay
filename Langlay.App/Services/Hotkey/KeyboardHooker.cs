@@ -66,19 +66,27 @@ namespace Product
                 var kea = new KeyEventArgs2(nonModifiers, modifiers);
                 if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
                 {
-                    Trace.WriteLine("Hooked keyDOWN " + modifiers.ToString() + " + " + nonModifiers.ToString());
+                    Trace.WriteLine(string.Format(
+                        "Hooked keyDOWN {0} + {1}",
+                        ((KeyCode) modifiers).ToString(), ((KeyCode) nonModifiers).ToString()));
                     KeyDown(this, kea);
                 }
                 else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
                 {
-                    Trace.WriteLine("Hooked keyUP " + modifiers.ToString() + " + " + nonModifiers.ToString());
+                    Trace.WriteLine(string.Format(
+                        "Hooked keyUP {0} + {1}",
+                        ((KeyCode) modifiers).ToString(), ((KeyCode) nonModifiers).ToString()));
                     KeyUp(this, kea);
                 }
                 if (kea.Handled)
                     return 1;
                 else
                 {
-                    Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": " + modifiers.ToString() + " + " + nonModifiers.ToString());
+                    Trace.WriteLine(string.Format(
+                        "Not handled {0}: {1} + {2}",
+                        Win32.MessageToString(wParam), 
+                        ((KeyCode) modifiers).ToString(), 
+                        ((KeyCode) nonModifiers).ToString()));
                 }
             }
             return Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
