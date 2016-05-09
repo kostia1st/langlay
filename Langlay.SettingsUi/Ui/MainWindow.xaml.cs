@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using Product.Common;
 
@@ -12,7 +14,6 @@ namespace Product.SettingsUi
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ConfigService ConfigService { get; set; }
         private ConfigViewModel ViewModel { get; set; }
 
         public MainWindow()
@@ -29,12 +30,39 @@ namespace Product.SettingsUi
         {
             tbrVersion.Text = string.Format("Version {0}", AppSpecific.AppVersion);
             tbrLocation.Text = PathUtils.GetAppDirectory();
+            UpdateHotkeyAnalysis();
         }
 
         private void DoOnViewModelChanged()
         {
             // Save configuration
             App.ConfigService.SaveToFile();
+            UpdateHotkeyAnalysis();
+        }
+
+        private void UpdateHotkeyAnalysis()
+        {
+            tbkFeedbackLanguage.Text = GetAnalysisByHotkey(App.ConfigService.LanguageSwitchKeyArray);
+            tbkFeedbackLayout.Text = GetAnalysisByHotkey(App.ConfigService.LayoutSwitchKeyArray);
+        }
+
+        private string GetAnalysisByHotkey(IList<KeyCode> keys)
+        {
+            var result = new StringBuilder();
+            if (keys.Count == 1)
+            {
+                if (keys[0] == KeyCode.CapsLock)
+                    result.AppendLine("Note, to press the *actual* Caps Lock you can use Shift + Caps Lock.");
+            }
+            else if (keys.Count > 1)
+            {
+                if (keys.Contains(KeyCode.FnKey))
+                    result.AppendLine("The Fn key will work out only if pressed last in the sequence.");
+                if (keys.Contains(KeyCode.LWin) || keys.Contains(KeyCode.RWin))
+                    result.AppendLine("The use of the Win key in a combination could probably lead to issues"
+                        + " if Win is applied not the last in the sequence.");
+            }
+            return result.ToString().TrimEnd('\r', '\n');
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -58,30 +58,51 @@ namespace Product
         /// <returns></returns>
         private int HookProcedure(int code, uint wParam, ref Win32.KeyboardInfo lParam)
         {
+            var result = (int?) null;
             if (code >= 0)
             {
-                var nonModifiers = (Keys) lParam.VirtualKeyCode;
-                var modifiers = KeyUtils.AddModifiers();
+                try
+                {
+                    var key = (Keys) lParam.VirtualKeyCode;
+                    var keys = KeyUtils.GetKeysPressed();
 
-                var kea = new KeyEventArgs2(nonModifiers, modifiers);
-                if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
-                {
-                    Trace.WriteLine("Hooked keyDOWN " + modifiers.ToString() + " + " + nonModifiers.ToString());
-                    KeyDown(this, kea);
+                    var kea = new KeyEventArgs2(key, keys);
+
+                    if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
+                    {
+                        Trace.WriteLine(string.Format(
+                            "Hooked keyDOWN {0}",
+                            string.Join(", ", keys)));
+                        KeyDown(this, kea);
+                    }
+                    else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
+                    {
+                        Trace.WriteLine(string.Format(
+                            "Hooked keyUP {0}",
+                            string.Join(", ", keys)));
+                        KeyUp(this, kea);
+                    }
+                    if (kea.Handled)
+                    {
+                        result = 1;
+                    }
+                    else
+                    {
+                        Trace.WriteLine(string.Format(
+                            ">> Not handled {0}: {1}",
+                            Win32.MessageToString(wParam),
+                            string.Join(", ", keys)));
+                    }
                 }
-                else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
+                catch (Exception ex)
                 {
-                    Trace.WriteLine("Hooked keyUP " + modifiers.ToString() + " + " + nonModifiers.ToString());
-                    KeyUp(this, kea);
-                }
-                if (kea.Handled)
-                    return 1;
-                else
-                {
-                    Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": " + modifiers.ToString() + " + " + nonModifiers.ToString());
+                    Trace.TraceError(ex.ToString());
+                    throw;
                 }
             }
-            return Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
+            if (result == null)
+                result = Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
+            return result.Value;
         }
 
         #region IDisposable Support

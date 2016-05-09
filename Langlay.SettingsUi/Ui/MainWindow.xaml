@@ -40,7 +40,7 @@
                           IsChecked="{Binding ShowOverlayRoundCorners}"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
-                    <TextBlock Text="Stays visible for" Width="150" />
+                    <TextBlock Text="Stays visible for" Width="150" Margin="0 2 2 0" />
                     <Slider x:Name="sliderOverlayTime" Width="200" Minimum="0" Maximum="3000" 
                             IsSnapToTickEnabled="True"
                             TickFrequency="50"
@@ -51,7 +51,7 @@
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
-                    <TextBlock Text="scaled to" Width="150" />
+                    <TextBlock Text="scaled to" Width="150" Margin="0 2 2 0" />
                     <Slider x:Name="sliderOverlayScale" Width="200" Minimum="50" Maximum="500" 
                             IsSnapToTickEnabled="True"
                             TickFrequency="5"
@@ -62,7 +62,7 @@
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
-                    <TextBlock Text="with opacity" Width="150" />
+                    <TextBlock Text="with opacity" Width="150" Margin="0 2 2 0"/>
                     <Slider x:Name="sliderOverlayOpacity" Width="200" Minimum="5" Maximum="100" 
                             IsSnapToTickEnabled="True"
                             TickFrequency="5"
@@ -73,7 +73,7 @@
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" >
-                    <TextBlock Text="Location on the screen" Width="150" />
+                    <TextBlock Text="Location on the screen" Width="150" Margin="0 2 2 0" />
                     <local:OverlayLocationEditor x:Name="oleOverlayLocation" 
                                                  Width="100"
                                                  Height="100"
@@ -98,7 +98,8 @@
                 <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
-                    <TextBlock Text="Switch method:" Width="150" VerticalAlignment="Top" Margin="0 2 0 0" />
+                    <TextBlock Text="Switch method:" Width="150" 
+                               VerticalAlignment="Top" Margin="0 2 2 0" />
                     <ComboBox x:Name="cbSwitchMethod" 
                               ItemsSource="{Binding SwitchMethod, Mode=OneTime, Converter={StaticResource enumConverter}}"
                               SelectedValue="{Binding SwitchMethod}"
@@ -121,23 +122,25 @@
                     <CheckBox Content="Language:"
                               IsChecked="{Binding SwitchLanguage}"
                               VerticalAlignment="Top"
-                              Margin="0 2 0 0"
+                              Margin="0 2 2 0"
                               Width="150"  />
                     <local:HotkeyComposer DataContext="{Binding LanguageSwitchSequence}"
                                           x:Name="HotkeyComposer_Language"
                                           Changed="HotkeyComposer_Language_Changed"/>
 
                 </StackPanel>
+                <TextBlock x:Name="tbkFeedbackLanguage" Foreground="Red" TextWrapping="Wrap" />
                 <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                     <CheckBox Content="Layout:"
                               IsChecked="{Binding SwitchLayout}"
                               VerticalAlignment="Top"
-                              Margin="0 2 0 0"
+                              Margin="0 2 2 0"
                               Width="150" />
                     <local:HotkeyComposer DataContext="{Binding LayoutSwitchSequence}"
                                           x:Name="HotkeyComposer_Layout"
                                           Changed="HotkeyComposer_Layout_Changed"/>
                 </StackPanel>
+                <TextBlock x:Name="tbkFeedbackLayout" Foreground="Red" TextWrapping="Wrap" />
             </StackPanel>
         </ScrollViewer>
         <Rectangle Style="{StaticResource separator}"

@@ -64,7 +64,10 @@ namespace Product.Common
 
         private IList<KeyCode> KeyStringToArray(string arrayString)
         {
-            return arrayString.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries).Select(x => (KeyCode) Utils.ParseInt(x, 0)).ToList();
+            return arrayString.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => (KeyCode) Utils.ParseInt(x, 0))
+                .Where(x => x != KeyCode.None)
+                .ToList();
         }
 
         private void ReadArgument(string name, string value)
@@ -192,7 +195,7 @@ namespace Product.Common
                 {
                     Directory.CreateDirectory(directoryPath);
                 }
-                File.WriteAllText((string) configPath, @"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                File.WriteAllText(configPath, @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <configuration>
   <appSettings>
   </appSettings>
@@ -206,5 +209,16 @@ namespace Product.Common
             }, ConfigurationUserLevel.None);
         }
 
+        public bool GetLanguageSwitchConfigured()
+        {
+            return DoSwitchLanguage
+                && LanguageSwitchKeyArray.Count > 0;
+        }
+
+        public bool GetLayoutSwitchConfigured()
+        {
+            return DoSwitchLayout
+                && LayoutSwitchKeyArray.Count > 0;
+        }
     }
 }
