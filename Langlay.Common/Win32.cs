@@ -109,6 +109,9 @@ namespace Product.Common
         public static extern short GetKeyState(int keyCode);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern short GetAsyncKeyState(int keyCode);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetKeyboardState(byte[] keyStateArray);
         /// <summary>
         /// Sets the windows hook, do the desired event, one of hInstance or threadId must be non-null
         /// </summary>

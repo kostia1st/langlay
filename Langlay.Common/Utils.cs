@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Product.Common
 {
@@ -119,6 +120,13 @@ namespace Product.Common
             if (!String.IsNullOrEmpty(value))
                 return f(value);
             return defaultValue;
+        }
+
+        public static IList<T> Combine<T>(IList<T> list1, IList<T> list2)
+        {
+            var result =  new List<T>(list1);
+            result.AddRange(list2);
+            return result;
         }
     }
 }

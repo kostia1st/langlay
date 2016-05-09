@@ -76,7 +76,7 @@ namespace Product
                 }
                 catch (Exception ex)
                 {
-                    Trace.WriteLine(ex.ToString());
+                    Trace.TraceError(ex.ToString());
                     MessageBox.Show(ex.ToString());
                 }
             });

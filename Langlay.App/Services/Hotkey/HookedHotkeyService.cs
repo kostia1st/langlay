@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
 using WindowsInput;
@@ -52,10 +53,10 @@ namespace Product
                     {
                         Trace.WriteLine("-- START Simulating full keystroke up");
                         Trace.Indent();
-                        if (savedKeyDown.KeyStroke.NonModifiers != Keys.None)
-                            KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
-                        if (savedKeyDown.KeyStroke.Modifiers != Keys.None)
-                            KeyboardSimulator.KeyUp((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
+                        foreach (var key in savedKeyDown.KeyStroke.KeysPressedBefore)
+                        {
+                            KeyboardSimulator.KeyUp((VirtualKeyCode) key);
+                        }
                         Trace.Unindent();
                         Trace.WriteLine("-- END Simulating full keystroke up");
 
@@ -71,10 +72,11 @@ namespace Product
 
                         Trace.WriteLine("-- START Simulating full keystroke down");
                         Trace.Indent();
-                        if (savedKeyDown.KeyStroke.Modifiers != Keys.None)
-                            KeyboardSimulator.KeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.Modifiers);
-                        if (savedKeyDown.KeyStroke.NonModifiers != Keys.None)
-                            KeyboardSimulator.KeyDown((VirtualKeyCode) savedKeyDown.KeyStroke.NonModifiers);
+
+                        foreach (var key in savedKeyDown.KeyStroke.KeysPressedBefore.Reverse())
+                        {
+                            KeyboardSimulator.KeyDown((VirtualKeyCode) key);
+                        }
                         Trace.Unindent();
                         Trace.WriteLine("-- END Simulating full keystroke down");
                     }
@@ -142,28 +144,12 @@ namespace Product
         private KeyboardSwitch? GetSwitchToApply(KeyEventArgs2 e)
         {
             var switchToApply = (KeyboardSwitch?) null;
+            var keyCodes = e.KeyStroke.Keys.Select(x => (KeyCode) x).ToList();
 
-            var triggeredLanguageSwitch = false;
-            var triggeredLayoutSwitch = false;
-
-            var isLanguageSequenceConfigured = ConfigService.DoSwitchLanguage
-                && (ConfigService.LanguageSwitchNonModifiers | ConfigService.LanguageSwitchModifiers) != KeyCode.None;
-            var isLayoutSequenceConfigured = ConfigService.DoSwitchLayout
-                && (ConfigService.LayoutSwitchNonModifiers | ConfigService.LayoutSwitchModifiers) != KeyCode.None;
-
-            if (isLanguageSequenceConfigured)
-            {
-                var isLanguageNonModifiersSet = (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LanguageSwitchNonModifiers;
-                var isLanguageModifiersSet = (KeyCode) e.KeyStroke.Modifiers == ConfigService.LanguageSwitchModifiers;
-                triggeredLanguageSwitch = isLanguageNonModifiersSet && isLanguageModifiersSet;
-            }
-
-            if (isLayoutSequenceConfigured)
-            {
-                var isLayoutNonModifiersSet = (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LayoutSwitchNonModifiers;
-                var isLayoutModifiersSet = (KeyCode) e.KeyStroke.Modifiers == ConfigService.LayoutSwitchModifiers;
-                triggeredLayoutSwitch = isLayoutNonModifiersSet && isLayoutModifiersSet;
-            }
+            var triggeredLanguageSwitch = ConfigService.GetLanguageSwitchConfigured()
+                && ConfigService.LanguageSwitchKeyArray.AreEqual(keyCodes);
+            var triggeredLayoutSwitch = ConfigService.GetLayoutSwitchConfigured()
+                && ConfigService.LayoutSwitchKeyArray.AreEqual(keyCodes);
 
             if (triggeredLanguageSwitch)
             {
@@ -182,78 +168,84 @@ namespace Product
 
         private void Hooker_KeyDown(object sender, KeyEventArgs2 e)
         {
-            var switchToApply = GetSwitchToApply(e);
-            if (switchToApply != null)
+            if (IsEnabled)
             {
-                if (!GetPrevKeyDownEffective())
+                var switchToApply = GetSwitchToApply(e);
+                if (switchToApply != null)
                 {
-                    if (IsEnabled)
+                    if (!GetPrevKeyDownEffective())
                     {
                         SavedKeyDown = e;
                         e.Handled = HandleSwitch(switchToApply.Value);
                         if (e.Handled)
-                        {
                             SetKeyDownEffective();
-                        }
                     }
                     else
                         e.Handled = true;
                 }
-                else
-                    e.Handled = true;
             }
         }
 
         private void Hooker_KeyUp(object sender, KeyEventArgs2 e)
         {
-            var isLanguageNonModifiersUp = (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LanguageSwitchNonModifiers;
-            var isLanguageModifiersUp = (KeyCode) e.KeyStroke.Modifiers == ConfigService.LanguageSwitchModifiers;
-
-            var isLayoutNonModifiersUp = (KeyCode) e.KeyStroke.NonModifiers == ConfigService.LayoutSwitchNonModifiers;
-            var isLayoutModifiersUp = (KeyCode) e.KeyStroke.Modifiers == ConfigService.LayoutSwitchModifiers;
-
-            // We're supposed to handle the key-up as well as the key-down
-            // otherwise the target app will face a strange situation,
-            // which is not guaranteed to work properly.
-            var triggeredLanguageSwitch = ConfigService.DoSwitchLanguage
-                && (isLanguageNonModifiersUp && isLanguageModifiersUp
-                || !e.KeyStroke.Modifiers.IsEmpty() && isLanguageModifiersUp && GetPrevKeyDownEffective());
-
-            var triggeredLayoutSwitch = ConfigService.DoSwitchLayout
-                && (isLayoutNonModifiersUp && isLayoutModifiersUp
-                || !e.KeyStroke.Modifiers.IsEmpty() && isLayoutModifiersUp && GetPrevKeyDownEffective());
-
-            if (triggeredLanguageSwitch || triggeredLayoutSwitch)
+            // The handling could be disabled only by intention - intention to pass everything thru.
+            if (IsEnabled)
             {
-                var isKeyDownHandled = SavedKeyDown != null;
+                var keyCodes = e.KeyStroke.Keys.Select(x => (KeyCode) x).ToList();
+                // We're supposed to handle the key-up as well as the key-down
+                // otherwise the target app will face a strange situation,
+                // which is not guaranteed to work properly.
+                var triggeredLanguageSwitch = ConfigService.GetLanguageSwitchConfigured()
+                    && ConfigService.LanguageSwitchKeyArray.AreEqual(keyCodes);
 
-                // Since the sequence is fully owned by the app, we should never pass it thru.
-                e.Handled = true;
+                var triggeredLayoutSwitch = ConfigService.GetLayoutSwitchConfigured()
+                    && ConfigService.LayoutSwitchKeyArray.AreEqual(keyCodes);
 
-                if (IsEnabled)
-                    // Reset the previous key down only when allowed to.
+                if (triggeredLanguageSwitch || triggeredLayoutSwitch)
+                {
+                    // Since the sequence is fully owned by the app, we should not pass it thru.
+                    e.Handled = true;
+
+                    var isKeyDownSaved = SavedKeyDown != null;
                     ResetKeyDown();
 
-                // This is a work around for this single case:
-                // - the hotkey is Caps Lock 
-                // - and there's a system setting to disable Caps using the Shift key only.
-                // See issue #65 on GitHub for details.
-                if (!isKeyDownHandled && IsEnabled
-                    && (e.KeyStroke.NonModifiers | e.KeyStroke.Modifiers) == Keys.CapsLock)
-                {
-                    Trace.WriteLine("-- START #65 case");
-                    Trace.Indent();
-                    // Here we disable the Caps by fake-pressing Shift
-                    if (SystemSettings.GetIsShiftToDisableCapsLock())
-                        KeyboardSimulator.KeyPress(VirtualKeyCode.LSHIFT);
+                    // This case for all the situations when the needed sequence was combined 
+                    // with something else when was down, but is being UP alone.
+                    // TODO: review if we could to ignore the whole thing in this case, or still switch
+                    if (!isKeyDownSaved)
+                    {
+                        IsEnabled = false;
 
-                    var switchToApply = GetSwitchToApply(e);
-                    if (switchToApply != null)
-                        HandleSwitch(switchToApply.Value);
-                    Trace.Unindent();
-                    Trace.WriteLine("-- END #65 case");
+                        try
+                        {
+                            Trace.WriteLine("Pass the key-up thru");
+                            KeyboardSimulator.KeyUp((VirtualKeyCode) keyCodes[0]);
+
+                            // Here we disable the Caps by fake-pressing Shift
+                            if (keyCodes.All(x => x == KeyCode.CapsLock) && SystemSettings.GetIsShiftToDisableCapsLock())
+                            {
+                                // This is a work around for this single case:
+                                // - the hotkey is Caps Lock 
+                                // - the Shift is set up to turn Caps off
+                                // See issue #65 on GitHub for details.
+                                Trace.WriteLine("-- START #65 case");
+                                Trace.Indent();
+                                KeyboardSimulator.KeyPress(VirtualKeyCode.LSHIFT);
+                                Trace.Unindent();
+                                Trace.WriteLine("-- END #65 case");
+                                // -- end of workaround
+                            }
+
+                            var switchToApply = GetSwitchToApply(e);
+                            if (switchToApply != null)
+                                HandleSwitch(switchToApply.Value);
+                        }
+                        finally
+                        {
+                            IsEnabled = true;
+                        }
+                    }
                 }
-                // -- end of workaround
             }
         }
 

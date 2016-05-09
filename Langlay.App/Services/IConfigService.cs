@@ -21,7 +21,9 @@ namespace Product
         OverlayLocation OverlayLocation { get; }
         bool DoRunAtWindowsStartup { get; }
         bool DoSwitchLanguage { get; }
+        bool GetLanguageSwitchConfigured();
         bool DoSwitchLayout { get; }
+        bool GetLayoutSwitchConfigured();
         bool DoShowSettingsOnce { get; }
         bool DoShowCursorTooltip { get; }
     }
