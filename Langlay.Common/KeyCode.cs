@@ -250,16 +250,6 @@ namespace Product.Common
         Z = 90,
         //
         // Summary:
-        //     The left Windows logo key (Microsoft Natural Keyboard).
-        [Display(Name = "Left Windows")]
-        LWin = 91,
-        //
-        // Summary:
-        //     The right Windows logo key (Microsoft Natural Keyboard).
-        [Display(Name = "Right Windows")]
-        RWin = 92,
-        //
-        // Summary:
         //     The computer sleep key.
         Sleep = 95,
         //
@@ -324,11 +314,6 @@ namespace Product.Common
         Add = 107,
         //
         // Summary:
-        //     The separator key.
-        [Display(Name = "|")]
-        Separator = 108,
-        //
-        // Summary:
         //     The subtract key.
         [Display(Name = "Numpad -")]
         Subtract = 109,
@@ -342,6 +327,11 @@ namespace Product.Common
         //     The divide key.
         [Display(Name = "Numpad /")]
         Divide = 111,
+        //
+        // Summary:
+        //     The separator key.
+        [Display(Name = "|")]
+        Separator = 108,
         //
         // Summary:
         //     The F1 key.
@@ -448,6 +438,16 @@ namespace Product.Common
         //     The SCROLL LOCK key.
         [Display(Name = "Scroll Lock")]
         Scroll = 145,
+        //
+        // Summary:
+        //     The left Windows logo key (Microsoft Natural Keyboard).
+        [Display(Name = "Left Windows")]
+        LWin = 91,
+        //
+        // Summary:
+        //     The right Windows logo key (Microsoft Natural Keyboard).
+        [Display(Name = "Right Windows")]
+        RWin = 92,
         //
         // Summary:
         //     The left SHIFT key.
@@ -588,10 +588,6 @@ namespace Product.Common
         // Summary:
         //     The ZOOM key.
         Zoom = 251,
-        //
-        // Summary:
-        //     A constant reserved for future use.
-        NoName = 252,
 
         [Display(Name = "Fn key")]
         FnKey = 255
