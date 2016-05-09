@@ -53,6 +53,7 @@
     <Compile Include="KeyUtils.cs" />
     <Compile Include="OverlayLocation.cs" />
     <Compile Include="PathUtils.cs" />
+    <Compile Include="ProcessUtils.cs" />
     <Compile Include="SystemSettings.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="Services\ConfigServiceBase.cs" />

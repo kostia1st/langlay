@@ -33,6 +33,8 @@ namespace Product.Common
         public bool DoRunAtWindowsStartup { get; set; }
         public bool DoShowSettingsOnce { get; set; }
 
+        public bool DoForceThisInstance { get; set; }
+
         public bool DoShowCursorTooltip { get; set; }
 
         public ConfigServiceBase()
@@ -118,6 +120,8 @@ namespace Product.Common
                 DoShowSettingsOnce = Utils.ParseBool(value, true);
             else if (name == ArgumentNames.ShowCursorTooltip)
                 DoShowCursorTooltip = Utils.ParseBool(value, false);
+            else if (name == ArgumentNames.ForceThisInstance)
+                DoForceThisInstance = Utils.ParseBool(value, false);
         }
 
         private void ReadArgument(string argument)
@@ -125,10 +129,9 @@ namespace Product.Common
             if (!argument.StartsWith("--"))
                 throw new ArgumentException("Arguments must start with '--'");
             var parts = argument.Substring(2).Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-            var argumentName = parts[0];
             if (parts.Length > 1)
             {
-                ReadArgument(argumentName, parts[1]);
+                ReadArgument(parts[0], parts[1]);
             }
         }
 

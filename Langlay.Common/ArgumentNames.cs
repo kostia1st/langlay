@@ -17,5 +17,6 @@
         public const string RunAtWindowsStartup = "RunAtWindowsStartup";
         public const string ShowSettingsOnce = "ShowSettingsOnce";
         public const string ShowCursorTooltip = "ShowCursorTooltip";
+        public const string ForceThisInstance = "ForceThisInstance";
     }
 }

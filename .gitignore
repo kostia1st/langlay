@@ -3,3 +3,8 @@
 ################################################################################
 
 /Langlay.Common/obj/Debug
+/Langlay.SettingsUi/obj/Debug
+/Langlay.App/bin/Debug
+/Langlay.App/obj/Debug
+/.vs/Langlay/v14
+/UpgradeLog.htm

@@ -38,6 +38,11 @@ namespace Product
             Process.Start(psi);
         }
 
+        private void RestartAsAdmin()
+        {
+            ProcessUtils.StartMainApp(true, true);
+        }
+
         private void ExitApplication()
         {
             Application.Exit();
@@ -55,6 +60,7 @@ namespace Product
                     new MenuItem("Report a bug", delegate { OpenIssues(); }),
                     new MenuItem("Visit homepage", delegate { OpenHomepage(); }),
                     new MenuItem("-"),
+                    new MenuItem("Restart as admin", delegate { RestartAsAdmin(); }),
                     new MenuItem("Quit", delegate { ExitApplication(); })
                 });
                 Icon = new NotifyIcon()

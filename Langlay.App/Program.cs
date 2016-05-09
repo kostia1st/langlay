@@ -10,16 +10,20 @@ namespace Product
         [STAThread]
         static void Main()
         {
-            var uniquenessService = new UniquenessService(Application.ProductName);
-            uniquenessService.RunOrIgnore(delegate
+            try
             {
                 var configService = new ConfigService();
-                try
-                {
-                    configService.ReadFromConfigFile(false);
-                    configService.ReadFromConfigFile(true);
-                    configService.ReadFromCommandLineArguments();
+                configService.ReadFromConfigFile(false);
+                configService.ReadFromConfigFile(true);
+                configService.ReadFromCommandLineArguments();
 
+                var uniquenessService = new UniquenessService(
+                    Application.ProductName, configService.DoForceThisInstance,
+                    () => {
+                        ProcessUtils.StopMainApp();
+                    });
+                uniquenessService.Run(delegate
+                {
                     var overlayService = new OverlayService(configService);
                     var languageService = new LanguageService(configService, overlayService);
                     var hotkeyService = new HookedHotkeyService(configService, languageService);
@@ -73,13 +77,13 @@ namespace Product
                         hotkeyService.Stop();
                         overlayService.Stop();
                     }
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError(ex.ToString());
-                    MessageBox.Show(ex.ToString());
-                }
-            });
+                });
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }
