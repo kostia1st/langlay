@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace Product.Common
 {
@@ -30,7 +28,6 @@ namespace Product.Common
                 if (!process.WaitForExit(2000))
                 {
                     process.Kill();
-
                 }
                 return true;
             }
