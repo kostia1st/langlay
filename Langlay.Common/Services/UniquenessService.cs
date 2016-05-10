@@ -20,17 +20,24 @@ namespace Product.Common
 
         public bool Run(Action action)
         {
-            bool isTaken;
-            using (var mutex = new Mutex(true, UniqueId, out isTaken))
+            var isTaken = false;
+            var mutex = new Mutex(false, UniqueId);
+            try
             {
+                isTaken = mutex.WaitOne(500);
                 if (!isTaken && DoForceThisInstance)
                 {
                     CloseConcurrentMutexHandler?.Invoke();
-                    mutex.WaitOne();
-                    isTaken = true;
+                    isTaken = mutex.WaitOne(500);
                 }
                 if (isTaken)
                     action();
+            }
+            finally
+            {
+                if (isTaken)
+                    mutex.ReleaseMutex();
+                mutex.Dispose();
             }
             return isTaken;
         }

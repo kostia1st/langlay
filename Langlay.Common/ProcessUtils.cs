@@ -8,10 +8,14 @@ namespace Product.Common
     {
         public static bool StopMainApp()
         {
-            var process = Process.GetProcessesByName(AppSpecific.MainAppProcessName).FirstOrDefault();
+            var mainAppProcesses = Process.GetProcessesByName(AppSpecific.MainAppProcessName);
+            var currentProcess = Process.GetCurrentProcess();
+            var process = mainAppProcesses
+                .FirstOrDefault(x => x.Id != currentProcess.Id);
 #if DEBUG
             if (process == null)
-                process = Process.GetProcessesByName(AppSpecific.MainAppProcessName + ".vshost").FirstOrDefault();
+                process = Process.GetProcessesByName(AppSpecific.MainAppProcessNameDebug)
+                    .FirstOrDefault(x => x.Id != currentProcess.Id);
 #endif
 
             if (process != null)
@@ -19,7 +23,7 @@ namespace Product.Common
                 var thread = process.Threads.Cast<ProcessThread>().FirstOrDefault();
                 if (thread != null)
                 {
-                    Win32.PostThreadMessage(thread.Id, Win32.WM_USER_RESTART, IntPtr.Zero, IntPtr.Zero);
+                    Win32.PostThreadMessage(thread.Id, Win32.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
                 else
                 {

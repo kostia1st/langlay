@@ -122,11 +122,16 @@ namespace Product.Common
             return defaultValue;
         }
 
-        public static IList<T> Combine<T>(IList<T> list1, IList<T> list2)
+        public static IList<T> Combine<T>(this IList<T> list1, IList<T> list2)
         {
             var result =  new List<T>(list1);
             result.AddRange(list2);
             return result;
+        }
+
+        public static bool In<T>(this T instance, params T[] others)
+        {
+            return others.Contains(instance);
         }
     }
 }
