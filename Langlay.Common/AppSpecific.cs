@@ -8,6 +8,6 @@
         public const string MainAppFilename = "Langlay.exe";
         public const string MainAppConfigFilename = MainAppFilename + ".config";
         public const string SettingsAppFilename = "Langlay.SettingsUi.exe";
-        public const string AppVersion = "1.7";
+        public const string AppVersion = "1.8";
     }
 }
