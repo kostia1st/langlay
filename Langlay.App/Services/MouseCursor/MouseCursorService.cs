@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -10,7 +11,6 @@ namespace Product
         private IConfigService ConfigService { get; set; }
         private ITooltipService TooltipService { get; set; }
 
-        private bool IsStarted { get; set; }
         private bool IsLastDownHandled;
 
         public MouseCursorService(
@@ -24,12 +24,16 @@ namespace Product
             TooltipService = tooltipService;
         }
 
+        #region Start/Stop
+
+        private bool IsStarted { get; set; }
+
         public void Start()
         {
             if (!IsStarted)
             {
                 IsStarted = true;
-                Hooker = new MouseHooker(false);
+                Hooker = new MouseHooker(false, HookProcedureWrapper);
                 Hooker.ButtonDown = Hooker_ButtonDown;
                 Hooker.ButtonUp = Hooker_ButtonUp;
                 Hooker.MouseMove = Hooker_MouseMove;
@@ -50,6 +54,8 @@ namespace Product
             }
         }
 
+        #endregion Start/Stop
+
         private void ShowTooltip(MouseEventArgs2 e)
         {
             var currentLayout = InputLayoutHelper.GetCurrentLayout();
@@ -65,6 +71,22 @@ namespace Product
                 var text = currentLayout.LanguageNameTwoLetter;
                 TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), false);
             }
+        }
+
+        #region Hook handling
+
+        private int? HookProcedureWrapper(Func<int?> func)
+        {
+            var result = (int?) null;
+            try
+            {
+                result = func();
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
+            }
+            return result;
         }
 
         protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e)
@@ -94,6 +116,8 @@ namespace Product
         {
             UpdateTooltip(e);
         }
+
+        #endregion Hook handling
 
         #region IDisposable Support
 

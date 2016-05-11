@@ -102,7 +102,7 @@ namespace Product
             if (!IsStarted)
             {
                 IsStarted = true;
-                Hooker = new KeyboardHooker(false);
+                Hooker = new KeyboardHooker(false, HookProcedureWrapper);
                 Hooker.KeyDown = Hooker_KeyDown;
                 Hooker.KeyUp = Hooker_KeyUp;
                 Hooker.SetHook();
@@ -123,11 +123,6 @@ namespace Product
         }
 
         #endregion Start/Stop
-
-        private bool HandleSwitch(KeyboardSwitch keyboardSwitch)
-        {
-            return LanguageService.ConductSwitch(keyboardSwitch);
-        }
 
         #region KeyDown saved
 
@@ -156,6 +151,11 @@ namespace Product
 
         #endregion KeyDown saved
 
+        private bool HandleSwitch(KeyboardSwitch keyboardSwitch)
+        {
+            return LanguageService.ConductSwitch(keyboardSwitch);
+        }
+
         private KeyboardSwitch? GetSwitchToApply(KeyEventArgs2 e)
         {
             var switchToApply = (KeyboardSwitch?) null;
@@ -179,6 +179,25 @@ namespace Product
             }
 
             return switchToApply;
+        }
+
+        #region Hook handling
+
+        private int? HookProcedureWrapper(Func<int?> func)
+        {
+            var result = (int?) null;
+            try
+            {
+                result = func();
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
+#if DEBUG
+                MessageBox.Show(ex.ToString());
+#endif
+            }
+            return result;
         }
 
         private void Hooker_KeyDown(object sender, KeyEventArgs2 e)
@@ -259,6 +278,8 @@ namespace Product
                 }
             }
         }
+
+        #endregion Hook handling
 
         #region IDisposable Support
 

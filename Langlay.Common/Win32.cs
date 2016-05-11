@@ -155,6 +155,9 @@ namespace Product.Common
         [DllImport("user32.dll")]
         public static extern int CallNextHookEx(IntPtr idHook, int nCode, uint wParam, ref MouseInfo lParam);
 
+        [DllImport("user32.dll")]
+        public static extern int CallNextHookEx(IntPtr idHook, int nCode, uint wParam, IntPtr lParam);
+
         /// <summary>
         /// Loads the library.
         /// </summary>
@@ -169,9 +172,13 @@ namespace Product.Common
         /// <summary>
         /// Defines the callback type for the hook
         /// </summary>
-        public delegate int KeyboardHookProc(int code, uint wParam, ref KeyboardInfo lParam);
+        public delegate int KeyboardHookProc(int code, uint wParam, IntPtr lParam);
 
-        public delegate int MouseHookProc(int nCode, uint wParam, ref MouseInfo lParam);
+        public delegate int KeyboardHookProc2(int code, uint wParam, ref KeyboardInfo lParam);
+
+        public delegate int MouseHookProc(int nCode, uint wParam, IntPtr lParam);
+
+        public delegate int MouseHookProc2(int nCode, uint wParam, ref MouseInfo lParam);
 
         public struct KeyboardInfo
         {
@@ -215,5 +222,8 @@ namespace Product.Common
 
         [DllImport("user32.dll")]
         public static extern bool GetCursorInfo(out CursorInfo pci);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetProcessDPIAware();
     }
 }

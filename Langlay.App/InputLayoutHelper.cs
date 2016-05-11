@@ -64,12 +64,12 @@ namespace Product
         public static IntPtr GetDefaultLayoutForLanguage(string languageName)
         {
             // Avoid re-evaluating properties
-            var inputLanguages = GetInputLayouts();
-            var firstLanguageLayout = inputLanguages.FirstOrDefault(x => x.LanguageName == languageName);
+            var inputLayouts = GetInputLayouts();
+            var firstLanguageLayout = inputLayouts.FirstOrDefault(x => x.LanguageName == languageName);
             if (firstLanguageLayout == null)
-                firstLanguageLayout = inputLanguages.FirstOrDefault();
+                firstLanguageLayout = inputLayouts.FirstOrDefault();
             if (firstLanguageLayout == null)
-                throw new NullReferenceException("Not a single language's installed in the system");
+                throw new NullReferenceException("Not a single language/layout installed in the system");
 
             return firstLanguageLayout.Handle;
         }

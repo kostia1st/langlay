@@ -12,6 +12,8 @@ namespace Product
         {
             try
             {
+                // We read the global config first, then the user's one (higher priority)
+                // and finally the command line (the highest priority).
                 var configService = new ConfigService();
                 configService.ReadFromConfigFile(false);
                 configService.ReadFromConfigFile(true);
@@ -22,11 +24,16 @@ namespace Product
                     delegate { ProcessUtils.StopMainApp(); });
                 uniquenessService.Run(delegate
                 {
+                    // We must let Windows know that our app is DPI aware,
+                    // so the sizes and coordinates don't get scaled behind the scene
+                    Win32.SetProcessDPIAware();
+
                     var overlayService = new OverlayService(configService);
                     var languageService = new LanguageService(configService, overlayService);
                     var hotkeyService = new HookedHotkeyService(configService, languageService);
                     var tooltipService = new TooltipService(configService);
                     var mouseCursorService = new MouseCursorService(configService, tooltipService);
+                    var trayService = new TrayService(configService);
 
                     ILanguageSetterService languageSetterService;
                     if (configService.SwitchMethod == SwitchMethod.InputSimulation)
@@ -36,43 +43,35 @@ namespace Product
 
                     languageService.LanguageSetterService = languageSetterService;
 
-                    var trayService = new TrayService(configService);
-
                     Application.AddMessageFilter(new AppMessageFilter
                     {
                         OnClose = delegate { Application.Exit(); },
                         OnRestart = delegate { Application.Restart(); }
                     });
 
-                    hotkeyService.Start();
-                    trayService.Start();
                     overlayService.Start();
+                    hotkeyService.Start();
                     tooltipService.Start();
                     mouseCursorService.Start();
-
-                    WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
-
-                    if (configService.DoShowSettingsOnce)
-                        AppUtils.ShowSettings();
+                    trayService.Start();
 
                     try
                     {
-                        Application.Run();
-                    }
-                    catch (Exception)
-                    {
-#if DEBUG
-                        throw;
-#else
+                        // Here we make sure that registry contains the proper value in the Startup section
+                        WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
 
-                        // Do nothing O_o as of yet.
-#endif
+                        // Here we check if we need to show the settings up immediately
+                        // (it's likely the first app run)
+                        if (configService.DoShowSettingsOnce)
+                            AppUtils.ShowSettings();
+
+                        Application.Run();
                     }
                     finally
                     {
+                        trayService.Stop();
                         mouseCursorService.Stop();
                         tooltipService.Stop();
-                        trayService.Stop();
                         hotkeyService.Stop();
                         overlayService.Stop();
                     }
@@ -81,7 +80,11 @@ namespace Product
             catch (Exception ex)
             {
                 Trace.TraceError(ex.ToString());
+#if DEBUG
                 MessageBox.Show(ex.ToString());
+#endif
+
+                // In the release environment we don't show exceptions up
             }
         }
     }

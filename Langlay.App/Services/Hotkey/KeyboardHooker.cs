@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -17,19 +18,23 @@ namespace Product
 
         public KeyEventHandler2 KeyDown;
         public KeyEventHandler2 KeyUp;
+        public Func<Func<int?>, int?> HookProcedureWrapper { get; set; }
 
         #endregion Events
 
         /// <summary>
         /// Strong reference to a native callback method.
+        /// Thanks to it, we connect its GC lifetime to the lifetime of the hooker itself.
         /// </summary>
         private Win32.KeyboardHookProc HookProcedureHolder;
 
-        public KeyboardHooker(bool doHookImmediately = true)
+        public KeyboardHooker(
+            bool doHookImmediately = true, Func<Func<int?>, int?> hookProcedureWrapper = null)
         {
             // This is a c# hack in order to keep a firm reference to a dynamically created delegate
             // so that it won't be collected by GC.
             HookProcedureHolder = HookProcedure;
+            HookProcedureWrapper = hookProcedureWrapper;
             if (doHookImmediately)
                 SetHook();
         }
@@ -52,6 +57,39 @@ namespace Product
             Win32.UnhookWindowsHookEx(HookHandle);
         }
 
+        private int? HookInternals(int code, uint wParam, IntPtr lParam)
+        {
+            var result = (int?) null;
+            if (code >= 0)
+            {
+                var keyInfo = (Win32.KeyboardInfo) Marshal.PtrToStructure(lParam, typeof(Win32.KeyboardInfo));
+                var key = (Keys) keyInfo.VirtualKeyCode;
+                var keyHeldBefore = KeyUtils.GetKeysPressed();
+
+                var kea = new KeyEventArgs2(key, keyHeldBefore);
+#if TRACE
+                var keysString = string.Join(", ", kea.KeyStroke.Keys.Select(x => ((KeyCode) x).GetDisplayName()));
+                var eventString = $"{ Win32.MessageToString(wParam) }: { keysString }";
+#endif
+                if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null)
+                {
+                    Trace.WriteLine($"Hooked { eventString }");
+                    KeyDown(this, kea);
+                }
+                else if (wParam.In(Win32.WM_KEYUP, Win32.WM_SYSKEYUP) && KeyUp != null)
+                {
+                    Trace.WriteLine($"Hooked { eventString }");
+                    KeyUp(this, kea);
+                }
+
+                if (kea.Handled)
+                    result = 1;
+                else
+                    Trace.WriteLine($">> Not handled { eventString }");
+            }
+            return result;
+        }
+
         /// <summary>
         /// The callback for the keyboard hook
         /// </summary>
@@ -59,47 +97,15 @@ namespace Product
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
         /// <returns></returns>
-        private int HookProcedure(int code, uint wParam, ref Win32.KeyboardInfo lParam)
+        private int HookProcedure(int code, uint wParam, IntPtr lParam)
         {
             var result = (int?) null;
-            if (code >= 0)
-            {
-                try
-                {
-                    var key = (Keys) lParam.VirtualKeyCode;
-                    var keyHeldBefore = KeyUtils.GetKeysPressed();
-
-                    var kea = new KeyEventArgs2(key, keyHeldBefore);
-#if TRACE
-                    var keysString = string.Join(", ", kea.KeyStroke.Keys.Select(x => ((KeyCode) x).GetDisplayName()));
-                    var eventString = $"{ Win32.MessageToString(wParam) }: { keysString }";
-#endif
-                    if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null)
-                    {
-                        Trace.WriteLine($"Hooked { eventString }");
-                        KeyDown(this, kea);
-                    }
-                    else if (wParam.In(Win32.WM_KEYUP, Win32.WM_SYSKEYUP) && KeyUp != null)
-                    {
-                        Trace.WriteLine($"Hooked { eventString }");
-                        KeyUp(this, kea);
-                    }
-
-                    if (kea.Handled)
-                        result = 1;
-                    else
-                        Trace.WriteLine($">> Not handled { eventString }");
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError(ex.ToString());
-#if DEBUG
-                    MessageBox.Show(ex.ToString());
-#endif
-                }
-            }
+            if (HookProcedureWrapper != null)
+                result = HookProcedureWrapper(() => HookInternals(code, wParam, lParam));
+            else
+                result = HookInternals(code, wParam, lParam);
             if (result == null)
-                result = Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
+                result = Win32.CallNextHookEx(HookHandle, code, wParam, lParam);
             return result.Value;
         }
 
