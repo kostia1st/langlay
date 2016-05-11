@@ -66,22 +66,22 @@ namespace Product
                 try
                 {
                     var key = (Keys) lParam.VirtualKeyCode;
-                    var keys = KeyUtils.GetKeysPressed();
+                    var keyHeldBefore = KeyUtils.GetKeysPressed();
 
-                    var kea = new KeyEventArgs2(key, keys);
+                    var kea = new KeyEventArgs2(key, keyHeldBefore);
 
                     if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null)
                     {
                         Trace.WriteLine(string.Format(
                             "Hooked keyDOWN {0}",
-                            string.Join(", ", keys)));
+                            string.Join(", ", kea.KeyStroke.Keys)));
                         KeyDown(this, kea);
                     }
                     else if (wParam.In(Win32.WM_KEYUP, Win32.WM_SYSKEYUP) && KeyUp != null)
                     {
                         Trace.WriteLine(string.Format(
                             "Hooked keyUP {0}",
-                            string.Join(", ", keys)));
+                            string.Join(", ", kea.KeyStroke.Keys)));
                         KeyUp(this, kea);
                     }
 
@@ -94,7 +94,7 @@ namespace Product
                         Trace.WriteLine(string.Format(
                             ">> Not handled {0}: {1}",
                             Win32.MessageToString(wParam),
-                            string.Join(", ", keys)));
+                            string.Join(", ", kea.KeyStroke.Keys)));
                     }
                 }
                 catch (Exception ex)
