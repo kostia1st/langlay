@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -225,15 +226,27 @@ namespace Product.SettingsUi
             }
         }
 
-        private void NotifyPropertyChanged<T1>(Expression<Func<ConfigViewModel, T1>> expression)
+        private void SetPropertyValue<T1>(
+            Expression<Func<ConfigViewModel, T1>> expression, T1 value)
+        {
+            var valueOld = expression.Compile()(this);
+            if (!EqualityComparer<T1>.Default.Equals(valueOld , value))
+            {
+                // TODO: need to set to the property
+
+                NotifyPropertyChanged(expression);
+            }
+        }
+
+        private void NotifyPropertyChanged<T1>(
+            Expression<Func<ConfigViewModel, T1>> expression)
         {
             NotifyPropertyChanged(ExpressionUtils.GetMemberName(expression));
         }
 
         private void NotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

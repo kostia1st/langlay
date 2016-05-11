@@ -8,34 +8,34 @@ namespace Product.Common
     {
         public static bool StopMainApp()
         {
+            var result = false;
             var mainAppProcesses = Process.GetProcessesByName(AppSpecific.MainAppProcessName);
             var currentProcess = Process.GetCurrentProcess();
             var process = mainAppProcesses
                 .FirstOrDefault(x => x.Id != currentProcess.Id);
 #if DEBUG
             if (process == null)
-                process = Process.GetProcessesByName(AppSpecific.MainAppProcessNameDebug)
+            {
+                process = Process
+                    .GetProcessesByName(AppSpecific.MainAppProcessNameDebug)
                     .FirstOrDefault(x => x.Id != currentProcess.Id);
+            }
 #endif
 
             if (process != null)
             {
                 var thread = process.Threads.Cast<ProcessThread>().FirstOrDefault();
                 if (thread != null)
-                {
                     Win32.PostThreadMessage(thread.Id, Win32.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                }
                 else
-                {
                     process.CloseMainWindow();
-                }
+
                 if (!process.WaitForExit(2000))
-                {
                     process.Kill();
-                }
-                return true;
+
+                result = true;
             }
-            return false;
+            return result;
         }
 
         public static void StartMainApp(
