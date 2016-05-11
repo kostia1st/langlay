@@ -50,131 +50,61 @@ namespace Product.SettingsUi
         public bool RunAtWindowsStartup
         {
             get { return ConfigService.DoRunAtWindowsStartup; }
-            set
-            {
-                if (value != ConfigService.DoRunAtWindowsStartup)
-                {
-                    ConfigService.DoRunAtWindowsStartup = value;
-                    NotifyPropertyChanged(x => x.RunAtWindowsStartup);
-                }
-            }
+            set { SetPropertyValue(x => x.RunAtWindowsStartup, x => x.DoRunAtWindowsStartup, value); }
         }
 
         public bool ShowOverlay
         {
             get { return ConfigService.DoShowOverlay; }
-            set
-            {
-                if (ConfigService.DoShowOverlay != value)
-                {
-                    ConfigService.DoShowOverlay = value;
-                    NotifyPropertyChanged(x => x.ShowOverlay);
-                }
-            }
+            set { SetPropertyValue(x => x.ShowOverlay, x => x.DoShowOverlay, value); }
         }
 
         public bool ShowOverlayOnMainDisplayOnly
         {
             get { return ConfigService.DoShowOverlayOnMainDisplayOnly; }
-            set
-            {
-                if (ConfigService.DoShowOverlayOnMainDisplayOnly != value)
-                {
-                    ConfigService.DoShowOverlayOnMainDisplayOnly = value;
-                    NotifyPropertyChanged(x => x.ShowOverlayOnMainDisplayOnly);
-                }
-            }
+            set { SetPropertyValue(x => x.ShowOverlayOnMainDisplayOnly, x => x.DoShowOverlayOnMainDisplayOnly, value); }
         }
 
         public bool ShowOverlayRoundCorners
         {
             get { return ConfigService.DoShowOverlayRoundCorners; }
-            set
-            {
-                if (ConfigService.DoShowOverlayRoundCorners != value)
-                {
-                    ConfigService.DoShowOverlayRoundCorners = value;
-                    NotifyPropertyChanged(x => x.ShowOverlayRoundCorners);
-                }
-            }
+            set { SetPropertyValue(x => x.ShowOverlayRoundCorners, x => x.DoShowOverlayRoundCorners, value); }
         }
 
         public bool ShowCursorTooltip
         {
             get { return ConfigService.DoShowCursorTooltip; }
-            set
-            {
-                if (ConfigService.DoShowCursorTooltip != value)
-                {
-                    ConfigService.DoShowCursorTooltip = value;
-                    NotifyPropertyChanged(x => x.ShowCursorTooltip);
-                }
-            }
+            set { SetPropertyValue(x => x.ShowCursorTooltip, x => x.DoShowCursorTooltip, value); }
         }
 
         public uint OverlayMilliseconds
         {
             get { return ConfigService.OverlayDuration; }
-            set
-            {
-                if (ConfigService.OverlayDuration != value)
-                {
-                    ConfigService.OverlayDuration = value;
-                    NotifyPropertyChanged(x => x.OverlayMilliseconds);
-                }
-            }
+            set { SetPropertyValue(x => x.OverlayMilliseconds, x => x.OverlayDuration, value); }
         }
 
         public uint OverlayOpacity
         {
             get { return ConfigService.OverlayOpacity; }
-            set
-            {
-                if (ConfigService.OverlayOpacity != value)
-                {
-                    ConfigService.OverlayOpacity = value;
-                    NotifyPropertyChanged(x => x.OverlayOpacity);
-                }
-            }
+            set { SetPropertyValue(x => x.OverlayOpacity, x => x.OverlayOpacity, value); }
         }
 
         public uint OverlayScale
         {
             get { return ConfigService.OverlayScale; }
-            set
-            {
-                if (ConfigService.OverlayScale != value)
-                {
-                    ConfigService.OverlayScale = value;
-                    NotifyPropertyChanged(x => x.OverlayScale);
-                }
-            }
+            set { SetPropertyValue(x => x.OverlayScale, x => x.OverlayScale, value); }
         }
 
         public OverlayLocation OverlayLocation
         {
             get { return ConfigService.OverlayLocation; }
-            set
-            {
-                if (ConfigService.OverlayLocation != value)
-                {
-                    ConfigService.OverlayLocation = value;
-                    NotifyPropertyChanged(x => x.OverlayLocation);
-                }
-            }
+            set { SetPropertyValue(x => x.OverlayLocation, x => x.OverlayLocation, value); }
         }
 
         public SwitchMethod SwitchMethod
         {
             get { return ConfigService.SwitchMethod; }
-            set
-            {
-                if (ConfigService.SwitchMethod != value)
-                {
-                    ConfigService.SwitchMethod = value;
-                    NotifyPropertyChanged(x => x.SwitchMethod);
-                }
-            }
+            set { SetPropertyValue(x => x.SwitchMethod, x => x.SwitchMethod, value); }
         }
 
         public ObservableCollection<KeyCodeViewModel> LanguageSwitchSequence
@@ -190,51 +120,32 @@ namespace Product.SettingsUi
         public bool SwitchLanguage
         {
             get { return ConfigService.DoSwitchLanguage; }
-            set
-            {
-                if (ConfigService.DoSwitchLanguage != value)
-                {
-                    ConfigService.DoSwitchLanguage = value;
-                    NotifyPropertyChanged(x => x.SwitchLanguage);
-                }
-            }
+            set { SetPropertyValue(x => x.SwitchLanguage, x => x.DoSwitchLanguage, value); }
         }
 
         public bool SwitchLayout
         {
             get { return ConfigService.DoSwitchLayout; }
-            set
-            {
-                if (ConfigService.DoSwitchLayout != value)
-                {
-                    ConfigService.DoSwitchLayout = value;
-                    NotifyPropertyChanged(x => x.SwitchLayout);
-                }
-            }
+            set { SetPropertyValue(x => x.SwitchLayout, x => x.DoSwitchLayout, value); }
         }
 
         public bool ShowSettingsOnce
         {
             get { return ConfigService.DoShowSettingsOnce; }
-            set
-            {
-                if (ConfigService.DoShowSettingsOnce != value)
-                {
-                    ConfigService.DoShowSettingsOnce = value;
-                    NotifyPropertyChanged(x => x.ShowSettingsOnce);
-                }
-            }
+            set { SetPropertyValue(x => x.ShowSettingsOnce, x => x.DoShowSettingsOnce, value); }
         }
 
         private void SetPropertyValue<T1>(
-            Expression<Func<ConfigViewModel, T1>> expression, T1 value)
+            Expression<Func<ConfigViewModel, T1>> expression1,
+            Expression<Func<ConfigService, T1>> expression2, T1 value)
         {
-            var valueOld = expression.Compile()(this);
-            if (!EqualityComparer<T1>.Default.Equals(valueOld , value))
+            var valueOld = expression2.Compile()(ConfigService);
+            if (!EqualityComparer<T1>.Default.Equals(valueOld, value))
             {
-                // TODO: need to set to the property
+                var propertyName = ExpressionUtils.GetMemberName(expression2);
+                ConfigService.GetType().GetProperty(propertyName).SetValue(ConfigService, value, null);
 
-                NotifyPropertyChanged(expression);
+                NotifyPropertyChanged(expression1);
             }
         }
 
