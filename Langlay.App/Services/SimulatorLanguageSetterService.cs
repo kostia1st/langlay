@@ -38,12 +38,12 @@ namespace Product
         private void SendAltShift(int amount = 1)
         {
             // It's important to HOLD the Alt key first, not vice versa
-            KeyboardSimulator.KeyDown((VirtualKeyCode) KeyCode.LMenu);
+            KeyboardSimulator.KeyDown((VirtualKeyCode) KeyCode.LAltKey);
             for (int i = 0; i < amount; i++)
             {
                 KeyboardSimulator.KeyPress((VirtualKeyCode) KeyCode.LShiftKey);
             }
-            KeyboardSimulator.KeyUp((VirtualKeyCode) KeyCode.LMenu);
+            KeyboardSimulator.KeyUp((VirtualKeyCode) KeyCode.LAltKey);
         }
 
         private void SendGraveAccent(int amount = 1)

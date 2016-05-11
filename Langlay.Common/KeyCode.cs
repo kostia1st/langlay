@@ -209,10 +209,10 @@ namespace Product.Common
         RControlKey = 163,
 
         [Display(Name = "Left Alt")]
-        LMenu = 164,
+        LAltKey = 164,
 
         [Display(Name = "Right Alt")]
-        RMenu = 165,
+        RAltKey = 165,
 
         VolumeMute = 173,
 

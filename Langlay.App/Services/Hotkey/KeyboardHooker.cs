@@ -71,7 +71,7 @@ namespace Product
 
                     var kea = new KeyEventArgs2(key, keyHeldBefore);
 #if TRACE
-                    var keysString = string.Join(", ", kea.KeyStroke.Keys.Select(x => (KeyCode) x));
+                    var keysString = string.Join(", ", kea.KeyStroke.Keys.Select(x => ((KeyCode) x).GetDisplayName()));
                     var eventString = $"{ Win32.MessageToString(wParam) }: { keysString }";
 #endif
                     if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null)
