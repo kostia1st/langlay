@@ -63,9 +63,11 @@ namespace Product
                 case WindowsSequenceCode.CtrlShift:
                     SendCtrlShift(amount);
                     break;
+
                 case WindowsSequenceCode.AltShift:
                     SendAltShift(amount);
                     break;
+
                 case WindowsSequenceCode.GraveAccent:
                     SendGraveAccent(amount);
                     break;
@@ -101,7 +103,8 @@ namespace Product
             var result = 0;
 
             var inputLayouts = InputLayoutHelper.GetInputLayouts();
-            // Re-read the current layout, to find out what layout the system language manager 
+
+            // Re-read the current layout, to find out what layout the system language manager
             // has selected within the layout group of the language.
             var currentLayout = InputLayoutHelper.GetCurrentLayout();
 
@@ -140,8 +143,8 @@ namespace Product
                 if (amountOfLanguageSwitches > 0)
                 {
                     if (CurrentLanguageSwitchSequence == null)
-                        throw new Exception(
-                            "cannot enumerate languages 'cause the system key sequence was not set");
+                        throw new InvalidOperationException(
+                            "Cannot enumerate languages because the system key sequence was not set");
 
                     SendSequence(CurrentLanguageSwitchSequence.Value, amountOfLanguageSwitches);
                     result = true;
@@ -157,8 +160,8 @@ namespace Product
                 if (amountOfLayoutSwitches > 0)
                 {
                     if (CurrentLayoutSwitchSequence == null)
-                        throw new Exception(
-                            "cannot enumerate layouts, because the system key sequence was not set");
+                        throw new InvalidOperationException(
+                            "Cannot enumerate layouts because the system key sequence was not set");
                     SendSequence(CurrentLayoutSwitchSequence.Value, amountOfLayoutSwitches);
                     result = true;
                 }
