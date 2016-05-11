@@ -9,6 +9,7 @@ namespace Product
     {
         private IDictionary<string, IntPtr> CultureToLastUsedLayout
             = new Dictionary<string, IntPtr>();
+
         private IOverlayService OverlayService { get; set; }
         private IConfigService ConfigService { get; set; }
         public ILanguageSetterService LanguageSetterService { get; set; }
@@ -115,12 +116,16 @@ namespace Product
             {
                 case KeyboardSwitch.Language:
                     return SwitchLanguage(false);
+
                 case KeyboardSwitch.LanguageRestoreLayout:
                     return SwitchLanguage(true);
+
                 case KeyboardSwitch.LayoutNoWrap:
-                    return SwitchLayout(false);                    
+                    return SwitchLayout(false);
+
                 case KeyboardSwitch.Layout:
                     return SwitchLayout(true);
+
                 case KeyboardSwitch.LanguageAndLayout:
                     return SwitchLanguageAndLayout();
             }

@@ -31,6 +31,7 @@ namespace Product.SettingsUi
             ConfigService.LayoutSwitchKeyArray = LayoutSequence.Select(x => x.KeyCode).ToList();
             NotifyPropertyChanged(x => x.LayoutSequence);
         }
+
         private void LayoutSequence_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             NotifyLayoutSequenceChanged();
@@ -161,6 +162,5 @@ namespace Product.SettingsUi
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
     }
 }

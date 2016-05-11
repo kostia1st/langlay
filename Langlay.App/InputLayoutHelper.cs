@@ -78,6 +78,5 @@ namespace Product
         {
             return GetInputLayouts().FirstOrDefault(x => x.LanguageName == languageName && x.Name == layoutName);
         }
-
     }
 }

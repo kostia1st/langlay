@@ -14,6 +14,7 @@ namespace Product.SettingsUi
             = DependencyProperty.Register(
                "Value", typeof(OverlayLocation), typeof(OverlayLocationEditor),
                new PropertyMetadata(OverlayLocation.None, OnValueChanged));
+
         public OverlayLocation Value
         {
             get { return (OverlayLocation) GetValue(ValueProperty); }
@@ -21,10 +22,11 @@ namespace Product.SettingsUi
         }
 
         private OverlayLocationHolder[] Holders { get; set; }
+
         public OverlayLocationEditor()
         {
             InitializeComponent();
-            Holders = new[] 
+            Holders = new[]
             {
                 hTopLeft, hTopCenter, hTopRight,
                 hMiddleLeft, hMiddleCenter, hMiddleRight,
@@ -55,6 +57,7 @@ namespace Product.SettingsUi
                 holder.IsSelected = holder.Location == location;
             }
         }
+
         protected static void OnValueChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs args)
         {

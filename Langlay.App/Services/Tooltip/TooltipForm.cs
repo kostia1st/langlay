@@ -139,10 +139,9 @@ namespace Product
         {
             var sizeOfText = e.Graphics.MeasureString(DisplayString, TextFont);
             var positionOfText = new PointF((Width - sizeOfText.Width - 1) / 2, (Height - sizeOfText.Height - 1) / 2);
-            
+
             e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             e.Graphics.DrawString(DisplayString, TextFont, TextBrush, positionOfText);
-
         }
     }
 }

@@ -44,10 +44,13 @@ namespace Product.Common
             {
                 case WM_KEYDOWN:
                     return "Key Down";
+
                 case WM_KEYUP:
                     return "Key Up";
+
                 case WM_SYSKEYDOWN:
                     return "Key Down (Sys)";
+
                 case WM_SYSKEYUP:
                     return "Key Up (Sys)";
             }

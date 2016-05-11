@@ -10,6 +10,7 @@ namespace Product.SettingsUi
     {
         public event RoutedEventHandler RemoveClick;
         public event RoutedEventHandler Changed;
+
         public HotkeyEditor()
         {
             InitializeComponent();

@@ -66,7 +66,6 @@ namespace Product
             Visible = true;
             OnTimer();
             timerOverlay.Start();
-
         }
 
         private int ToPixels(float relativeValue)
@@ -110,11 +109,13 @@ namespace Product
                 case OverlayLocation.BottomLeft:
                     Left = screenBounds.Left + ScreenMargin;
                     break;
+
                 case OverlayLocation.TopCenter:
                 case OverlayLocation.MiddleCenter:
                 case OverlayLocation.BottomCenter:
                     Left = screenBounds.Left + ((screenBounds.Width - Width) / 2);
                     break;
+
                 case OverlayLocation.TopRight:
                 case OverlayLocation.MiddleRight:
                 case OverlayLocation.BottomRight:
@@ -129,11 +130,13 @@ namespace Product
                 case OverlayLocation.TopRight:
                     Top = screenBounds.Top + ScreenMargin;
                     break;
+
                 case OverlayLocation.MiddleLeft:
                 case OverlayLocation.MiddleCenter:
                 case OverlayLocation.MiddleRight:
                     Top = screenBounds.Top + (screenBounds.Height - Height) / 2;
                     break;
+
                 case OverlayLocation.BottomLeft:
                 case OverlayLocation.BottomCenter:
                 case OverlayLocation.BottomRight:

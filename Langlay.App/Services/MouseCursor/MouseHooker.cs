@@ -9,10 +9,12 @@ namespace Product
         private IntPtr HookHandle = IntPtr.Zero;
 
         #region Events
+
         public MouseEventHandler2 ButtonDown;
         public MouseEventHandler2 ButtonUp;
         public MouseEventHandler2 MouseMove;
-        #endregion
+
+        #endregion Events
 
         /// <summary>
         /// Strong reference to a native callback method.
@@ -62,34 +64,23 @@ namespace Product
                 if (ButtonDown != null)
                 {
                     if (wParam == Win32.WM_LBUTTONDOWN)
-                    {
                         args = new MouseEventArgs2(MouseButtons.Left, lParam.Point);
-                    }
                     if (wParam == Win32.WM_RBUTTONDOWN)
-                    {
                         args = new MouseEventArgs2(MouseButtons.Right, lParam.Point);
-                    }
                     if (wParam == Win32.WM_MBUTTONDOWN)
-                    {
                         args = new MouseEventArgs2(MouseButtons.Middle, lParam.Point);
-                    }
                     if (args != null)
                         ButtonDown(this, args);
                 }
                 if (args == null && ButtonUp != null)
                 {
                     if (wParam == Win32.WM_LBUTTONUP)
-                    {
                         args = new MouseEventArgs2(MouseButtons.Left, lParam.Point);
-                    }
                     if (wParam == Win32.WM_RBUTTONUP)
-                    {
                         args = new MouseEventArgs2(MouseButtons.Right, lParam.Point);
-                    }
                     if (wParam == Win32.WM_MBUTTONUP)
-                    {
                         args = new MouseEventArgs2(MouseButtons.Middle, lParam.Point);
-                    }
+
                     if (args != null)
                         ButtonUp(this, args);
                 }
@@ -115,7 +106,8 @@ namespace Product
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+
+        private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -142,6 +134,7 @@ namespace Product
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 }

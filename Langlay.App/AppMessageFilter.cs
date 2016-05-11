@@ -4,7 +4,7 @@ using Product.Common;
 
 namespace Product
 {
-    public class AppMessageFilter: IMessageFilter
+    public class AppMessageFilter : IMessageFilter
     {
         public Action OnClose;
         public Action OnRestart;
