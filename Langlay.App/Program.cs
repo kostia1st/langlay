@@ -5,10 +5,10 @@ using Product.Common;
 
 namespace Product
 {
-    static class Program
+    internal static class Program
     {
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             try
             {
@@ -19,9 +19,7 @@ namespace Product
 
                 var uniquenessService = new UniquenessService(
                     Application.ProductName, configService.DoForceThisInstance,
-                    () => {
-                        ProcessUtils.StopMainApp();
-                    });
+                    delegate { ProcessUtils.StopMainApp(); });
                 uniquenessService.Run(delegate
                 {
                     var overlayService = new OverlayService(configService);
@@ -66,6 +64,7 @@ namespace Product
 #if DEBUG
                         throw;
 #else
+
                         // Do nothing O_o as of yet.
 #endif
                     }

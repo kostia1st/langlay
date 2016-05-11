@@ -24,6 +24,7 @@ namespace Product.Common
                 (WindowsSequenceCode?) Utils.ParseInt(Registry.GetValue(
                     ToggleKey,
                     "Language Hotkey", null));
+
             // Fallback to perhaps "old"-Windows-version key for the language sequence
             if (result == null)
             {

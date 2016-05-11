@@ -13,9 +13,11 @@ namespace Product
         private IntPtr HookHandle = IntPtr.Zero;
 
         #region Events
+
         public KeyEventHandler2 KeyDown;
         public KeyEventHandler2 KeyUp;
-        #endregion
+
+        #endregion Events
 
         /// <summary>
         /// Strong reference to a native callback method.
@@ -68,20 +70,21 @@ namespace Product
 
                     var kea = new KeyEventArgs2(key, keys);
 
-                    if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
+                    if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null)
                     {
                         Trace.WriteLine(string.Format(
                             "Hooked keyDOWN {0}",
                             string.Join(", ", keys)));
                         KeyDown(this, kea);
                     }
-                    else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
+                    else if (wParam.In(Win32.WM_KEYUP, Win32.WM_SYSKEYUP) && KeyUp != null)
                     {
                         Trace.WriteLine(string.Format(
                             "Hooked keyUP {0}",
                             string.Join(", ", keys)));
                         KeyUp(this, kea);
                     }
+
                     if (kea.Handled)
                     {
                         result = 1;
@@ -106,6 +109,7 @@ namespace Product
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
@@ -133,6 +137,7 @@ namespace Product
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 }

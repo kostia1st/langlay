@@ -10,7 +10,7 @@ namespace Product.Common
         private Action CloseConcurrentMutexHandler { get; set; }
 
         public UniquenessService(
-            string uniqueId, bool forceThisInstance = false, 
+            string uniqueId, bool forceThisInstance = false,
             Action closeConcurrentMutexHandler = null)
         {
             UniqueId = uniqueId;

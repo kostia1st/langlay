@@ -5,7 +5,6 @@ namespace Product.Common
 {
     public static class ExpressionUtils
     {
-        //iteration based
         public static string GetMemberName(this LambdaExpression memberSelector)
         {
             var currentExpression = memberSelector.Body;

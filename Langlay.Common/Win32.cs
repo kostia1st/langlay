@@ -6,10 +6,10 @@ namespace Product.Common
     public class Win32
     {
         public const int WH_KEYBOARD_LL = 13;
-        public const int WM_KEYDOWN = 0x100;
-        public const int WM_KEYUP = 0x101;
-        public const int WM_SYSKEYDOWN = 0x104;
-        public const int WM_SYSKEYUP = 0x105;
+        public const uint WM_KEYDOWN = 0x100;
+        public const uint WM_KEYUP = 0x101;
+        public const uint WM_SYSKEYDOWN = 0x104;
+        public const uint WM_SYSKEYUP = 0x105;
 
         public const int WH_MOUSE = 7;
         public const int WH_MOUSE_LL = 14;
@@ -31,7 +31,6 @@ namespace Product.Common
         public const int WM_NCXBUTTONDOWN = 0xAB;
         public const int WM_NCXBUTTONUP = 0xAC;
         public const int WM_NCXBUTTONDBLCLK = 0xAD;
-
 
         public const int WM_INPUTLANGCHANGEREQUEST = 0x0050;
         public const int WM_CLOSE = 0x0010;
@@ -72,16 +71,22 @@ namespace Product.Common
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetKeyboardLayout(int threadId);
+
         [DllImport("user32.dll")]
         public static extern int GetWindowThreadProcessId(IntPtr windowHandle, IntPtr id);
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetActiveWindow();
+
         [DllImport("user32.dll")]
         public static extern bool PostMessage(IntPtr hWnd, uint messageId, IntPtr wParam, IntPtr lParam);
+
         [DllImport("user32.dll")]
         public static extern bool SendMessage(IntPtr hWnd, uint messageId, IntPtr wParam, IntPtr lParam);
+
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessageTimeout(
             IntPtr windowHandle,
@@ -102,16 +107,20 @@ namespace Product.Common
             int roundingWidth, // height of ellipse
             int roundingHeight // width of ellipse
          );
+
         [DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr objectHandle);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern short GetKeyState(int keyCode);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern short GetAsyncKeyState(int keyCode);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetKeyboardState(byte[] keyStateArray);
+
         /// <summary>
         /// Sets the windows hook, do the desired event, one of hInstance or threadId must be non-null
         /// </summary>
@@ -125,6 +134,7 @@ namespace Product.Common
 
         [DllImport("user32.dll")]
         public static extern IntPtr SetWindowsHookEx(int idHook, MouseHookProc callback, IntPtr hInstance, uint threadId);
+
         /// <summary>
         /// Unhooks the windows hook.
         /// </summary>
@@ -141,6 +151,7 @@ namespace Product.Common
 
         [DllImport("user32.dll")]
         public static extern int CallNextHookEx(IntPtr idHook, int nCode, uint wParam, ref MouseInfo lParam);
+
         /// <summary>
         /// Loads the library.
         /// </summary>
@@ -151,7 +162,6 @@ namespace Product.Common
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool PostThreadMessage(int threadId, uint messageId, IntPtr wParam, IntPtr lParam);
-
 
         /// <summary>
         /// Defines the callback type for the hook
@@ -194,7 +204,7 @@ namespace Product.Common
         {
             public int Size;
             public int Flags;
-            private IntPtr _cursorHandle; 
+            private IntPtr _cursorHandle;
             public Point ScreenPosition;
 
             public IntPtr Handle { get { return _cursorHandle; } }

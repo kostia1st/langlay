@@ -8,3 +8,10 @@
 /Langlay.App/obj/Debug
 /.vs/Langlay/v14
 /UpgradeLog.htm
+/.release
+/Langlay.App/bin/Release
+/Langlay.App/obj/Release
+/Langlay.Common/obj/Release
+/Langlay.Installer/Debug
+/Langlay.SettingsUi/bin/Release
+/Langlay.SettingsUi/obj/Release

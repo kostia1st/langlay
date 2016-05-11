@@ -67,6 +67,7 @@ namespace Product.Common
         public static IList<Keys> GetKeysPressed()
         {
             var result = new List<Keys>();
+
             // Here we get the state of just the keys of our interest - the ones
             // supported by the app. These are all specified in KeyCode enum.
             var keyCodes = ((KeyCode[]) Enum

@@ -6,6 +6,7 @@ namespace Product.Common
     {
         [Display(Name = "Messaging")]
         Message = 0,
+
         [Display(Name = "Input Simulation")]
         InputSimulation = 1
     }
