@@ -13,13 +13,9 @@ namespace Product.Common
 
         public bool DoSwitchLanguage { get; set; }
         public IList<KeyCode> LanguageSwitchKeyArray { get; set; }
-        public KeyCode LanguageSwitchNonModifiers { get { return KeyUtils.ReduceKeyCodeArray(LanguageSwitchKeyArray, false); } }
-        public KeyCode LanguageSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LanguageSwitchKeyArray, true); } }
 
         public bool DoSwitchLayout { get; set; }
         public IList<KeyCode> LayoutSwitchKeyArray { get; set; }
-        public KeyCode LayoutSwitchNonModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, false); } }
-        public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
 
         public bool DoShowOverlay { get; set; }
         public bool DoShowOverlayOnMainDisplayOnly { get; set; }
@@ -91,9 +87,7 @@ namespace Product.Common
                 throw new ArgumentException("Arguments must start with '--'");
             var parts = argument.Substring(2).Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length > 1)
-            {
                 ReadArgument(parts[0], parts[1]);
-            }
         }
 
         private void ReadFromString(string str)

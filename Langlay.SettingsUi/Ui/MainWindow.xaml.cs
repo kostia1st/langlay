@@ -24,7 +24,7 @@ namespace Product.SettingsUi
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            tbrVersion.Text = string.Format("Version {0}", AppSpecific.AppVersion);
+            tbrVersion.Text = $"Version {AppSpecific.AppVersion}";
             tbrLocation.Text = PathUtils.GetAppDirectory();
             UpdateHotkeyAnalysis();
         }

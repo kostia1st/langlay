@@ -50,36 +50,40 @@ namespace Product
                 var savedKeyDown = this.SavedKeyDown;
                 if (savedKeyDown != null)
                 {
-                    if (!value)
+                    var keysToSimulate = savedKeyDown.KeyStroke.KeysPressedBefore;
+                    if (keysToSimulate.Count > 0)
                     {
-                        Trace.WriteLine("-- START Simulating full keystroke up");
-                        Trace.Indent();
-                        foreach (var key in savedKeyDown.KeyStroke.KeysPressedBefore)
+                        if (!value)
                         {
-                            KeyboardSimulator.KeyUp((VirtualKeyCode) key);
+                            Trace.WriteLine("-- START Simulating full keystroke up");
+                            Trace.Indent();
+                            foreach (var key in keysToSimulate)
+                            {
+                                KeyboardSimulator.KeyUp((VirtualKeyCode) key);
+                            }
+                            Trace.Unindent();
+                            Trace.WriteLine("-- END Simulating full keystroke up");
+
+                            // This line (or equivalent) is necessary to avoid
+                            // phantom KEY UP messages afterwards.
+                            Application.DoEvents();
                         }
-                        Trace.Unindent();
-                        Trace.WriteLine("-- END Simulating full keystroke up");
-
-                        // This line (or equivalent) is necessary to avoid
-                        // phantom KEY UP messages afterwards.
-                        Application.DoEvents();
-                    }
-                    else
-                    {
-                        // This line (or equivalent) is necessary to avoid
-                        // phantom KEY UP messages afterwards.
-                        Application.DoEvents();
-
-                        Trace.WriteLine("-- START Simulating full keystroke down");
-                        Trace.Indent();
-
-                        foreach (var key in savedKeyDown.KeyStroke.KeysPressedBefore.Reverse())
+                        else
                         {
-                            KeyboardSimulator.KeyDown((VirtualKeyCode) key);
+                            // This line (or equivalent) is necessary to avoid
+                            // phantom KEY UP messages afterwards.
+                            Application.DoEvents();
+
+                            Trace.WriteLine("-- START Simulating full keystroke down");
+                            Trace.Indent();
+
+                            foreach (var key in keysToSimulate.Reverse())
+                            {
+                                KeyboardSimulator.KeyDown((VirtualKeyCode) key);
+                            }
+                            Trace.Unindent();
+                            Trace.WriteLine("-- END Simulating full keystroke down");
                         }
-                        Trace.Unindent();
-                        Trace.WriteLine("-- END Simulating full keystroke down");
                     }
                 }
                 if (value)

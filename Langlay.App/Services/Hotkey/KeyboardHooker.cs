@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -69,38 +70,32 @@ namespace Product
                     var keyHeldBefore = KeyUtils.GetKeysPressed();
 
                     var kea = new KeyEventArgs2(key, keyHeldBefore);
-
+#if TRACE
+                    var keysString = string.Join(", ", kea.KeyStroke.Keys.Select(x => (KeyCode) x));
+                    var eventString = $"{ Win32.MessageToString(wParam) }: { keysString }";
+#endif
                     if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null)
                     {
-                        Trace.WriteLine(string.Format(
-                            "Hooked keyDOWN {0}",
-                            string.Join(", ", kea.KeyStroke.Keys)));
+                        Trace.WriteLine($"Hooked { eventString }");
                         KeyDown(this, kea);
                     }
                     else if (wParam.In(Win32.WM_KEYUP, Win32.WM_SYSKEYUP) && KeyUp != null)
                     {
-                        Trace.WriteLine(string.Format(
-                            "Hooked keyUP {0}",
-                            string.Join(", ", kea.KeyStroke.Keys)));
+                        Trace.WriteLine($"Hooked { eventString }");
                         KeyUp(this, kea);
                     }
 
                     if (kea.Handled)
-                    {
                         result = 1;
-                    }
                     else
-                    {
-                        Trace.WriteLine(string.Format(
-                            ">> Not handled {0}: {1}",
-                            Win32.MessageToString(wParam),
-                            string.Join(", ", kea.KeyStroke.Keys)));
-                    }
+                        Trace.WriteLine($">> Not handled { eventString }");
                 }
                 catch (Exception ex)
                 {
                     Trace.TraceError(ex.ToString());
-                    throw;
+#if DEBUG
+                    MessageBox.Show(ex.ToString());
+#endif
                 }
             }
             if (result == null)

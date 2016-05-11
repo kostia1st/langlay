@@ -50,7 +50,7 @@ namespace Product.Common
                 FileName = fullFilename,
                 WorkingDirectory = location,
                 UseShellExecute = runAsAdmin,
-                Arguments = forceThisInstance ? "--ForceThisInstance:true" : string.Empty,
+                Arguments = forceThisInstance ? $"--{ArgumentNames.ForceThisInstance}:true" : string.Empty,
                 Verb = runAsAdmin ? "runas" : string.Empty,
                 LoadUserProfile = true
             };
