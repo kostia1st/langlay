@@ -1,4 +1,4 @@
 configuration: Release
-build:
+build: off
   project: Langlay.Ci.sln  
   verbosity: minimal
