@@ -33,25 +33,25 @@ namespace Product
                 throw new NullReferenceException("LanguageSetterService");
         }
 
-        private IList<InputLayout> _inputLayouts;
+        private IDictionary<IntPtr, InputLayout> _inputLayouts
+            = new Dictionary<IntPtr, InputLayout>();
 
         public IList<InputLayout> GetInputLayouts()
         {
-            if (_inputLayouts == null)
-            {
-                // Surprisingly, this is quite expensive. According to ILSpy there're lots of unsafe
-                // method and registry usage each time you read the property and sub-properties.
-                _inputLayouts = InputLanguage.InstalledInputLanguages
-                  .Cast<InputLanguage>()
-                  .Select(x => new InputLayout(x))
-                  .ToList();
-            }
-            return _inputLayouts;
-        }
-
-        public void ResetCache()
-        {
-            _inputLayouts = null;
+            return InputLanguage.InstalledInputLanguages
+              .Cast<InputLanguage>()
+              .Select(x =>
+              {
+                  if (!_inputLayouts.ContainsKey(x.Handle))
+                  {
+                      // Surprisingly, this is quite expensive. According to
+                      // ILSpy there're lots of unsafe method and registry
+                      // usage each time you read the property and sub-properties.
+                      _inputLayouts[x.Handle] = new InputLayout(x);
+                  }
+                  return _inputLayouts[x.Handle];
+              })
+              .ToList();
         }
 
         private IList<InputLayout> GetLayoutsByLanguage(
@@ -80,23 +80,12 @@ namespace Product
             return layoutNames[indexOfNext];
         }
 
-        private InputLayout GetCurrentLayoutInternal()
+        public InputLayout GetCurrentLayout()
         {
             var currentLayoutHandle = Win32.GetKeyboardLayout(
                Win32.GetWindowThreadProcessId(Win32.GetForegroundWindow(), IntPtr.Zero));
             return GetInputLayouts()
                 .FirstOrDefault(x => x.Handle == currentLayoutHandle);
-        }
-
-        public InputLayout GetCurrentLayout()
-        {
-            var result = GetCurrentLayoutInternal();
-            if (result == null)
-            {
-                ResetCache();
-                result = GetCurrentLayoutInternal();
-            }
-            return result;
         }
 
         private string GetNextInputLanguageName(
@@ -157,7 +146,8 @@ namespace Product
             if (currentLayout == null)
                 throw new NullReferenceException("currentLayout must not be null");
 
-            // Here we save the layout last used within the language, so that it could be restored later.
+            // Here we save the layout last used within the language, so
+            // that it could be restored later.
             CultureToLastUsedLayout[currentLayout.LanguageName] = currentLayout.Handle;
 
             var nextLanguageName = GetNextInputLanguageName(
@@ -207,9 +197,6 @@ namespace Product
 
         public void ConductSwitch(KeyboardSwitch keyboardSwitch)
         {
-            // Make sure we re-read all the actual information
-            ResetCache();
-
             switch (keyboardSwitch)
             {
                 case KeyboardSwitch.Language:

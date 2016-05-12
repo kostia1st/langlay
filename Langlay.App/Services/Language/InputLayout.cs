@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Product
@@ -15,9 +14,6 @@ namespace Product
         public string Name { get; set; }
         public IntPtr Handle { get; set; }
 
-        private static IDictionary<IntPtr, string> _layoutNames
-            = new Dictionary<IntPtr, string>();
-
         public InputLayout(InputLanguage inputLanguage)
         {
             Handle = inputLanguage.Handle;
@@ -29,10 +25,7 @@ namespace Product
             LanguageNameThreeLetter = inputLanguage.Culture.ThreeLetterISOLanguageName;
             LanguageNameThreeLetterNative = inputLanguage.Culture.NativeName.Substring(0, 3);
 
-            // Layout names per handle are not going to change, ever
-            if (!_layoutNames.ContainsKey(Handle))
-                _layoutNames[Handle] = inputLanguage.LayoutName;
-            Name = _layoutNames[Handle];
+            Name = inputLanguage.LayoutName;
         }
     }
 }
