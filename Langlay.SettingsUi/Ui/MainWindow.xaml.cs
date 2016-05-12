@@ -52,8 +52,6 @@ namespace Product.SettingsUi
             }
             else if (keys.Count > 1)
             {
-                if (keys.Contains(KeyCode.FnKey))
-                    result.AppendLine("The Fn key will work out only if pressed last in the sequence.");
                 if (keys.Contains(KeyCode.LWin) || keys.Contains(KeyCode.RWin))
                     result.AppendLine("The use of the Win key in a combination could probably lead to issues"
                         + " if Win is applied not the last in the sequence.");

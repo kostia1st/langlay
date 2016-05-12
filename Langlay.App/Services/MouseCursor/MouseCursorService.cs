@@ -9,18 +9,23 @@ namespace Product
     {
         private MouseHooker Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
+        private ILanguageService LanguageService { get; set; }
         private ITooltipService TooltipService { get; set; }
 
         private bool IsLastDownHandled;
 
         public MouseCursorService(
-            IConfigService configService, ITooltipService tooltipService)
+            IConfigService configService, ILanguageService languageService,
+            ITooltipService tooltipService)
         {
             if (configService == null)
                 throw new ArgumentNullException("configService");
+            if (languageService == null)
+                throw new ArgumentNullException("languageService");
             if (tooltipService == null)
                 throw new ArgumentNullException("tooltipService");
             ConfigService = configService;
+            LanguageService = languageService;
             TooltipService = tooltipService;
         }
 
@@ -65,7 +70,7 @@ namespace Product
 
         private void ShowTooltip(MouseEventArgs2 e)
         {
-            var currentLayout = InputLayoutHelper.GetCurrentLayout();
+            var currentLayout = LanguageService.GetCurrentLayout();
             var text = GetLanguageName(currentLayout);
             TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
         }

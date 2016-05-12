@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMessageFilter.cs" />
-    <Compile Include="InputLayout.cs" />
+    <Compile Include="Services\Language\InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
     <Compile Include="Services\Hotkey\KeyEventArgs2.cs" />
     <Compile Include="Services\Hotkey\KeyEventHandler2.cs" />
@@ -89,7 +89,6 @@
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Hotkey\KeyboardHooker.cs" />
-    <Compile Include="InputLayoutHelper.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\Hotkey\HookedHotkeyService.cs" />
     <Compile Include="Services\IConfigService.cs" />

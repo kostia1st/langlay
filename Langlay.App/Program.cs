@@ -9,8 +9,8 @@ namespace Product
     {
         private static IConfigService InitializeConfig()
         {
-            // We read the global config first, then the user's one (higher priority)
-            // and finally the command line (the highest priority).
+            // We read the global config first, then the user's one (higher
+            // priority) and finally the command line (the highest priority).
             var configService = new ConfigService();
             configService.ReadFromConfigFile(false);
             configService.ReadFromConfigFile(true);
@@ -26,8 +26,8 @@ namespace Product
             {
                 IsAppInitialized = true;
 
-                // We must let Windows know that our app is DPI aware,
-                // so the sizes and coordinates don't get scaled behind the scene
+                // We must let Windows know that our app is DPI aware, so
+                // the sizes and coordinates don't get scaled behind the scene
                 Win32.SetProcessDPIAware();
 
                 // Make the app react properly to external events
@@ -41,8 +41,8 @@ namespace Product
 
         private static void RunTheConfig(IConfigService configService)
         {
-            // Here we make sure that registry contains the proper value
-            // in the Startup section
+            // Here we make sure that registry contains the proper value in
+            // the Startup section
             WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
 
             // Here we check if we need to show the settings up immediately
@@ -54,12 +54,13 @@ namespace Product
             var languageService = new LanguageService(configService, overlayService);
             var hotkeyService = new HookedHotkeyService(configService, languageService);
             var tooltipService = new TooltipService(configService);
-            var mouseCursorService = new MouseCursorService(configService, tooltipService);
+            var mouseCursorService = new MouseCursorService(
+                configService, languageService, tooltipService);
             var trayService = new TrayService(configService);
 
             ILanguageSetterService languageSetterService;
             if (configService.SwitchMethod == SwitchMethod.InputSimulation)
-                languageSetterService = new SimulatorLanguageSetterService(hotkeyService);
+                languageSetterService = new SimulatorLanguageSetterService(hotkeyService, languageService);
             else
                 languageSetterService = new MessageLanguageSetterService();
 

@@ -82,24 +82,28 @@ namespace Product
             timerTooltip.Start();
         }
 
+        private Graphics _graphicsForMeasuring;
+
         private void UpdateRegionAndPosition()
         {
-            using (var g = this.CreateGraphics())
-            {
-                var sizeOfText = g.MeasureString(DisplayString, TextFont);
-                Size = new Size(
-                    Math.Max((int) sizeOfText.Width + 8, MinWidth),
-                    (int) sizeOfText.Height + 8);
-            }
+            if (_graphicsForMeasuring == null)
+                _graphicsForMeasuring = CreateGraphics();
+            var sizeOfText = _graphicsForMeasuring.MeasureString(DisplayString, TextFont);
+            var size = new Size(
+                Math.Max((int) sizeOfText.Width + 8, MinWidth),
+                (int) sizeOfText.Height + 8);
+
             var screen = Screen.FromPoint(PivotPosition);
-            var proposedLeft = PivotPosition.X + 20;
-            var proposedTop = PivotPosition.Y + 20;
-            if (proposedLeft + Size.Width > screen.Bounds.Right)
-                proposedLeft = PivotPosition.X - Size.Width;
-            if (proposedTop + Size.Height > screen.Bounds.Bottom)
-                proposedTop = PivotPosition.Y - Size.Height;
-            Left = proposedLeft;
-            Top = proposedTop;
+
+            var position = new Point();
+            position.X = PivotPosition.X + 20;
+            if (position.X + Size.Width > screen.Bounds.Right)
+                position.X = PivotPosition.X - size.Width;
+            position.Y = PivotPosition.Y + 20;
+            if (position.Y + Size.Height > screen.Bounds.Bottom)
+                position.Y = PivotPosition.Y - size.Height;
+
+            Bounds = new Rectangle(position, size);
         }
 
         public bool GetIsVisible()

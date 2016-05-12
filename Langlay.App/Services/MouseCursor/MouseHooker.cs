@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -26,8 +25,8 @@ namespace Product
         public MouseHooker(
             bool doHookImmediately = true, Func<Func<int?>, int?> hookProcedureWrapper = null)
         {
-            // This is a c# hack in order to keep a firm reference to a dynamically created delegate
-            // so that it won't be collected by GC.
+            // This is a c# hack in order to keep a firm reference to a
+            // dynamically created delegate so that it won't be collected by GC.
             HookProcedureHolder = HookProcedure;
             HookProcedureWrapper = hookProcedureWrapper;
             if (doHookImmediately)
@@ -57,27 +56,26 @@ namespace Product
             int? result = null;
             if (code >= 0)
             {
-                var mouseInfo = (Win32.MouseInfo) Marshal.PtrToStructure(lParam, typeof(Win32.MouseInfo));
                 MouseEventArgs2 args = null;
                 if (ButtonDown != null)
                 {
                     if (wParam == Win32.WM_LBUTTONDOWN)
-                        args = new MouseEventArgs2(MouseButtons.Left, mouseInfo.Point);
+                        args = new MouseEventArgs2(MouseButtons.Left, lParam);
                     if (wParam == Win32.WM_RBUTTONDOWN)
-                        args = new MouseEventArgs2(MouseButtons.Right, mouseInfo.Point);
+                        args = new MouseEventArgs2(MouseButtons.Right, lParam);
                     if (wParam == Win32.WM_MBUTTONDOWN)
-                        args = new MouseEventArgs2(MouseButtons.Middle, mouseInfo.Point);
+                        args = new MouseEventArgs2(MouseButtons.Middle, lParam);
                     if (args != null)
                         ButtonDown(this, args);
                 }
                 if (args == null && ButtonUp != null)
                 {
                     if (wParam == Win32.WM_LBUTTONUP)
-                        args = new MouseEventArgs2(MouseButtons.Left, mouseInfo.Point);
+                        args = new MouseEventArgs2(MouseButtons.Left, lParam);
                     if (wParam == Win32.WM_RBUTTONUP)
-                        args = new MouseEventArgs2(MouseButtons.Right, mouseInfo.Point);
+                        args = new MouseEventArgs2(MouseButtons.Right, lParam);
                     if (wParam == Win32.WM_MBUTTONUP)
-                        args = new MouseEventArgs2(MouseButtons.Middle, mouseInfo.Point);
+                        args = new MouseEventArgs2(MouseButtons.Middle, lParam);
 
                     if (args != null)
                         ButtonUp(this, args);
@@ -87,7 +85,7 @@ namespace Product
                 {
                     if (wParam == Win32.WM_MOUSEMOVE)
                     {
-                        args = new MouseEventArgs2(MouseButtons.None, mouseInfo.Point);
+                        args = new MouseEventArgs2(MouseButtons.None, lParam);
                         MouseMove(this, args);
                     }
                 }
@@ -104,7 +102,9 @@ namespace Product
         /// <summary>
         /// The callback for the keyboard hook
         /// </summary>
-        /// <param name="code">The hook code, if it isn't >= 0, the function shouldn't do anyting</param>
+        /// <param name="code">
+        /// The hook code, if it isn't &gt;= 0, the function shouldn't do anyting
+        /// </param>
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The mousehook event information</param>
         /// <returns></returns>

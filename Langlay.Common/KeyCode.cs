@@ -6,9 +6,7 @@ namespace Product.Common
     [Flags]
     public enum KeyCode : byte
     {
-        //
-        // Summary:
-        //     No key pressed.
+        // Summary: No key pressed.
         None = 0,
 
         [Display(Name = "Backspace")]
@@ -236,89 +234,53 @@ namespace Product.Common
 
         LaunchApplication2 = 183,
 
-        //
-        // Summary:
-        //     The OEM Semicolon key on a US standard keyboard (Windows 2000 or later).
+        // Summary: The OEM Semicolon key (Windows 2000 or later).
         [Display(Name = "Semicolon")]
         OemSemicolon = 186,
 
-        //
-        // Summary:
-        //     The OEM 1 key.
+        // Summary: The OEM 1 key.
         Oem1 = 186,
 
-        //
-        // Summary:
-        //     The OEM plus key on any country/region keyboard (Windows 2000 or later).
+        // Summary: The OEM plus key
         Oemplus = 187,
 
-        //
-        // Summary:
-        //     The OEM comma key on any country/region keyboard (Windows 2000 or later).
+        // Summary: The OEM comma key
         Oemcomma = 188,
 
-        //
-        // Summary:
-        //     The OEM minus key on any country/region keyboard (Windows 2000 or later).
+        // Summary: The OEM minus key
         OemMinus = 189,
 
-        //
-        // Summary:
-        //     The OEM period key on any country/region keyboard (Windows 2000 or later).
+        // Summary: The OEM period key
         OemPeriod = 190,
 
-        //
-        // Summary:
-        //     The OEM question mark key on a US standard keyboard (Windows 2000 or later).
+        // Summary: The OEM question mark key
         OemQuestion = 191,
 
-        //
-        // Summary:
-        //     The OEM tilde key on a US standard keyboard (Windows 2000 or later).
+        // Summary: The OEM tilde key
         Oemtilde = 192,
 
-        //
-        // Summary:
-        //     The OEM open bracket key on a US standard keyboard (Windows 2000 or later).
+        // Summary: The OEM open bracket key
         OemOpenBrackets = 219,
 
-        //
-        // Summary:
-        //     The OEM pipe key on a US standard keyboard (Windows 2000 or later).
+        // Summary: The OEM pipe key
         OemPipe = 220,
 
-        //
-        // Summary:
-        //     The OEM close bracket key on a US standard keyboard (Windows 2000 or later).
+        // Summary: The OEM close bracket key (Windows 2000 or later).
         OemCloseBrackets = 221,
 
-        //
-        // Summary:
-        //     The OEM singled/double quote key on a US standard keyboard (Windows 2000 or later).
+        // Summary: The OEM singled/double quote key
         OemQuotes = 222,
 
-        //
-        // Summary:
-        //     The OEM 8 key.
+        // Summary: The OEM 8 key.
         Oem8 = 223,
 
-        //
-        // Summary:
-        //     The OEM angle bracket or backslash key on the RT 102 key keyboard (Windows 2000
-        //     or later).
+        // Summary: The OEM angle bracket or backslash key
         OemBackslash = 226,
 
-        //
-        // Summary:
-        //     The PLAY key.
+        // Summary: The PLAY key.
         Play = 250,
 
-        //
-        // Summary:
-        //     The ZOOM key.
+        // Summary: The ZOOM key.
         Zoom = 251,
-
-        [Display(Name = "Fn key")]
-        FnKey = 255
     }
 }
