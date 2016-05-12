@@ -64,14 +64,14 @@ namespace Product
                             Trace.Unindent();
                             Trace.WriteLine("-- END Simulating full keystroke up");
 
-                            // This line (or equivalent) is necessary to avoid phantom KEY UP
-                            // messages afterwards.
+                            // This line (or equivalent) is necessary to
+                            // avoid phantom KEY UP messages afterwards.
                             Application.DoEvents();
                         }
                         else
                         {
-                            // This line (or equivalent) is necessary to avoid phantom KEY UP
-                            // messages afterwards.
+                            // This line (or equivalent) is necessary to
+                            // avoid phantom KEY UP messages afterwards.
                             Application.DoEvents();
 
                             Trace.WriteLine("-- START Simulating full keystroke down");
@@ -105,6 +105,7 @@ namespace Product
                 Hooker = new KeyboardHooker(false, HookProcedureWrapper);
                 Hooker.KeyDown = Hooker_KeyDown;
                 Hooker.KeyUp = Hooker_KeyUp;
+                Hooker.IsEnabledHandler = GetIsEnabled;
                 Hooker.SetHook();
             }
         }
@@ -144,8 +145,8 @@ namespace Product
 
         private void SetKeyDownEffective()
         {
-            // Here, we place a timeout on when the next KeyDown could be applied without resetting
-            // it by KeyUp
+            // Here, we place a timeout on when the next KeyDown could be
+            // applied without resetting it by KeyUp
             InactiveTill = DateTime.Now.AddMilliseconds(InactivePeriod);
         }
 
@@ -220,24 +221,29 @@ namespace Product
 
         private void Hooker_KeyUp(object sender, KeyEventArgs2 e)
         {
-            // The handling could be disabled only by intention - intention to pass everything thru.
+            // The handling could be disabled only by intention - intention
+            // to pass everything thru.
             if (IsEnabled)
             {
-                // We're supposed to handle the key-up as well as the key-down otherwise the target
-                // app will face a strange situation, which is not guaranteed to work properly.
+                // We're supposed to handle the key-up as well as the
+                // key-down otherwise the target app will face a strange
+                // situation, which is not guaranteed to work properly.
                 var switchToApply = GetSwitchToApply(e);
 
                 if (switchToApply != null)
                 {
-                    // Since the sequence is fully owned by the app, we should not pass it thru.
+                    // Since the sequence is fully owned by the app, we
+                    // should not pass it thru.
                     e.Handled = true;
 
                     var isKeyDownSaved = SavedKeyDown != null;
                     ResetKeyDown();
 
-                    // This case for all the situations when the needed sequence was combined with
-                    // something else when was down, but is being UP alone.
-                    // TODO: review if we could to ignore the whole thing in this case, or still switch
+                    // This case for all the situations when the needed
+                    // sequence was combined with something else when was
+                    // down, but is being UP alone.
+                    // TODO: review if we could to ignore the whole thing in
+                    //       this case, or still switch
                     if (!isKeyDownSaved)
                     {
                         IsEnabled = false;
@@ -254,7 +260,8 @@ namespace Product
                             {
                                 // This is a work around for this single case:
                                 // - the hotkey is Caps Lock
-                                // - the Shift is set up to turn Caps off See issue #65 on GitHub for details.
+                                // - the Shift is set up to turn Caps off
+                                //   See issue #65 on GitHub for details.
                                 Trace.WriteLine("-- START #65 case");
                                 Trace.Indent();
                                 KeyboardSimulator.KeyPress(VirtualKeyCode.LSHIFT);

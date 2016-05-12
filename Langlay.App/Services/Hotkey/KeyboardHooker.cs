@@ -16,6 +16,7 @@ namespace Product
 
         #region Events
 
+        public Func<bool> IsEnabledHandler;
         public KeyEventHandler2 KeyDown;
         public KeyEventHandler2 KeyUp;
         public Func<Func<int?>, int?> HookProcedureWrapper { get; set; }
@@ -23,16 +24,16 @@ namespace Product
         #endregion Events
 
         /// <summary>
-        /// Strong reference to a native callback method.
-        /// Thanks to it, we connect its GC lifetime to the lifetime of the hooker itself.
+        /// Strong reference to a native callback method. Thanks to it, we
+        /// connect its GC lifetime to the lifetime of the hooker itself.
         /// </summary>
         private Win32.KeyboardHookProc HookProcedureHolder;
 
         public KeyboardHooker(
             bool doHookImmediately = true, Func<Func<int?>, int?> hookProcedureWrapper = null)
         {
-            // This is a c# hack in order to keep a firm reference to a dynamically created delegate
-            // so that it won't be collected by GC.
+            // This is a c# hack in order to keep a firm reference to a
+            // dynamically created delegate so that it won't be collected by GC.
             HookProcedureHolder = HookProcedure;
             HookProcedureWrapper = hookProcedureWrapper;
             if (doHookImmediately)
@@ -60,7 +61,8 @@ namespace Product
         private int? HookInternals(int code, uint wParam, IntPtr lParam)
         {
             var result = (int?) null;
-            if (code >= 0)
+            if (code >= 0
+                && (IsEnabledHandler == null || IsEnabledHandler()))
             {
                 var keyInfo = (Win32.KeyboardInfo) Marshal.PtrToStructure(lParam, typeof(Win32.KeyboardInfo));
                 var key = (Keys) keyInfo.VirtualKeyCode;
@@ -96,7 +98,9 @@ namespace Product
         /// <summary>
         /// The callback for the keyboard hook
         /// </summary>
-        /// <param name="code">The hook code, if it isn't >= 0, the function shouldn't do anyting</param>
+        /// <param name="code">
+        /// The hook code, if it isn't &gt;= 0, the function shouldn't do anyting
+        /// </param>
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
         /// <returns></returns>
