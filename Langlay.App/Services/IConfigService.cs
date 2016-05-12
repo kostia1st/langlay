@@ -20,6 +20,8 @@ namespace Product
         bool DoShowSettingsOnce { get; }
         bool DoShowCursorTooltip { get; }
         bool DoSwitchLayout { get; }
+        bool DoForceThisInstance { get; }
+        SwitchMethod SwitchMethod { get; }
 
         bool GetLanguageSwitchConfigured();
 
