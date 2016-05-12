@@ -1,4 +1,10 @@
+version: 1.0.{build}
+branches:
+  only:
+  - dev
 configuration: Release
-build: off
+build:
   project: Langlay.Ci.sln  
   verbosity: minimal
+skip_commits:
+  message: /^((?!build).)*$/
