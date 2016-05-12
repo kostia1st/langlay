@@ -29,6 +29,7 @@
                           IsChecked="{Binding RunAtWindowsStartup}" />
                 <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
+
                 <CheckBox x:Name="chbShowOverlay"
                           Content="Show overlay" Margin="0 10 0 0"
                           IsChecked="{Binding ShowOverlay}" />
@@ -97,6 +98,14 @@
 
                 <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
+
+                <CheckBox x:Name="chbUseNativeLabels"
+                          Content="Show language name in native" Margin="0 10 0 0"
+                          IsChecked="{Binding ShowLanguageNameInNative}" />
+
+                <Rectangle Style="{StaticResource separator}"
+                           Margin="0 10 0 0" />
+
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
                     <TextBlock Text="Switch method:" Width="150"
                                VerticalAlignment="Top" Margin="0 2 2 0" />

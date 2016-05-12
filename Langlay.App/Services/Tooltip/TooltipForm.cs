@@ -11,7 +11,7 @@ namespace Product
     {
         private const int MillisecondsToKeepVisible = 500;
         private Stopwatch PeriodElapsed { get; set; }
-        private string DisplayString { get; set; }
+        public string DisplayString { get; set; }
         private const int OpacityWhenVisible = 80;
         private Font TextFont { get; set; }
         private Brush TextBrush { get; set; }
@@ -40,7 +40,7 @@ namespace Product
             }
         }
 
-        public void Push(string str, Point position, bool resetTimer)
+        public void Push(string displayString, Point position, bool resetTimer)
         {
             PivotPosition = position;
             if (resetTimer)
@@ -51,16 +51,16 @@ namespace Product
                 Application.DoEvents();
                 Visible = false;
 
-                DisplayString = str;
+                DisplayString = displayString;
                 ResetAndRun();
             }
             else
             {
                 PivotPosition = position;
                 UpdateRegionAndPosition();
-                if (DisplayString != str)
+                if (!string.Equals(DisplayString, displayString))
                 {
-                    DisplayString = str;
+                    DisplayString = displayString;
                     Invalidate();
                 }
                 Application.DoEvents();
@@ -104,7 +104,8 @@ namespace Product
 
         public bool GetIsVisible()
         {
-            return PeriodElapsed.ElapsedMilliseconds < MillisecondsToKeepVisible;
+            return PeriodElapsed.IsRunning
+                && PeriodElapsed.ElapsedMilliseconds < MillisecondsToKeepVisible;
         }
 
         private double GetOpacity(long elapsed)

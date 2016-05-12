@@ -72,6 +72,12 @@ namespace Product.SettingsUi
             set { SetPropertyValue(x => x.ShowOverlayRoundCorners, x => x.DoShowOverlayRoundCorners, value); }
         }
 
+        public bool ShowLanguageNameInNative
+        {
+            get { return ConfigService.DoShowLanguageNameInNative; }
+            set { SetPropertyValue(x => x.ShowLanguageNameInNative, x => x.DoShowLanguageNameInNative, value); }
+        }
+
         public bool ShowCursorTooltip
         {
             get { return ConfigService.DoShowCursorTooltip; }

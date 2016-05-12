@@ -56,10 +56,17 @@ namespace Product
 
         #endregion Start/Stop
 
+        private string GetLanguageName(InputLayout layout)
+        {
+            return ConfigService.DoShowLanguageNameInNative
+                ? layout.LanguageNameThreeLetterNative.ToLower()
+                : layout.LanguageNameThreeLetter.ToLower();
+        }
+
         private void ShowTooltip(MouseEventArgs2 e)
         {
             var currentLayout = InputLayoutHelper.GetCurrentLayout();
-            var text = currentLayout.LanguageNameTwoLetter;
+            var text = GetLanguageName(currentLayout);
             TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
         }
 
@@ -67,9 +74,7 @@ namespace Product
         {
             if (TooltipService.GetIsVisible())
             {
-                var currentLayout = InputLayoutHelper.GetCurrentLayout();
-                var text = currentLayout.LanguageNameTwoLetter;
-                TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), false);
+                TooltipService.Push(TooltipService.GetDisplayString(), new System.Drawing.Point(e.Point.X, e.Point.Y), false);
             }
         }
 

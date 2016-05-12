@@ -11,6 +11,7 @@ namespace Product
         bool DoShowOverlay { get; }
         bool DoShowOverlayOnMainDisplayOnly { get; }
         bool DoShowOverlayRoundCorners { get; }
+        bool DoShowLanguageNameInNative { get; }
         uint OverlayDuration { get; }
         uint OverlayOpacity { get; }
         uint OverlayScale { get; }

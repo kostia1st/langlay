@@ -20,6 +20,7 @@ namespace Product.Common
         public bool DoShowOverlay { get; set; }
         public bool DoShowOverlayOnMainDisplayOnly { get; set; }
         public bool DoShowOverlayRoundCorners { get; set; }
+        public bool DoShowLanguageNameInNative { get; set; }
         public uint OverlayDuration { get; set; }
         public uint OverlayOpacity { get; set; }
         public uint OverlayScale { get; set; }
@@ -63,6 +64,7 @@ namespace Product.Common
                 { ArgumentNames.ShowOverlay, x => DoShowOverlay = Utils.ParseBool(x, DoShowOverlay) },
                 { ArgumentNames.ShowOverlayOnMainDisplayOnly, x => DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(x, DoShowOverlayOnMainDisplayOnly) },
                 { ArgumentNames.ShowOverlayRoundCorners, x => DoShowOverlayRoundCorners = Utils.ParseBool(x, DoShowOverlayRoundCorners) },
+                { ArgumentNames.ShowLanguageNameInNative, x => DoShowLanguageNameInNative = Utils.ParseBool(x, DoShowLanguageNameInNative) },
                 { ArgumentNames.OverlayDuration, x => OverlayDuration = Utils.ParseUInt(x, OverlayDuration) },
                 { ArgumentNames.OverlayOpacity, x => OverlayOpacity = (uint) Utils.ParseUInt(x, OverlayOpacity, 1, 100) },
                 { ArgumentNames.OverlayScale, x => OverlayScale = (uint) Utils.ParseUInt(x, OverlayScale, 50, 500) },

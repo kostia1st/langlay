@@ -42,10 +42,15 @@ namespace Product
             }
         }
 
-        public void Push(string str, Point position, bool resetTimer)
+        public string GetDisplayString()
+        {
+            return TooltipForm.DisplayString;
+        }
+
+        public void Push(string displayString, Point position, bool resetTimer)
         {
             if (IsStarted)
-                TooltipForm.Push(str, position, resetTimer);
+                TooltipForm.Push(displayString, position, resetTimer);
         }
 
         public bool GetIsVisible()

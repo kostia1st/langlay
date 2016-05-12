@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Product.Common;
 
 namespace Product
 {
@@ -31,20 +30,28 @@ namespace Product
                 throw new NullReferenceException("LanguageSetterService");
         }
 
+        private string GetLanguageName(InputLayout layout)
+        {
+            return ConfigService.DoShowLanguageNameInNative
+                ? layout.LanguageNameThreeLetterNative.ToUpper()
+                : layout.LanguageNameThreeLetter.ToUpper();
+        }
+
         protected bool SwitchLanguage(bool restoreSavedLayout)
         {
             try
             {
                 CheckServicesAreSet();
 
-                var currentLanguage = InputLayoutHelper.GetCurrentLayout();
-                if (currentLanguage != null)
+                var currentLayout = InputLayoutHelper.GetCurrentLayout();
+                if (currentLayout != null)
                 {
-                    // Here we save the layout last used within the language, so that it could be restored later.
-                    CultureToLastUsedLayout[currentLanguage.LanguageName] = currentLanguage.Handle;
+                    // Here we save the layout last used within the language, so that it could be
+                    // restored later.
+                    CultureToLastUsedLayout[currentLayout.LanguageName] = currentLayout.Handle;
 
                     var nextLanguageName = InputLayoutHelper.GetNextInputLanguageName(
-                        currentLanguage.LanguageName);
+                        currentLayout.LanguageName);
                     IntPtr layoutToSet;
                     if (restoreSavedLayout && CultureToLastUsedLayout.ContainsKey(nextLanguageName))
                         layoutToSet = CultureToLastUsedLayout[nextLanguageName];
@@ -52,12 +59,12 @@ namespace Product
                         layoutToSet = InputLayoutHelper.GetDefaultLayoutForLanguage(nextLanguageName);
                     LanguageSetterService.SetCurrentLayout(layoutToSet);
                     Thread.Sleep(10);
-                    currentLanguage = InputLayoutHelper.GetCurrentLayout();
-                    if (currentLanguage != null)
+                    currentLayout = InputLayoutHelper.GetCurrentLayout();
+                    if (currentLayout != null)
                     {
                         OverlayService.PushMessage(
-                            currentLanguage.LanguageNameTwoLetter.CapitalizeFirst(),
-                            currentLanguage.Name);
+                            GetLanguageName(currentLayout),
+                            currentLayout.Name);
                         return true;
                     }
                 }
@@ -91,7 +98,7 @@ namespace Product
                         if (currentLayout != null)
                         {
                             OverlayService.PushMessage(
-                                currentLayout.LanguageNameTwoLetter.CapitalizeFirst(),
+                                GetLanguageName(currentLayout),
                                 currentLayout.Name);
                             return true;
                         }

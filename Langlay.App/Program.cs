@@ -18,23 +18,37 @@ namespace Product
             return configService;
         }
 
-        private static void InitializeApplication()
-        {
-            // We must let Windows know that our app is DPI aware,
-            // so the sizes and coordinates don't get scaled behind the scene
-            Win32.SetProcessDPIAware();
+        private static bool IsAppInitialized { get; set; }
 
-            // Make the app react properly to external events
-            Application.AddMessageFilter(new AppMessageFilter
+        private static void InitializeApp()
+        {
+            if (!IsAppInitialized)
             {
-                OnClose = delegate { Application.Exit(); },
-                OnRestart = delegate { Application.Restart(); }
-            });
+                IsAppInitialized = true;
+
+                // We must let Windows know that our app is DPI aware,
+                // so the sizes and coordinates don't get scaled behind the scene
+                Win32.SetProcessDPIAware();
+
+                // Make the app react properly to external events
+                Application.AddMessageFilter(new AppMessageFilter
+                {
+                    OnClose = delegate { Application.Exit(); },
+                    OnRestart = delegate { Application.Restart(); }
+                });
+            }
         }
 
         private static void RunTheConfig(IConfigService configService)
         {
-            InitializeApplication();
+            // Here we make sure that registry contains the proper value
+            // in the Startup section
+            WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
+
+            // Here we check if we need to show the settings up immediately
+            // (it's likely the first app run)
+            if (configService.DoShowSettingsOnce)
+                AppUtils.ShowSettings();
 
             var overlayService = new OverlayService(configService);
             var languageService = new LanguageService(configService, overlayService);
@@ -59,15 +73,6 @@ namespace Product
 
             try
             {
-                // Here we make sure that registry contains the proper value
-                // in the Startup section
-                WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
-
-                // Here we check if we need to show the settings up immediately
-                // (it's likely the first app run)
-                if (configService.DoShowSettingsOnce)
-                    AppUtils.ShowSettings();
-
                 Application.Run();
             }
             finally
@@ -92,6 +97,7 @@ namespace Product
                     delegate { ProcessUtils.StopMainApp(); });
                 uniquenessService.Run(delegate
                 {
+                    InitializeApp();
                     RunTheConfig(configService);
                 });
             }
