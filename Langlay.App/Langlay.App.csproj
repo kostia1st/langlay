@@ -118,14 +118,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Services\Overlay\OverlayForm.resx">
-      <DependentUpon>OverlayForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Services\Tooltip\TooltipForm.resx">
-      <DependentUpon>TooltipForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
