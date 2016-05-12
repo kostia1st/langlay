@@ -4,24 +4,22 @@ using Product.Common;
 
 namespace Product
 {
-    public class AppMessageFilter: IMessageFilter
+    public class AppMessageFilter : IMessageFilter
     {
         public Action OnClose;
         public Action OnRestart;
+
         public bool PreFilterMessage(ref Message m)
         {
             var result = false;
-            if (m.Msg == Win32.WM_CLOSE
-                || m.Msg == Win32.WM_DESTROY
-                || m.Msg == Win32.WM_QUIT)
+            if (m.Msg.In(Win32.WM_CLOSE, Win32.WM_DESTROY, Win32.WM_QUIT))
             {
-                if (OnClose != null)
-                    OnClose();
+                OnClose?.Invoke();
+                result = true;
             }
             if (m.Msg == Win32.WM_USER_RESTART)
             {
-                if (OnRestart != null)
-                    OnRestart();
+                OnRestart?.Invoke();
                 result = true;
             }
             return result;

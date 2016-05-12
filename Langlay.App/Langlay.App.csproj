@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMessageFilter.cs" />
-    <Compile Include="InputLayout.cs" />
+    <Compile Include="Services\Language\InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
     <Compile Include="Services\Hotkey\KeyEventArgs2.cs" />
     <Compile Include="Services\Hotkey\KeyEventHandler2.cs" />
@@ -89,7 +89,6 @@
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Hotkey\KeyboardHooker.cs" />
-    <Compile Include="InputLayoutHelper.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\Hotkey\HookedHotkeyService.cs" />
     <Compile Include="Services\IConfigService.cs" />
@@ -116,14 +115,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Services\Overlay\OverlayForm.resx">
-      <DependentUpon>OverlayForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Services\Tooltip\TooltipForm.resx">
-      <DependentUpon>TooltipForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

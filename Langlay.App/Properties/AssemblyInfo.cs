@@ -10,9 +10,7 @@ using Product.Common;
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
 [assembly: ComVisible(false)]
 [assembly: Guid("764b8166-cdce-4c65-bfdd-ddbbd4789870")]
-
 [assembly: AssemblyVersion(AppSpecific.AppVersion + ".*")]
 [assembly: AssemblyFileVersion(AppSpecific.AppVersion + ".0.0")]

@@ -66,7 +66,6 @@ namespace Product
             Visible = true;
             OnTimer();
             timerOverlay.Start();
-
         }
 
         private int ToPixels(float relativeValue)
@@ -88,37 +87,42 @@ namespace Product
             LayoutFont = new Font(Font.FontFamily, ToPixels(24), GraphicsUnit.Pixel);
         }
 
+        private Graphics _graphicsForMeasuring;
+
         private void UpdateRegionAndPosition()
         {
             if (RenderingCoefficient == 0)
                 InitializeRenderingCoefficient();
 
-            using (var g = this.CreateGraphics())
-            {
-                var sizeLanguage = g.MeasureString(LanguageName, LanguageFont);
-                var sizeLayout = g.MeasureString(LayoutName, LayoutFont);
-                this.Size = new Size(
-                    Math.Max((int) Math.Max(sizeLanguage.Width, sizeLayout.Width) + ToPixels(40), MinWidth),
-                    (int) sizeLanguage.Height + (int) sizeLayout.Height + ToPixels(20));
-            }
+            if (_graphicsForMeasuring == null)
+                _graphicsForMeasuring = CreateGraphics();
 
+            var sizeLanguage = _graphicsForMeasuring.MeasureString(LanguageName, LanguageFont);
+            var sizeLayout = _graphicsForMeasuring.MeasureString(LayoutName, LayoutFont);
+            var size = new Size(
+                Math.Max((int) Math.Max(sizeLanguage.Width, sizeLayout.Width) + ToPixels(40), MinWidth),
+                (int) sizeLanguage.Height + (int) sizeLayout.Height + ToPixels(20));
+
+            var position = new Point();
             var screenBounds = Screen.Bounds;
             switch (DisplayLocation)
             {
                 case OverlayLocation.TopLeft:
                 case OverlayLocation.MiddleLeft:
                 case OverlayLocation.BottomLeft:
-                    Left = screenBounds.Left + ScreenMargin;
+                    position.X = screenBounds.Left + ScreenMargin;
                     break;
+
                 case OverlayLocation.TopCenter:
                 case OverlayLocation.MiddleCenter:
                 case OverlayLocation.BottomCenter:
-                    Left = screenBounds.Left + ((screenBounds.Width - Width) / 2);
+                    position.X = screenBounds.Left + ((screenBounds.Width - size.Width) / 2);
                     break;
+
                 case OverlayLocation.TopRight:
                 case OverlayLocation.MiddleRight:
                 case OverlayLocation.BottomRight:
-                    Left = screenBounds.Left + screenBounds.Width - Width - ScreenMargin;
+                    position.X = screenBounds.Left + screenBounds.Width - size.Width - ScreenMargin;
                     break;
             }
 
@@ -127,20 +131,23 @@ namespace Product
                 case OverlayLocation.TopLeft:
                 case OverlayLocation.TopCenter:
                 case OverlayLocation.TopRight:
-                    Top = screenBounds.Top + ScreenMargin;
+                    position.Y = screenBounds.Top + ScreenMargin;
                     break;
+
                 case OverlayLocation.MiddleLeft:
                 case OverlayLocation.MiddleCenter:
                 case OverlayLocation.MiddleRight:
-                    Top = screenBounds.Top + (screenBounds.Height - Height) / 2;
+                    position.Y = screenBounds.Top + (screenBounds.Height - size.Height) / 2;
                     break;
+
                 case OverlayLocation.BottomLeft:
                 case OverlayLocation.BottomCenter:
                 case OverlayLocation.BottomRight:
-                    Top = screenBounds.Top + screenBounds.Height - Height - ScreenMargin;
+                    position.Y = screenBounds.Top + screenBounds.Height - size.Height - ScreenMargin;
                     break;
             }
 
+            this.Bounds = new Rectangle(position, size);
             if (RoundCorners)
                 SetRoundedRegion();
         }

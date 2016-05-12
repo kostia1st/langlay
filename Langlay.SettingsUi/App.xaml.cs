@@ -21,7 +21,7 @@ namespace Product.SettingsUi
                 //    .OfType<AssemblyProductAttribute>()
                 //    .FirstOrDefault().GetValueOrDefault(x => x.Product);
                 var uniquenessService = new UniquenessService(System.Windows.Forms.Application.ProductName);
-                uniquenessService.RunOrIgnore(delegate
+                uniquenessService.Run(delegate
                 {
                     ConfigService = new ConfigService();
                     ConfigService.ReadFromConfigFile(false);

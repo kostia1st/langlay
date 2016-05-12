@@ -8,6 +8,7 @@ namespace Product.SettingsUi
     public class KeyCodeViewModel : INotifyPropertyChanged
     {
         private KeyCode _keyCode;
+
         public KeyCode KeyCode
         {
             get { return _keyCode; }
@@ -33,6 +34,5 @@ namespace Product.SettingsUi
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
     }
 }

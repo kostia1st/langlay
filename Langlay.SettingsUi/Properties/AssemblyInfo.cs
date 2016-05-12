@@ -11,10 +11,7 @@ using Product.Common;
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
 [assembly: ComVisible(false)]
-
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
-
 [assembly: AssemblyVersion(AppSpecific.AppVersion + ".*")]
 [assembly: AssemblyFileVersion(AppSpecific.AppVersion + ".0.0")]

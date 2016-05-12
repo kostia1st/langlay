@@ -7,6 +7,7 @@ namespace Product
     {
         public KeyStroke KeyStroke { get; set; }
         public bool Handled { get; set; }
+
         public KeyEventArgs2(Keys keyTriggered, IList<Keys> keysPressedBefore)
         {
             KeyStroke = new KeyStroke(keyTriggered, keysPressedBefore);

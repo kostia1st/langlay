@@ -1,7 +1,13 @@
-﻿namespace Product
+﻿using System.Collections.Generic;
+
+namespace Product
 {
     public interface ILanguageService
     {
-        bool ConductSwitch(KeyboardSwitch keyboardSwitch);
+        void ConductSwitch(KeyboardSwitch keyboardSwitch);
+
+        InputLayout GetCurrentLayout();
+
+        IList<InputLayout> GetInputLayouts();
     }
 }

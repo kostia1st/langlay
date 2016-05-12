@@ -13,17 +13,14 @@ namespace Product.Common
 
         public bool DoSwitchLanguage { get; set; }
         public IList<KeyCode> LanguageSwitchKeyArray { get; set; }
-        public KeyCode LanguageSwitchNonModifiers { get { return KeyUtils.ReduceKeyCodeArray(LanguageSwitchKeyArray, false); } }
-        public KeyCode LanguageSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LanguageSwitchKeyArray, true); } }
 
         public bool DoSwitchLayout { get; set; }
         public IList<KeyCode> LayoutSwitchKeyArray { get; set; }
-        public KeyCode LayoutSwitchNonModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, false); } }
-        public KeyCode LayoutSwitchModifiers { get { return KeyUtils.ReduceKeyCodeArray(LayoutSwitchKeyArray, true); } }
 
         public bool DoShowOverlay { get; set; }
         public bool DoShowOverlayOnMainDisplayOnly { get; set; }
         public bool DoShowOverlayRoundCorners { get; set; }
+        public bool DoShowLanguageNameInNative { get; set; }
         public uint OverlayDuration { get; set; }
         public uint OverlayOpacity { get; set; }
         public uint OverlayScale { get; set; }
@@ -33,7 +30,10 @@ namespace Product.Common
         public bool DoRunAtWindowsStartup { get; set; }
         public bool DoShowSettingsOnce { get; set; }
 
+        public bool DoForceThisInstance { get; set; }
+
         public bool DoShowCursorTooltip { get; set; }
+        private IDictionary<string, Action<string>> ReadStrategies { get; set; }
 
         public ConfigServiceBase()
         {
@@ -54,6 +54,42 @@ namespace Product.Common
             OverlayOpacity = 80;
             OverlayScale = 100;
             OverlayLocation = OverlayLocation.BottomCenter;
+
+            ReadStrategies = new Dictionary<string, Action<string>>()
+            {
+                { ArgumentNames.SwitchLanguage, x => DoSwitchLanguage = Utils.ParseBool(x, DoSwitchLanguage) },
+                { ArgumentNames.SwitchLayout, x => DoSwitchLayout = Utils.ParseBool(x, DoSwitchLayout) },
+                { ArgumentNames.LanguageSwitchKeys, x => LanguageSwitchKeyArray = KeyStringToArray(x) },
+                { ArgumentNames.LayoutSwitchKeys, x => LayoutSwitchKeyArray = KeyStringToArray(x) },
+                { ArgumentNames.ShowOverlay, x => DoShowOverlay = Utils.ParseBool(x, DoShowOverlay) },
+                { ArgumentNames.ShowOverlayOnMainDisplayOnly, x => DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(x, DoShowOverlayOnMainDisplayOnly) },
+                { ArgumentNames.ShowOverlayRoundCorners, x => DoShowOverlayRoundCorners = Utils.ParseBool(x, DoShowOverlayRoundCorners) },
+                { ArgumentNames.ShowLanguageNameInNative, x => DoShowLanguageNameInNative = Utils.ParseBool(x, DoShowLanguageNameInNative) },
+                { ArgumentNames.OverlayDuration, x => OverlayDuration = Utils.ParseUInt(x, OverlayDuration) },
+                { ArgumentNames.OverlayOpacity, x => OverlayOpacity = (uint) Utils.ParseUInt(x, OverlayOpacity, 1, 100) },
+                { ArgumentNames.OverlayScale, x => OverlayScale = (uint) Utils.ParseUInt(x, OverlayScale, 50, 500) },
+                { ArgumentNames.OverlayLocation, x => OverlayLocation = Utils.ParseEnum(x, OverlayLocation) },
+                { ArgumentNames.SwitchMethod, x => SwitchMethod = Utils.ParseEnum(x, SwitchMethod) },
+                { ArgumentNames.RunAtWindowsStartup, x => DoRunAtWindowsStartup = Utils.ParseBool(x, DoRunAtWindowsStartup) },
+                { ArgumentNames.ShowSettingsOnce, x => DoShowSettingsOnce = Utils.ParseBool(x, DoShowSettingsOnce) },
+                { ArgumentNames.ShowCursorTooltip, x => DoShowCursorTooltip = Utils.ParseBool(x, DoShowCursorTooltip) },
+                { ArgumentNames.ForceThisInstance, x => DoForceThisInstance = Utils.ParseBool(x, DoForceThisInstance) },
+            };
+        }
+
+        private void ReadArgument(string name, string value)
+        {
+            if (ReadStrategies.ContainsKey(name))
+                ReadStrategies[name](value);
+        }
+
+        private void ReadArgument(string argument)
+        {
+            if (!argument.StartsWith("--"))
+                throw new ArgumentException("Arguments must start with '--'");
+            var parts = argument.Substring(2).Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length > 1)
+                ReadArgument(parts[0], parts[1]);
         }
 
         private void ReadFromString(string str)
@@ -68,68 +104,6 @@ namespace Product.Common
                 .Select(x => (KeyCode) Utils.ParseInt(x, 0))
                 .Where(x => x != KeyCode.None)
                 .ToList();
-        }
-
-        private void ReadArgument(string name, string value)
-        {
-            if (name == ArgumentNames.SwitchLanguage)
-                DoSwitchLanguage = Utils.ParseBool(value, true);
-            else if (name == ArgumentNames.SwitchLayout)
-                DoSwitchLayout = Utils.ParseBool(value, false);
-            else if (name == ArgumentNames.LanguageSwitchKeys)
-                LanguageSwitchKeyArray = KeyStringToArray(value);
-            else if (name == ArgumentNames.LayoutSwitchKeys)
-                LayoutSwitchKeyArray = KeyStringToArray(value);
-
-            else if (name == ArgumentNames.ShowOverlay)
-                DoShowOverlay = Utils.ParseBool(value, false);
-            else if (name == ArgumentNames.ShowOverlayOnMainDisplayOnly)
-                DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(value, false);
-            else if (name == ArgumentNames.ShowOverlayRoundCorners)
-                DoShowOverlayRoundCorners = Utils.ParseBool(value, false);
-            else if (name == ArgumentNames.OverlayDuration)
-            {
-                var overlayDuration = Utils.ParseUInt(value);
-                if (overlayDuration != null)
-                    OverlayDuration = overlayDuration.Value;
-            }
-            else if (name == ArgumentNames.OverlayOpacity)
-            {
-                var overlayOpacity = Utils.ParseUInt(value);
-                // Enforcing the constraints
-                if (overlayOpacity != null && overlayOpacity > 0 && overlayOpacity <= 100)
-                    OverlayOpacity = overlayOpacity.Value;
-            }
-            else if (name == ArgumentNames.OverlayScale)
-            {
-                var overlayScale = Utils.ParseUInt(value);
-                // Enforcing the constraints
-                if (overlayScale != null && overlayScale >= 50 && overlayScale <= 500)
-                    OverlayScale = overlayScale.Value;
-            }
-            else if (name == ArgumentNames.OverlayLocation)
-                OverlayLocation = Utils.ParseEnum(value, OverlayLocation.BottomCenter);
-
-            else if (name == ArgumentNames.SwitchMethod)
-                SwitchMethod = Utils.ParseEnum(value, SwitchMethod.InputSimulation);
-            else if (name == ArgumentNames.RunAtWindowsStartup)
-                DoRunAtWindowsStartup = Utils.ParseBool(value, false);
-            else if (name == ArgumentNames.ShowSettingsOnce)
-                DoShowSettingsOnce = Utils.ParseBool(value, true);
-            else if (name == ArgumentNames.ShowCursorTooltip)
-                DoShowCursorTooltip = Utils.ParseBool(value, false);
-        }
-
-        private void ReadArgument(string argument)
-        {
-            if (!argument.StartsWith("--"))
-                throw new ArgumentException("Arguments must start with '--'");
-            var parts = argument.Substring(2).Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-            var argumentName = parts[0];
-            if (parts.Length > 1)
-            {
-                ReadArgument(argumentName, parts[1]);
-            }
         }
 
         public void ReadFromConfigFile(bool isUserLevel)
@@ -155,7 +129,6 @@ namespace Product.Common
                     }
                     else
                         ReadArgument(settingName, appSettings[key].GetValueOrDefault(x => x.Value));
-
                 }
             }
         }

@@ -5,81 +5,112 @@ using Product.Common;
 
 namespace Product
 {
-    static class Program
+    internal static class Program
     {
-        [STAThread]
-        static void Main()
+        private static IConfigService InitializeConfig()
         {
-            var uniquenessService = new UniquenessService(Application.ProductName);
-            uniquenessService.RunOrIgnore(delegate
+            // We read the global config first, then the user's one (higher
+            // priority) and finally the command line (the highest priority).
+            var configService = new ConfigService();
+            configService.ReadFromConfigFile(false);
+            configService.ReadFromConfigFile(true);
+            configService.ReadFromCommandLineArguments();
+            return configService;
+        }
+
+        private static bool IsAppInitialized { get; set; }
+
+        private static void InitializeApp()
+        {
+            if (!IsAppInitialized)
             {
-                var configService = new ConfigService();
-                try
+                IsAppInitialized = true;
+
+                // We must let Windows know that our app is DPI aware, so
+                // the sizes and coordinates don't get scaled behind the scene
+                Win32.SetProcessDPIAware();
+
+                // Make the app react properly to external events
+                Application.AddMessageFilter(new AppMessageFilter
                 {
-                    configService.ReadFromConfigFile(false);
-                    configService.ReadFromConfigFile(true);
-                    configService.ReadFromCommandLineArguments();
+                    OnClose = delegate { Application.Exit(); },
+                    OnRestart = delegate { Application.Restart(); }
+                });
+            }
+        }
 
-                    var overlayService = new OverlayService(configService);
-                    var languageService = new LanguageService(configService, overlayService);
-                    var hotkeyService = new HookedHotkeyService(configService, languageService);
-                    var tooltipService = new TooltipService(configService);
-                    var mouseCursorService = new MouseCursorService(configService, tooltipService);
+        private static void RunTheConfig(IConfigService configService)
+        {
+            // Here we make sure that registry contains the proper value in
+            // the Startup section
+            WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
 
-                    ILanguageSetterService languageSetterService;
-                    if (configService.SwitchMethod == SwitchMethod.InputSimulation)
-                        languageSetterService = new SimulatorLanguageSetterService(hotkeyService);
-                    else
-                        languageSetterService = new MessageLanguageSetterService();
+            // Here we check if we need to show the settings up immediately
+            // (it's likely the first app run)
+            if (configService.DoShowSettingsOnce)
+                AppUtils.ShowSettings();
 
-                    languageService.LanguageSetterService = languageSetterService;
+            var overlayService = new OverlayService(configService);
+            var languageService = new LanguageService(configService, overlayService);
+            var hotkeyService = new HookedHotkeyService(configService, languageService);
+            var tooltipService = new TooltipService(configService);
+            var mouseCursorService = new MouseCursorService(
+                configService, languageService, tooltipService);
+            var trayService = new TrayService(configService);
 
-                    var trayService = new TrayService(configService);
+            ILanguageSetterService languageSetterService;
+            if (configService.SwitchMethod == SwitchMethod.InputSimulation)
+                languageSetterService = new SimulatorLanguageSetterService(hotkeyService, languageService);
+            else
+                languageSetterService = new MessageLanguageSetterService();
 
-                    Application.AddMessageFilter(new AppMessageFilter
-                    {
-                        OnClose = delegate { Application.Exit(); },
-                        OnRestart = delegate { Application.Restart(); }
-                    });
+            languageService.LanguageSetterService = languageSetterService;
 
-                    hotkeyService.Start();
-                    trayService.Start();
-                    overlayService.Start();
-                    tooltipService.Start();
-                    mouseCursorService.Start();
+            overlayService.Start();
+            hotkeyService.Start();
+            tooltipService.Start();
+            mouseCursorService.Start();
+            trayService.Start();
 
-                    WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
+            try
+            {
+                Application.Run();
+            }
+            finally
+            {
+                trayService.Stop();
+                mouseCursorService.Stop();
+                tooltipService.Stop();
+                hotkeyService.Stop();
+                overlayService.Stop();
+            }
+        }
 
-                    if (configService.DoShowSettingsOnce)
-                        AppUtils.ShowSettings();
+        [STAThread]
+        private static void Main()
+        {
+            try
+            {
+                var configService = InitializeConfig();
 
-                    try
-                    {
-                        Application.Run();
-                    }
-                    catch (Exception)
-                    {
+                var uniquenessService = new UniquenessService(
+                    Application.ProductName, configService.DoForceThisInstance,
+                    delegate { ProcessUtils.StopMainApp(); });
+                uniquenessService.Run(delegate
+                {
+                    InitializeApp();
+                    RunTheConfig(configService);
+                });
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
 #if DEBUG
-                        throw;
-#else
-                        // Do nothing O_o as of yet.
+                MessageBox.Show(ex.ToString());
 #endif
-                    }
-                    finally
-                    {
-                        mouseCursorService.Stop();
-                        tooltipService.Stop();
-                        trayService.Stop();
-                        hotkeyService.Stop();
-                        overlayService.Stop();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError(ex.ToString());
-                    MessageBox.Show(ex.ToString());
-                }
-            });
+
+                // In the release environment we don't show exceptions up
+            }
         }
     }
 }

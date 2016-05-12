@@ -11,7 +11,7 @@ namespace Product
     {
         private const int MillisecondsToKeepVisible = 500;
         private Stopwatch PeriodElapsed { get; set; }
-        private string DisplayString { get; set; }
+        public string DisplayString { get; set; }
         private const int OpacityWhenVisible = 80;
         private Font TextFont { get; set; }
         private Brush TextBrush { get; set; }
@@ -40,7 +40,7 @@ namespace Product
             }
         }
 
-        public void Push(string str, Point position, bool resetTimer)
+        public void Push(string displayString, Point position, bool resetTimer)
         {
             PivotPosition = position;
             if (resetTimer)
@@ -51,16 +51,16 @@ namespace Product
                 Application.DoEvents();
                 Visible = false;
 
-                DisplayString = str;
+                DisplayString = displayString;
                 ResetAndRun();
             }
             else
             {
                 PivotPosition = position;
                 UpdateRegionAndPosition();
-                if (DisplayString != str)
+                if (!string.Equals(DisplayString, displayString))
                 {
-                    DisplayString = str;
+                    DisplayString = displayString;
                     Invalidate();
                 }
                 Application.DoEvents();
@@ -82,29 +82,34 @@ namespace Product
             timerTooltip.Start();
         }
 
+        private Graphics _graphicsForMeasuring;
+
         private void UpdateRegionAndPosition()
         {
-            using (var g = this.CreateGraphics())
-            {
-                var sizeOfText = g.MeasureString(DisplayString, TextFont);
-                Size = new Size(
-                    Math.Max((int) sizeOfText.Width + 8, MinWidth),
-                    (int) sizeOfText.Height + 8);
-            }
+            if (_graphicsForMeasuring == null)
+                _graphicsForMeasuring = CreateGraphics();
+            var sizeOfText = _graphicsForMeasuring.MeasureString(DisplayString, TextFont);
+            var size = new Size(
+                Math.Max((int) sizeOfText.Width + 8, MinWidth),
+                (int) sizeOfText.Height + 8);
+
             var screen = Screen.FromPoint(PivotPosition);
-            var proposedLeft = PivotPosition.X + 20;
-            var proposedTop = PivotPosition.Y + 20;
-            if (proposedLeft + Size.Width > screen.Bounds.Right)
-                proposedLeft = PivotPosition.X - Size.Width;
-            if (proposedTop + Size.Height > screen.Bounds.Bottom)
-                proposedTop = PivotPosition.Y - Size.Height;
-            Left = proposedLeft;
-            Top = proposedTop;
+
+            var position = new Point();
+            position.X = PivotPosition.X + 20;
+            if (position.X + Size.Width > screen.Bounds.Right)
+                position.X = PivotPosition.X - size.Width;
+            position.Y = PivotPosition.Y + 20;
+            if (position.Y + Size.Height > screen.Bounds.Bottom)
+                position.Y = PivotPosition.Y - size.Height;
+
+            Bounds = new Rectangle(position, size);
         }
 
         public bool GetIsVisible()
         {
-            return PeriodElapsed.ElapsedMilliseconds < MillisecondsToKeepVisible;
+            return PeriodElapsed.IsRunning
+                && PeriodElapsed.ElapsedMilliseconds < MillisecondsToKeepVisible;
         }
 
         private double GetOpacity(long elapsed)
@@ -139,10 +144,9 @@ namespace Product
         {
             var sizeOfText = e.Graphics.MeasureString(DisplayString, TextFont);
             var positionOfText = new PointF((Width - sizeOfText.Width - 1) / 2, (Height - sizeOfText.Height - 1) / 2);
-            
+
             e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             e.Graphics.DrawString(DisplayString, TextFont, TextBrush, positionOfText);
-
         }
     }
 }

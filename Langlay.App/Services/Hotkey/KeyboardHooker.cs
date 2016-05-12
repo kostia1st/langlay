@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -13,20 +15,27 @@ namespace Product
         private IntPtr HookHandle = IntPtr.Zero;
 
         #region Events
+
+        public Func<bool> IsEnabledHandler;
         public KeyEventHandler2 KeyDown;
         public KeyEventHandler2 KeyUp;
-        #endregion
+        public Func<Func<int?>, int?> HookProcedureWrapper { get; set; }
+
+        #endregion Events
 
         /// <summary>
-        /// Strong reference to a native callback method.
+        /// Strong reference to a native callback method. Thanks to it, we
+        /// connect its GC lifetime to the lifetime of the hooker itself.
         /// </summary>
         private Win32.KeyboardHookProc HookProcedureHolder;
 
-        public KeyboardHooker(bool doHookImmediately = true)
+        public KeyboardHooker(
+            bool doHookImmediately = true, Func<Func<int?>, int?> hookProcedureWrapper = null)
         {
-            // This is a c# hack in order to keep a firm reference to a dynamically created delegate
-            // so that it won't be collected by GC.
+            // This is a c# hack in order to keep a firm reference to a
+            // dynamically created delegate so that it won't be collected by GC.
             HookProcedureHolder = HookProcedure;
+            HookProcedureWrapper = hookProcedureWrapper;
             if (doHookImmediately)
                 SetHook();
         }
@@ -49,63 +58,66 @@ namespace Product
             Win32.UnhookWindowsHookEx(HookHandle);
         }
 
+        private int? HookInternals(int code, uint wParam, IntPtr lParam)
+        {
+            var result = (int?) null;
+            if (code >= 0
+                && (IsEnabledHandler == null || IsEnabledHandler()))
+            {
+                var keyInfo = (Win32.KeyboardInfo) Marshal.PtrToStructure(lParam, typeof(Win32.KeyboardInfo));
+                var key = (Keys) keyInfo.VirtualKeyCode;
+                var keyHeldBefore = KeyUtils.GetKeysPressed();
+
+                var kea = new KeyEventArgs2(key, keyHeldBefore);
+
+                var getEventString = (Func<string>) delegate
+                {
+                    var keysString = string.Join(", ", kea.KeyStroke.Keys.Select(x => ((KeyCode) x).GetDisplayName()));
+                    return $"{ Win32.MessageToString(wParam) }: { keysString }";
+                };
+
+                if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null)
+                {
+                    Trace.WriteLine($"Hooked { getEventString() }");
+                    KeyDown(this, kea);
+                }
+                else if (wParam.In(Win32.WM_KEYUP, Win32.WM_SYSKEYUP) && KeyUp != null)
+                {
+                    Trace.WriteLine($"Hooked { getEventString() }");
+                    KeyUp(this, kea);
+                }
+
+                if (kea.Handled)
+                    result = 1;
+                else
+                    Trace.WriteLine($">> Not handled { getEventString() }");
+            }
+            return result;
+        }
+
         /// <summary>
         /// The callback for the keyboard hook
         /// </summary>
-        /// <param name="code">The hook code, if it isn't >= 0, the function shouldn't do anyting</param>
+        /// <param name="code">
+        /// The hook code, if it isn't &gt;= 0, the function shouldn't do anyting
+        /// </param>
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
         /// <returns></returns>
-        private int HookProcedure(int code, uint wParam, ref Win32.KeyboardInfo lParam)
+        private int HookProcedure(int code, uint wParam, IntPtr lParam)
         {
             var result = (int?) null;
-            if (code >= 0)
-            {
-                try
-                {
-                    var key = (Keys) lParam.VirtualKeyCode;
-                    var keys = KeyUtils.GetKeysPressed();
-
-                    var kea = new KeyEventArgs2(key, keys);
-
-                    if ((wParam == Win32.WM_KEYDOWN || wParam == Win32.WM_SYSKEYDOWN) && (KeyDown != null))
-                    {
-                        Trace.WriteLine(string.Format(
-                            "Hooked keyDOWN {0}",
-                            string.Join(", ", keys)));
-                        KeyDown(this, kea);
-                    }
-                    else if ((wParam == Win32.WM_KEYUP || wParam == Win32.WM_SYSKEYUP) && (KeyUp != null))
-                    {
-                        Trace.WriteLine(string.Format(
-                            "Hooked keyUP {0}",
-                            string.Join(", ", keys)));
-                        KeyUp(this, kea);
-                    }
-                    if (kea.Handled)
-                    {
-                        result = 1;
-                    }
-                    else
-                    {
-                        Trace.WriteLine(string.Format(
-                            ">> Not handled {0}: {1}",
-                            Win32.MessageToString(wParam),
-                            string.Join(", ", keys)));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError(ex.ToString());
-                    throw;
-                }
-            }
+            if (HookProcedureWrapper != null)
+                result = HookProcedureWrapper(() => HookInternals(code, wParam, lParam));
+            else
+                result = HookInternals(code, wParam, lParam);
             if (result == null)
-                result = Win32.CallNextHookEx(HookHandle, code, wParam, ref lParam);
+                result = Win32.CallNextHookEx(HookHandle, code, wParam, lParam);
             return result.Value;
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
@@ -133,6 +145,7 @@ namespace Product
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 }

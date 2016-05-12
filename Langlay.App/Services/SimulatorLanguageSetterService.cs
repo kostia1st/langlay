@@ -16,12 +16,18 @@ namespace Product
         private WindowsSequenceCode? CurrentLayoutSwitchSequence { get; set; }
 
         public IHotkeyService HotkeyService { get; set; }
+        private ILanguageService LanguageService { get; set; }
         private KeyboardSimulator KeyboardSimulator { get; set; }
 
         public SimulatorLanguageSetterService(
-            IHotkeyService hotkeyService)
+            IHotkeyService hotkeyService, ILanguageService languageService)
         {
+            if (hotkeyService == null)
+                throw new ArgumentNullException("hotkeyService");
+            if (languageService == null)
+                throw new ArgumentNullException("languageService");
             HotkeyService = hotkeyService;
+            LanguageService = languageService;
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
@@ -38,12 +44,12 @@ namespace Product
         private void SendAltShift(int amount = 1)
         {
             // It's important to HOLD the Alt key first, not vice versa
-            KeyboardSimulator.KeyDown((VirtualKeyCode) KeyCode.LMenu);
+            KeyboardSimulator.KeyDown((VirtualKeyCode) KeyCode.LAltKey);
             for (int i = 0; i < amount; i++)
             {
                 KeyboardSimulator.KeyPress((VirtualKeyCode) KeyCode.LShiftKey);
             }
-            KeyboardSimulator.KeyUp((VirtualKeyCode) KeyCode.LMenu);
+            KeyboardSimulator.KeyUp((VirtualKeyCode) KeyCode.LAltKey);
         }
 
         private void SendGraveAccent(int amount = 1)
@@ -63,9 +69,11 @@ namespace Product
                 case WindowsSequenceCode.CtrlShift:
                     SendCtrlShift(amount);
                     break;
+
                 case WindowsSequenceCode.AltShift:
                     SendAltShift(amount);
                     break;
+
                 case WindowsSequenceCode.GraveAccent:
                     SendGraveAccent(amount);
                     break;
@@ -78,8 +86,8 @@ namespace Product
         {
             var result = 0;
 
-            var inputLayouts = InputLayoutHelper.GetInputLayouts();
-            var currentLayout = InputLayoutHelper.GetCurrentLayout();
+            var inputLayouts = LanguageService.GetInputLayouts();
+            var currentLayout = LanguageService.GetCurrentLayout();
             var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
 
             var inputLanguageNames = inputLayouts
@@ -100,10 +108,12 @@ namespace Product
         {
             var result = 0;
 
-            var inputLayouts = InputLayoutHelper.GetInputLayouts();
-            // Re-read the current layout, to find out what layout the system language manager 
-            // has selected within the layout group of the language.
-            var currentLayout = InputLayoutHelper.GetCurrentLayout();
+            var inputLayouts = LanguageService.GetInputLayouts();
+
+            // Re-read the current layout, to find out what layout the
+            // system language manager has selected within the layout group
+            // of the language.
+            var currentLayout = LanguageService.GetCurrentLayout();
 
             var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
             var inputLayoutNamesWithinLanguage = inputLayouts
@@ -127,9 +137,9 @@ namespace Product
             HotkeyService.SetEnabled(false);
             try
             {
-                // If those values are not set, we suppose we need to read this cache
-                // for the first time (guessing it's pointless to use this switch mode
-                // if no standard hotkeys set at all).
+                // If those values are not set, we suppose we need to read
+                // this cache for the first time (guessing it's pointless to
+                // use this switch mode if no standard hotkeys set at all).
                 if (CurrentLanguageSwitchSequence == null && CurrentLayoutSwitchSequence == null)
                 {
                     CurrentLanguageSwitchSequence = SystemSettings.GetLanguageSwitchSequence();
@@ -140,8 +150,8 @@ namespace Product
                 if (amountOfLanguageSwitches > 0)
                 {
                     if (CurrentLanguageSwitchSequence == null)
-                        throw new Exception(
-                            "cannot enumerate languages 'cause the system key sequence was not set");
+                        throw new InvalidOperationException(
+                            "Cannot enumerate languages because the system key sequence was not set");
 
                     SendSequence(CurrentLanguageSwitchSequence.Value, amountOfLanguageSwitches);
                     result = true;
@@ -149,7 +159,8 @@ namespace Product
 
                 if (result)
                 {
-                    // Simulate "interruption" so that the system can process the key sequence.
+                    // Simulate "interruption" so that the system can
+                    // process the key sequence.
                     Thread.Sleep(InterruptionDelay);
                 }
 
@@ -157,16 +168,17 @@ namespace Product
                 if (amountOfLayoutSwitches > 0)
                 {
                     if (CurrentLayoutSwitchSequence == null)
-                        throw new Exception(
-                            "cannot enumerate layouts, because the system key sequence was not set");
+                        throw new InvalidOperationException(
+                            "Cannot enumerate layouts because the system key sequence was not set");
                     SendSequence(CurrentLayoutSwitchSequence.Value, amountOfLayoutSwitches);
                     result = true;
                 }
 
                 if (result)
                 {
-                    // Simulating "interruption" once again, so that synchronous code can read
-                    // the current (new) layout from OS after this method finishes.
+                    // Simulating "interruption" once again, so that
+                    // synchronous code can read the current (new) layout
+                    // from OS after this method finishes.
                     Thread.Sleep(InterruptionDelay);
                 }
             }

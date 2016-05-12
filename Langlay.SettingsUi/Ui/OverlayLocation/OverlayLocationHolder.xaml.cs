@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Product.Common;
 
 namespace Product.SettingsUi
@@ -24,6 +14,7 @@ namespace Product.SettingsUi
             = DependencyProperty.Register(
                 "Location", typeof(OverlayLocation), typeof(OverlayLocationHolder),
                 new PropertyMetadata(OverlayLocation.None, OnLocationChanged));
+
         public OverlayLocation Location
         {
             get { return (OverlayLocation) GetValue(LocationProperty); }
@@ -34,6 +25,7 @@ namespace Product.SettingsUi
             = DependencyProperty.Register(
                 "IsSelected", typeof(bool), typeof(OverlayLocationHolder),
                 new PropertyMetadata(false, OnIsSelectedChanged));
+
         public bool IsSelected
         {
             get { return (bool) GetValue(IsSelectedProperty); }
@@ -69,6 +61,5 @@ namespace Product.SettingsUi
             var control = (OverlayLocationHolder) d;
             control.OnLocationChanged((OverlayLocation) args.NewValue);
         }
-
     }
 }

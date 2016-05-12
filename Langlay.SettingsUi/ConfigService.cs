@@ -18,6 +18,7 @@ namespace Product.SettingsUi
             WriteArgument(ArgumentNames.ShowOverlay, DoShowOverlay.ToString());
             WriteArgument(ArgumentNames.ShowOverlayOnMainDisplayOnly, DoShowOverlayOnMainDisplayOnly.ToString());
             WriteArgument(ArgumentNames.ShowOverlayRoundCorners, DoShowOverlayRoundCorners.ToString());
+            WriteArgument(ArgumentNames.ShowLanguageNameInNative, DoShowLanguageNameInNative.ToString());
             WriteArgument(ArgumentNames.OverlayDuration, OverlayDuration.ToString());
             WriteArgument(ArgumentNames.OverlayOpacity, OverlayOpacity.ToString());
             WriteArgument(ArgumentNames.OverlayScale, OverlayScale.ToString());

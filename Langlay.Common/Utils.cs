@@ -49,9 +49,11 @@ namespace Product.Common
             return (uint) ParseLong(value, defaultValue);
         }
 
-        public static uint? ParseUInt(object value, uint? defaultValue = null)
+        public static uint? ParseUInt(
+            object value, uint? defaultValue = null,
+            uint? lowRange = null, uint? highRange = null)
         {
-            return (uint?) ParseLong(value, defaultValue);
+            return (uint?) ParseLong(value, defaultValue, lowRange, highRange);
         }
 
         public static long ParseLong(object value, long defaultValue)
@@ -59,26 +61,35 @@ namespace Product.Common
             return ParseLong(value, (long?) defaultValue).Value;
         }
 
-        public static long? ParseLong(object value, long? defaultValue = null)
+        public static long? ParseLong(
+            object value, long? defaultValue = null,
+            long? lowRange = null, long? highRange = null)
         {
+            var result = defaultValue;
             if (value != null)
             {
                 if (value is string)
                 {
-                    long result;
-                    if (long.TryParse((string) value, out result))
-                        return result;
+                    long number;
+                    if (long.TryParse((string) value, out number))
+                        result = number;
                 }
                 else
                 {
                     try
                     {
-                        return Convert.ToInt64(value);
+                        result = Convert.ToInt64(value);
                     }
                     catch { }
                 }
             }
-            return defaultValue;
+            if (result != null)
+            {
+                if (lowRange != null && result.Value < lowRange.Value
+                    || highRange != null && result.Value > highRange.Value)
+                    result = defaultValue;
+            }
+            return result;
         }
 
         public static bool ParseBool(object value, bool defaultValue)
@@ -122,11 +133,16 @@ namespace Product.Common
             return defaultValue;
         }
 
-        public static IList<T> Combine<T>(IList<T> list1, IList<T> list2)
+        public static IList<T> Combine<T>(this IList<T> list1, IList<T> list2)
         {
-            var result =  new List<T>(list1);
+            var result = new List<T>(list1);
             result.AddRange(list2);
             return result;
+        }
+
+        public static bool In<T>(this T instance, params T[] others)
+        {
+            return others.Contains(instance);
         }
     }
 }

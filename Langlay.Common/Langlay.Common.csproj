@@ -49,10 +49,12 @@
     <Compile Include="ArgumentNames.cs" />
     <Compile Include="AppSpecific.cs" />
     <Compile Include="CursorUtils.cs" />
+    <Compile Include="EnumUtils.cs" />
     <Compile Include="ExpressionUtils.cs" />
     <Compile Include="KeyUtils.cs" />
     <Compile Include="OverlayLocation.cs" />
     <Compile Include="PathUtils.cs" />
+    <Compile Include="ProcessUtils.cs" />
     <Compile Include="SystemSettings.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="Services\ConfigServiceBase.cs" />
