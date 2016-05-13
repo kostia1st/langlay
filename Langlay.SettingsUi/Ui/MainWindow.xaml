@@ -122,8 +122,10 @@
                                Margin="10 2 0 0"
                                Width="170" MinWidth="0" />
                 </StackPanel>
+
                 <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
+
                 <TextBlock Text="Here you can set up a key sequence for switching either language or layout, or both."
                            VerticalAlignment="Center"
                            Margin="0 10 0 0" />
@@ -149,6 +151,9 @@
                                           Changed="HotkeyComposer_Layout_Changed" />
                 </StackPanel>
                 <TextBlock x:Name="tbkFeedbackLayout" Foreground="Red" TextWrapping="Wrap" />
+                <CheckBox x:Name="chbDisableCapsToggle"
+                          Content="Disable standard Caps Lock toggle" Margin="0 10 0 0"
+                          IsChecked="{Binding DisableCapsLockToggle}" />
             </StackPanel>
         </ScrollViewer>
         <Rectangle Style="{StaticResource separator}"

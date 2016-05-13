@@ -124,6 +124,12 @@ namespace Product.SettingsUi
             get { return LayoutSequence; }
         }
 
+        public bool DisableCapsLockToggle
+        {
+            get { return ConfigService.DoDisableCapsLockToggle; }
+            set { SetPropertyValue(x => x.DisableCapsLockToggle, x => x.DoDisableCapsLockToggle, value); }
+        }
+
         public bool SwitchLanguage
         {
             get { return ConfigService.DoSwitchLanguage; }

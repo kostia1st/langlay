@@ -16,6 +16,7 @@ namespace Product.Common
 
         public bool DoSwitchLayout { get; set; }
         public IList<KeyCode> LayoutSwitchKeyArray { get; set; }
+        public bool DoDisableCapsLockToggle { get; set; }
 
         public bool DoShowOverlay { get; set; }
         public bool DoShowOverlayOnMainDisplayOnly { get; set; }
@@ -61,6 +62,7 @@ namespace Product.Common
                 { ArgumentNames.SwitchLayout, x => DoSwitchLayout = Utils.ParseBool(x, DoSwitchLayout) },
                 { ArgumentNames.LanguageSwitchKeys, x => LanguageSwitchKeyArray = KeyStringToArray(x) },
                 { ArgumentNames.LayoutSwitchKeys, x => LayoutSwitchKeyArray = KeyStringToArray(x) },
+                { ArgumentNames.DisableCapsLockToggle, x => DoDisableCapsLockToggle = Utils.ParseBool(x, DoDisableCapsLockToggle) },
                 { ArgumentNames.ShowOverlay, x => DoShowOverlay = Utils.ParseBool(x, DoShowOverlay) },
                 { ArgumentNames.ShowOverlayOnMainDisplayOnly, x => DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(x, DoShowOverlayOnMainDisplayOnly) },
                 { ArgumentNames.ShowOverlayRoundCorners, x => DoShowOverlayRoundCorners = Utils.ParseBool(x, DoShowOverlayRoundCorners) },

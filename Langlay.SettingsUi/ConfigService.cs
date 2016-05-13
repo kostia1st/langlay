@@ -28,6 +28,7 @@ namespace Product.SettingsUi
             WriteArgument(ArgumentNames.LanguageSwitchKeys, ArrayToKeyString(LanguageSwitchKeyArray));
             WriteArgument(ArgumentNames.SwitchLayout, DoSwitchLayout.ToString());
             WriteArgument(ArgumentNames.LayoutSwitchKeys, ArrayToKeyString(LayoutSwitchKeyArray));
+            WriteArgument(ArgumentNames.DisableCapsLockToggle, DoDisableCapsLockToggle.ToString());
             WriteArgument(ArgumentNames.ShowSettingsOnce, DoShowSettingsOnce.ToString());
             WriteArgument(ArgumentNames.ShowCursorTooltip, DoShowCursorTooltip.ToString());
             UserConfig.Save(ConfigurationSaveMode.Minimal, false);

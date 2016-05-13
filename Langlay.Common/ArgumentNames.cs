@@ -6,6 +6,7 @@
         public const string SwitchLayout = "SwitchLayout";
         public const string LanguageSwitchKeys = "LanguageSwitchKeys";
         public const string LayoutSwitchKeys = "LayoutSwitchKeys";
+        public const string DisableCapsLockToggle = "DisableCapsLockToggle";
         public const string ShowOverlay = "ShowOverlay";
         public const string ShowOverlayOnMainDisplayOnly = "ShowOverlayOnMainDisplayOnly";
         public const string ShowOverlayRoundCorners = "ShowOverlayRoundCorners";
