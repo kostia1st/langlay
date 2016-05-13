@@ -49,6 +49,7 @@ namespace Product.Common
             LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
             LayoutSwitchKeyArray = new KeyCode[] { };
 
+            DoDisableCapsLockToggle = false;
             SwitchMethod = SwitchMethod.InputSimulation;
             DoShowOverlay = true;
             OverlayDuration = 300;

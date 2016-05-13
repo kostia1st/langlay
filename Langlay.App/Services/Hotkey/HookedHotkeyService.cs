@@ -216,6 +216,14 @@ namespace Product
                         SetKeyDownEffective();
                     }
                 }
+                else if (ConfigService.DoDisableCapsLockToggle)
+                {
+                    if (e.KeyStroke.Keys.Contains(Keys.CapsLock)
+                        && !KeyUtils.GetIsKeyToggled(Keys.CapsLock))
+                    {
+                        e.Handled = true;
+                    }
+                }
             }
         }
 

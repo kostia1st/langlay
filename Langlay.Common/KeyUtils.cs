@@ -11,8 +11,8 @@ namespace Product.Common
         {
             var result = new List<Keys>();
 
-            // Here we get the state of just the keys of our interest - the ones
-            // supported by the app. These are all specified in KeyCode enum.
+            // Here we get the state of just the keys of our interest - the
+            // ones supported by the app. These are all specified in KeyCode enum.
             var keyCodes = ((KeyCode[]) Enum
                 .GetValues(typeof(KeyCode)))
                 .Select(x => (Keys) x)
@@ -23,6 +23,11 @@ namespace Product.Common
                     result.Add(code);
             }
             return result;
+        }
+
+        public static bool GetIsKeyToggled(Keys key)
+        {
+            return ((Win32.GetKeyState((int) key) & 0x0001) != 0);
         }
 
         public static bool IsEmpty(this Keys key)

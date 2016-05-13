@@ -5,9 +5,6 @@ namespace Product
 {
     public interface IConfigService
     {
-        IList<KeyCode> LanguageSwitchKeyArray { get; }
-        IList<KeyCode> LayoutSwitchKeyArray { get; }
-
         bool DoShowOverlay { get; }
         bool DoShowOverlayOnMainDisplayOnly { get; }
         bool DoShowOverlayRoundCorners { get; }
@@ -17,10 +14,15 @@ namespace Product
         uint OverlayScale { get; }
         OverlayLocation OverlayLocation { get; }
         bool DoRunAtWindowsStartup { get; }
+
         bool DoSwitchLanguage { get; }
+        IList<KeyCode> LanguageSwitchKeyArray { get; }
+        bool DoSwitchLayout { get; }
+        IList<KeyCode> LayoutSwitchKeyArray { get; }
+
+        bool DoDisableCapsLockToggle { get; }
         bool DoShowSettingsOnce { get; }
         bool DoShowCursorTooltip { get; }
-        bool DoSwitchLayout { get; }
         bool DoForceThisInstance { get; }
         SwitchMethod SwitchMethod { get; }
 
