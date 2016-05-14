@@ -6,11 +6,13 @@
         xmlns:local="clr-namespace:Product.SettingsUi"
         mc:Ignorable="d"
 
-        Title="Settings" Height="600" Width="550"
+        Title="Settings" Height="500" Width="550"
         ResizeMode="NoResize" SizeToContent="Manual"
+
         Background="{x:Static SystemColors.ControlBrush}"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
-        VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+        VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+        WindowStartupLocation="CenterScreen">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -102,6 +104,9 @@
                 <CheckBox x:Name="chbDisableCapsToggle"
                           Content="Disable standard Caps Lock toggle" Margin="0 10 0 0"
                           IsChecked="{Binding DisableCapsLockToggle}" />
+
+                <Rectangle Style="{StaticResource separator}"
+                           Margin="0 10 0 0" />
 
                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
                     <TextBlock Text="Switch method:" Width="150"
