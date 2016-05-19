@@ -11,11 +11,11 @@ namespace Product.SettingsUi
 {
     public class ConfigViewModel : INotifyPropertyChanged
     {
-        private ConfigService ConfigService { get; set; }
+        private IConfigService ConfigService { get; set; }
         private ObservableCollection<KeyCodeViewModel> LanguageSequence { get; set; }
         private ObservableCollection<KeyCodeViewModel> LayoutSequence { get; set; }
 
-        public ConfigViewModel(ConfigService configService)
+        public ConfigViewModel(IConfigService configService)
         {
             ConfigService = configService;
             LanguageSequence = new ObservableCollection<KeyCodeViewModel>(
@@ -124,6 +124,12 @@ namespace Product.SettingsUi
             get { return LayoutSequence; }
         }
 
+        public bool DisableCapsLockToggle
+        {
+            get { return ConfigService.DoDisableCapsLockToggle; }
+            set { SetPropertyValue(x => x.DisableCapsLockToggle, x => x.DoDisableCapsLockToggle, value); }
+        }
+
         public bool SwitchLanguage
         {
             get { return ConfigService.DoSwitchLanguage; }
@@ -144,7 +150,7 @@ namespace Product.SettingsUi
 
         private void SetPropertyValue<T1>(
             Expression<Func<ConfigViewModel, T1>> expression1,
-            Expression<Func<ConfigService, T1>> expression2, T1 value)
+            Expression<Func<IConfigService, T1>> expression2, T1 value)
         {
             var valueOld = expression2.Compile()(ConfigService);
             if (!EqualityComparer<T1>.Default.Equals(valueOld, value))

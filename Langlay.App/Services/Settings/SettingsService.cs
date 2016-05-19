@@ -1,0 +1,62 @@
+﻿using Product.SettingsUi;
+
+namespace Product
+{
+    public class SettingsService : ISettingsService
+    {
+        private IConfigService ConfigService { get; set; }
+        private IAppRunnerService AppRunnerService { get; set; }
+        private MainWindow _mainWindow;
+
+        public SettingsService(IConfigService configService, IAppRunnerService appRunnerService)
+        {
+            ConfigService = configService;
+            AppRunnerService = appRunnerService;
+        }
+
+        #region Start/Stop
+
+        private bool IsStarted { get; set; }
+
+        public void Start()
+        {
+            if (!IsStarted)
+                IsStarted = true;
+        }
+
+        public void Stop()
+        {
+            if (IsStarted)
+            {
+                IsStarted = false;
+                if (_mainWindow != null)
+                {
+                    if (_mainWindow.IsVisible)
+                        _mainWindow.Close();
+                    _mainWindow = null;
+                }
+            }
+        }
+
+        #endregion Start/Stop
+
+        public void ShowSettings()
+        {
+            if (_mainWindow == null)
+            {
+                _mainWindow = new MainWindow(ConfigService);
+                _mainWindow.HandleSave = delegate
+                {
+                    ConfigService.SaveToFile();
+                };
+                _mainWindow.HandleApply = delegate
+                {
+                    AppRunnerService.ReReadAndRunTheConfig();
+                };
+                _mainWindow.Show();
+            }
+            else
+                _mainWindow.Activate();
+        }
+    }
+}

@@ -57,13 +57,11 @@
     <Compile Include="ProcessUtils.cs" />
     <Compile Include="SystemSettings.cs" />
     <Compile Include="Win32.cs" />
-    <Compile Include="Services\ConfigServiceBase.cs" />
     <Compile Include="EnumItem.cs" />
     <Compile Include="EnumValueConverter.cs" />
     <Compile Include="KeyCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchMethod.cs" />
-    <Compile Include="Services\UniquenessService.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WindowsSequenceCode.cs" />
     <Compile Include="WindowsStartupUtils.cs" />

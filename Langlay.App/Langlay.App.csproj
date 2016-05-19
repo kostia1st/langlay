@@ -55,9 +55,12 @@
     <ApplicationIcon>Keyboard-Filled-2-16.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,12 +69,15 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="WindowsInput">
       <HintPath>..\Langlay.Libs\WindowsInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMessageFilter.cs" />
+    <Compile Include="Services\AppRunnerService.cs" />
+    <Compile Include="Services\IAppRunnerService.cs" />
     <Compile Include="Services\Language\InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
     <Compile Include="Services\Hotkey\KeyEventArgs2.cs" />
@@ -100,6 +106,8 @@
     <Compile Include="Services\Overlay\OverlayService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Settings\ISettingsService.cs" />
+    <Compile Include="Services\Settings\SettingsService.cs" />
     <Compile Include="Services\SimulatorLanguageSetterService.cs" />
     <Compile Include="Services\Tooltip\ITooltipService.cs" />
     <Compile Include="Services\Tooltip\TooltipForm.cs">
@@ -110,6 +118,24 @@
     </Compile>
     <Compile Include="Services\Tooltip\TooltipService.cs" />
     <Compile Include="Services\TrayService.cs" />
+    <Compile Include="Services\Settings\ConfigViewModel.cs" />
+    <Compile Include="Services\Settings\KeyCodeViewModel.cs" />
+    <Compile Include="Services\Settings\Ui\Hotkey\HotkeyComposer.xaml.cs">
+      <DependentUpon>HotkeyComposer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\Hotkey\HotkeyEditor.xaml.cs">
+      <DependentUpon>HotkeyEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\OverlayLocation\OverlayLocationEditor.xaml.cs">
+      <DependentUpon>OverlayLocationEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\OverlayLocation\OverlayLocationHolder.xaml.cs">
+      <DependentUpon>OverlayLocationHolder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\UniquenessService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -141,6 +167,28 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Keyboard-Filled-2-16.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Services\Settings\Ui\Hotkey\HotkeyComposer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Settings\Ui\Hotkey\HotkeyEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Settings\Ui\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Settings\Ui\OverlayLocation\OverlayLocationEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Settings\Ui\OverlayLocation\OverlayLocationHolder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

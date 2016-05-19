@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using Product.Common;
@@ -11,10 +13,12 @@ namespace Product.SettingsUi
     public partial class MainWindow : Window
     {
         private ConfigViewModel ViewModel { get; set; }
+        public Action HandleSave { get; set; }
+        public Action HandleApply { get; set; }
 
-        public MainWindow()
+        public MainWindow(IConfigService configService)
         {
-            ViewModel = new ConfigViewModel(App.ConfigService);
+            ViewModel = new ConfigViewModel(configService);
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
             ViewModel.ShowSettingsOnce = false;
             DataContext = ViewModel;
@@ -29,21 +33,32 @@ namespace Product.SettingsUi
             UpdateHotkeyAnalysis();
         }
 
+        private void RaiseSaveConfig()
+        {
+            HandleSave?.Invoke();
+        }
+
+        private void RaiseApplyConfig()
+        {
+            HandleApply?.Invoke();
+        }
+
         private void DoOnViewModelChanged()
         {
             // Save configuration
-            App.ConfigService.SaveToFile();
+            RaiseSaveConfig();
             UpdateHotkeyAnalysis();
         }
 
         private void UpdateHotkeyAnalysis()
         {
-            tbkFeedbackLanguage.Text = GetAnalysisByHotkey(App.ConfigService.LanguageSwitchKeyArray);
-            tbkFeedbackLayout.Text = GetAnalysisByHotkey(App.ConfigService.LayoutSwitchKeyArray);
+            tbkFeedbackLanguage.Text = GetAnalysisByHotkey(ViewModel.LanguageSwitchSequence);
+            tbkFeedbackLayout.Text = GetAnalysisByHotkey(ViewModel.LayoutSwitchSequence);
         }
 
-        private string GetAnalysisByHotkey(IList<KeyCode> keys)
+        private string GetAnalysisByHotkey(IList<KeyCodeViewModel> keyViewModels)
         {
+            var keys = keyViewModels.Select(x => x.KeyCode).ToList();
             var result = new StringBuilder();
             if (keys.Count == 1)
             {
@@ -66,12 +81,8 @@ namespace Product.SettingsUi
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Close the running product, and restart it.
-            if (ProcessUtils.StopMainApp())
-            {
-                ProcessUtils.StartMainApp();
-            }
             this.Close();
+            RaiseApplyConfig();
         }
 
         private void HotkeyComposer_Layout_Changed(object sender, RoutedEventArgs e)

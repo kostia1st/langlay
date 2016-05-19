@@ -4,13 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Product.SettingsUi"
+        xmlns:common="clr-namespace:Product.Common;assembly=Langlay.Common"
         mc:Ignorable="d"
 
-        Title="Settings" Height="600" Width="550"
+        Title="Settings" Height="500" Width="550"
         ResizeMode="NoResize" SizeToContent="Manual"
+
         Background="{x:Static SystemColors.ControlBrush}"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
-        VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+        VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <common:EnumValueConverter x:Key="enumConverter" />
+        <Style x:Key="separator" TargetType="Rectangle">
+            <Setter Property="Stroke" Value="{x:Static SystemColors.ControlDarkBrush}" />
+            <Setter Property="StrokeThickness" Value="0.5" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Height" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+    </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -87,6 +100,7 @@
                 </StackPanel>
                 <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
+
                 <CheckBox x:Name="chbShowCursorTooltip"
                           Margin="0 10 0 0"
                           IsChecked="{Binding ShowCursorTooltip}">
@@ -95,13 +109,12 @@
                         <Run>(when the mouse cursor is a beam)</Run>
                     </TextBlock>
                 </CheckBox>
-
-                <Rectangle Style="{StaticResource separator}"
-                           Margin="0 10 0 0" />
-
                 <CheckBox x:Name="chbUseNativeLabels"
                           Content="Show language name in native" Margin="0 10 0 0"
                           IsChecked="{Binding ShowLanguageNameInNative}" />
+                <CheckBox x:Name="chbDisableCapsToggle"
+                          Content="Disable standard Caps Lock toggle" Margin="0 10 0 0"
+                          IsChecked="{Binding DisableCapsLockToggle}" />
 
                 <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
@@ -122,8 +135,10 @@
                                Margin="10 2 0 0"
                                Width="170" MinWidth="0" />
                 </StackPanel>
+
                 <Rectangle Style="{StaticResource separator}"
                            Margin="0 10 0 0" />
+
                 <TextBlock Text="Here you can set up a key sequence for switching either language or layout, or both."
                            VerticalAlignment="Center"
                            Margin="0 10 0 0" />
