@@ -52,8 +52,11 @@ namespace Product.SettingsUi
 
         private void UpdateHotkeyAnalysis()
         {
-            tbkFeedbackLanguage.Text = GetAnalysisByHotkey(ViewModel.LanguageSwitchSequence);
-            tbkFeedbackLayout.Text = GetAnalysisByHotkey(ViewModel.LayoutSwitchSequence);
+            if (this.IsLoaded)
+            {
+                tbkFeedbackLanguage.Text = GetAnalysisByHotkey(ViewModel.LanguageSwitchSequence);
+                tbkFeedbackLayout.Text = GetAnalysisByHotkey(ViewModel.LayoutSwitchSequence);
+            }
         }
 
         private string GetAnalysisByHotkey(IList<KeyCodeViewModel> keyViewModels)
