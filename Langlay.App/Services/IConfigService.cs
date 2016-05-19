@@ -5,29 +5,31 @@ namespace Product
 {
     public interface IConfigService
     {
-        bool DoShowOverlay { get; }
-        bool DoShowOverlayOnMainDisplayOnly { get; }
-        bool DoShowOverlayRoundCorners { get; }
-        bool DoShowLanguageNameInNative { get; }
-        uint OverlayDuration { get; }
-        uint OverlayOpacity { get; }
-        uint OverlayScale { get; }
-        OverlayLocation OverlayLocation { get; }
-        bool DoRunAtWindowsStartup { get; }
+        bool DoShowOverlay { get; set; }
+        bool DoShowOverlayOnMainDisplayOnly { get; set; }
+        bool DoShowOverlayRoundCorners { get; set; }
+        bool DoShowLanguageNameInNative { get; set; }
+        uint OverlayDuration { get; set; }
+        uint OverlayOpacity { get; set; }
+        uint OverlayScale { get; set; }
+        OverlayLocation OverlayLocation { get; set; }
+        bool DoRunAtWindowsStartup { get; set; }
 
-        bool DoSwitchLanguage { get; }
-        IList<KeyCode> LanguageSwitchKeyArray { get; }
-        bool DoSwitchLayout { get; }
-        IList<KeyCode> LayoutSwitchKeyArray { get; }
+        bool DoSwitchLanguage { get; set; }
+        IList<KeyCode> LanguageSwitchKeyArray { get; set; }
+        bool DoSwitchLayout { get; set; }
+        IList<KeyCode> LayoutSwitchKeyArray { get; set; }
 
-        bool DoDisableCapsLockToggle { get; }
-        bool DoShowSettingsOnce { get; }
-        bool DoShowCursorTooltip { get; }
-        bool DoForceThisInstance { get; }
-        SwitchMethod SwitchMethod { get; }
+        bool DoDisableCapsLockToggle { get; set; }
+        bool DoShowSettingsOnce { get; set; }
+        bool DoShowCursorTooltip { get; set; }
+        bool DoForceThisInstance { get; set; }
+        SwitchMethod SwitchMethod { get; set; }
 
         bool GetLanguageSwitchConfigured();
 
         bool GetLayoutSwitchConfigured();
+
+        void SaveToFile();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Product.Common;
@@ -8,13 +9,15 @@ namespace Product
     public class TrayService
     {
         private IConfigService ConfigService { get; set; }
+        private ISettingsService SettingsService { get; set; }
         private ContextMenu ContextMenu { get; set; }
         private NotifyIcon Icon { get; set; }
         private bool IsStarted { get; set; }
 
-        public TrayService(IConfigService configService)
+        public TrayService(IConfigService configService, ISettingsService settingsService)
         {
             ConfigService = configService;
+            SettingsService = settingsService;
         }
 
         private void OpenHomepage()
@@ -52,9 +55,11 @@ namespace Product
             if (!IsStarted)
             {
                 IsStarted = true;
+                var actionOpenSettings = (Action) delegate { SettingsService.ShowSettings(); };
+
                 ContextMenu = new ContextMenu(new[]
                 {
-                    new MenuItem("Settings", delegate { AppUtils.ShowSettings(); }) { DefaultItem = true },
+                    new MenuItem("Settings", delegate { actionOpenSettings(); }) { DefaultItem = true },
                     new MenuItem("-"),
                     new MenuItem("Report a bug", delegate { OpenIssues(); }),
                     new MenuItem("Visit homepage", delegate { OpenHomepage(); }),
@@ -69,7 +74,7 @@ namespace Product
                     Visible = true,
                     ContextMenu = ContextMenu,
                 };
-                Icon.MouseDoubleClick += delegate { AppUtils.ShowSettings(); };
+                Icon.MouseDoubleClick += delegate { actionOpenSettings(); };
             }
         }
 

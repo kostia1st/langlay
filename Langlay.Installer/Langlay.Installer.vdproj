@@ -15,25 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_235309F71AB30787E6BFA7ECD7571A41"
-        "OwnerKey" = "8:_879F961C69EE4227861101CC4ECFFF77"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_235309F71AB30787E6BFA7ECD7571A41"
+        "MsmKey" = "8:_012684A117C51A1587B075301A18BC17"
         "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_879F961C69EE4227861101CC4ECFFF77"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A36A1C54673D7566E18EE7FB8FE61BA9"
+        "MsmKey" = "8:_6376F88F741434C736AB6E1A79D5CF9D"
         "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -46,25 +34,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A36A1C54673D7566E18EE7FB8FE61BA9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_235309F71AB30787E6BFA7ECD7571A41"
+        "OwnerKey" = "8:_012684A117C51A1587B075301A18BC17"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_879F961C69EE4227861101CC4ECFFF77"
+        "OwnerKey" = "8:_6376F88F741434C736AB6E1A79D5CF9D"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -172,20 +154,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_235309F71AB30787E6BFA7ECD7571A41"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_012684A117C51A1587B075301A18BC17"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Langlay.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_235309F71AB30787E6BFA7ECD7571A41"
+                    "_012684A117C51A1587B075301A18BC17"
                     {
-                    "Name" = "8:Langlay.Common.dll"
+                    "Name" = "8:WindowsInput.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Langlay.Common.dll"
+            "SourcePath" = "8:WindowsInput.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
@@ -203,20 +185,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A36A1C54673D7566E18EE7FB8FE61BA9"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6376F88F741434C736AB6E1A79D5CF9D"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Langlay.Common, Version=1.8.5980.1643, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_A36A1C54673D7566E18EE7FB8FE61BA9"
+                    "_6376F88F741434C736AB6E1A79D5CF9D"
                     {
-                    "Name" = "8:WindowsInput.dll"
+                    "Name" = "8:Langlay.Common.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:WindowsInput.dll"
+            "SourcePath" = "8:Langlay.Common.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
@@ -709,34 +691,6 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_879F961C69EE4227861101CC4ECFFF77"
-            {
-            "SourcePath" = "8:..\\Langlay.SettingsUi\\obj\\Release\\Langlay.SettingsUi.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{8D088F3C-C645-4333-9170-3B7F3021D26C}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C95BAE5C8F3E44D3B0ECEC3229C22568"
             {
             "SourcePath" = "8:..\\Langlay.App\\obj\\Release\\Langlay.exe"

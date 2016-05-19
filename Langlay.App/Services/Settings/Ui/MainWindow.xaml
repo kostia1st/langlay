@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Product.SettingsUi"
+        xmlns:common="clr-namespace:Product.Common;assembly=Langlay.Common"
         mc:Ignorable="d"
 
         Title="Settings" Height="500" Width="550"
@@ -13,6 +14,16 @@
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
         VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <common:EnumValueConverter x:Key="enumConverter" />
+        <Style x:Key="separator" TargetType="Rectangle">
+            <Setter Property="Stroke" Value="{x:Static SystemColors.ControlDarkBrush}" />
+            <Setter Property="StrokeThickness" Value="0.5" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Height" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+    </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

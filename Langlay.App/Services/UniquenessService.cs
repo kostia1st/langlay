@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Product.Common
+namespace Product
 {
     public class UniquenessService
     {
