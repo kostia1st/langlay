@@ -45,14 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppUtils.cs" />
-    <Compile Include="ArgumentNames.cs" />
     <Compile Include="AppSpecific.cs" />
     <Compile Include="CursorUtils.cs" />
     <Compile Include="EnumUtils.cs" />
     <Compile Include="ExpressionUtils.cs" />
     <Compile Include="KeyUtils.cs" />
-    <Compile Include="OverlayLocation.cs" />
     <Compile Include="PathUtils.cs" />
     <Compile Include="ProcessUtils.cs" />
     <Compile Include="SystemSettings.cs" />
@@ -61,7 +58,6 @@
     <Compile Include="EnumValueConverter.cs" />
     <Compile Include="KeyCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SwitchMethod.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WindowsSequenceCode.cs" />
     <Compile Include="WindowsStartupUtils.cs" />

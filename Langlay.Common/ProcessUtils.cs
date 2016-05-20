@@ -41,7 +41,7 @@ namespace Product.Common
         }
 
         public static void StartMainApp(
-            bool forceThisInstance = false,
+            string arguments,
             bool runAsAdmin = false)
         {
             var location = PathUtils.GetAppDirectory();
@@ -52,7 +52,7 @@ namespace Product.Common
                 FileName = fullFilename,
                 WorkingDirectory = location,
                 UseShellExecute = runAsAdmin,
-                Arguments = forceThisInstance ? $"--{ArgumentNames.ForceThisInstance}:true" : string.Empty,
+                Arguments = arguments,
                 Verb = runAsAdmin ? "runas" : string.Empty,
                 LoadUserProfile = true
             };

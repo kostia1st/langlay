@@ -42,7 +42,7 @@ namespace Product
 
         private void RestartAsAdmin()
         {
-            ProcessUtils.StartMainApp(true, true);
+            ProcessUtils.StartMainApp($"--{ArgumentNames.ForceThisInstance}:true", true);
         }
 
         private void ExitApplication()
