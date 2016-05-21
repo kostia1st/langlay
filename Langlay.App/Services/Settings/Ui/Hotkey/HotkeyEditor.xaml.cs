@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Product.SettingsUi
@@ -14,25 +15,30 @@ namespace Product.SettingsUi
         public HotkeyEditor()
         {
             InitializeComponent();
+            Loaded += HotkeyEditor_Loaded;
+            Unloaded += HotkeyEditor_Unloaded;
         }
 
-        public override void OnApplyTemplate()
+        private void HotkeyEditor_Unloaded(object sender, RoutedEventArgs e)
         {
-            base.OnApplyTemplate();
+            var viewModel = (KeyCodeViewModel) DataContext;
+            viewModel.PropertyChanged -= ViewModel_PropertyChanged;
+        }
+
+        private void HotkeyEditor_Loaded(object sender, RoutedEventArgs e)
+        {
             var viewModel = (KeyCodeViewModel) DataContext;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (Changed != null)
-                Changed(this, new RoutedEventArgs());
+            Changed?.Invoke(this, new RoutedEventArgs());
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (RemoveClick != null)
-                RemoveClick(this, e);
+            RemoveClick?.Invoke(this, e);
         }
     }
 }

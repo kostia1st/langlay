@@ -29,15 +29,15 @@ namespace Product
             // Here we make sure that registry contains the proper value in
             // the Startup section
             WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
-
+            var eventService = new EventService();
             var settingsService = new SettingsService(configService, this);
 
             var languageService = new LanguageService(configService);
-            var overlayService = new OverlayService(configService, languageService);
-            var hotkeyService = new HookedHotkeyService(configService, languageService);
+            var overlayService = new OverlayService(configService, languageService, eventService);
+            var hotkeyService = new HookedHotkeyService(configService, languageService, eventService);
             var tooltipService = new TooltipService(configService);
             var mouseCursorService = new MouseCursorService(
-                configService, languageService, tooltipService);
+                configService, languageService, tooltipService, eventService);
             var trayService = new TrayService(configService, settingsService);
 
             ILanguageSetterService languageSetterService;

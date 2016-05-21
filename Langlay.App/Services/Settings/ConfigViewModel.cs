@@ -29,7 +29,7 @@ namespace Product.SettingsUi
         public void NotifyLayoutSequenceChanged()
         {
             ConfigService.LayoutSwitchKeyArray = LayoutSequence.Select(x => x.KeyCode).ToList();
-            NotifyPropertyChanged(x => x.LayoutSequence);
+            RaisePropertyChanged(x => x.LayoutSequence);
         }
 
         private void LayoutSequence_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -37,15 +37,15 @@ namespace Product.SettingsUi
             NotifyLayoutSequenceChanged();
         }
 
-        public void NotifyLanguageSequenceChanged()
+        public void RaiseLanguageSequenceChanged()
         {
             ConfigService.LanguageSwitchKeyArray = LanguageSequence.Select(x => x.KeyCode).ToList();
-            NotifyPropertyChanged(x => x.LanguageSequence);
+            RaisePropertyChanged(x => x.LanguageSequence);
         }
 
         private void LanguageSequence_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            NotifyLanguageSequenceChanged();
+            RaiseLanguageSequenceChanged();
         }
 
         public bool RunAtWindowsStartup
@@ -158,17 +158,17 @@ namespace Product.SettingsUi
                 var propertyName = ExpressionUtils.GetMemberName(expression2);
                 ConfigService.GetType().GetProperty(propertyName).SetValue(ConfigService, value, null);
 
-                NotifyPropertyChanged(expression1);
+                RaisePropertyChanged(expression1);
             }
         }
 
-        private void NotifyPropertyChanged<T1>(
+        private void RaisePropertyChanged<T1>(
             Expression<Func<ConfigViewModel, T1>> expression)
         {
-            NotifyPropertyChanged(ExpressionUtils.GetMemberName(expression));
+            RaisePropertyChanged(ExpressionUtils.GetMemberName(expression));
         }
 
-        private void NotifyPropertyChanged(string propertyName)
+        private void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

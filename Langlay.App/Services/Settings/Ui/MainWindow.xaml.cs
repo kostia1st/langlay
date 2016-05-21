@@ -24,6 +24,16 @@ namespace Product.SettingsUi
             DataContext = ViewModel;
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+            Unloaded += MainWindow_Unloaded;
+        }
+
+        private void MainWindow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            HandleSave = null;
+            HandleApply = null;
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            ViewModel = null;
+            DataContext = null;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -84,8 +94,8 @@ namespace Product.SettingsUi
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
             RaiseApplyConfig();
+            this.Close();
         }
 
         private void HotkeyComposer_Layout_Changed(object sender, RoutedEventArgs e)
@@ -95,7 +105,7 @@ namespace Product.SettingsUi
 
         private void HotkeyComposer_Language_Changed(object sender, RoutedEventArgs e)
         {
-            ViewModel.NotifyLanguageSequenceChanged();
+            ViewModel.RaiseLanguageSequenceChanged();
         }
     }
 }

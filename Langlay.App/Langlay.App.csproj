@@ -78,7 +78,9 @@
   <ItemGroup>
     <Compile Include="AppMessageFilter.cs" />
     <Compile Include="Services\AppRunnerService.cs" />
+    <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\IAppRunnerService.cs" />
+    <Compile Include="Services\IEventService.cs" />
     <Compile Include="Services\Language\InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
     <Compile Include="Services\Hotkey\KeyEventArgs2.cs" />

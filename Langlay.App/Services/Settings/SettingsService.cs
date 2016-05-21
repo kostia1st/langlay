@@ -57,13 +57,18 @@ namespace Product
                 {
                     AppRunnerService.ReReadAndRunTheConfig();
                 };
-                _mainWindow.Closed += delegate
-                {
-                    _mainWindow = null;
-                };
+                _mainWindow.Closed += _mainWindow_Closed;
                 _mainWindow.ShowActivated = true;
                 _mainWindow.Show();
             }
+        }
+
+        private void _mainWindow_Closed(object sender, System.EventArgs e)
+        {
+            _mainWindow.HandleApply = null;
+            _mainWindow.HandleSave = null;
+            _mainWindow.Closed -= _mainWindow_Closed;
+            _mainWindow = null;
         }
     }
 }

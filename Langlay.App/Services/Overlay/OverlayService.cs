@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
@@ -9,15 +10,18 @@ namespace Product
     {
         private IConfigService ConfigService { get; set; }
         private ILanguageService LanguageService { get; set; }
+        private IEventService EventService { get; set; }
         private bool IsStarted { get; set; }
         private IDictionary<string, OverlayForm> Overlays { get; set; }
         private Timer LanguageCheckTimer { get; set; }
 
         public OverlayService(
-            IConfigService configService, ILanguageService languageService)
+            IConfigService configService, ILanguageService languageService,
+            IEventService eventService)
         {
             ConfigService = configService;
             LanguageService = languageService;
+            EventService = eventService;
             Overlays = new Dictionary<string, OverlayForm>();
         }
 
@@ -49,6 +53,8 @@ namespace Product
                         Overlays[screen.DeviceName] = CreateOverlay(screen);
                 }
                 StartTimer();
+                EventService.KeyboardInput += EventService_Input;
+                EventService.MouseInput += EventService_Input;
                 SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
             }
         }
@@ -57,9 +63,12 @@ namespace Product
         {
             if (IsStarted)
             {
-                SystemEvents.DisplaySettingsChanged -= SystemEvents_DisplaySettingsChanged;
-
                 IsStarted = false;
+
+                SystemEvents.DisplaySettingsChanged -= SystemEvents_DisplaySettingsChanged;
+                EventService.KeyboardInput -= EventService_Input;
+                EventService.MouseInput -= EventService_Input;
+
                 StopTimer();
                 foreach (var pair in Overlays)
                 {
@@ -75,6 +84,16 @@ namespace Product
         #endregion Start/Stop
 
         #region Timer
+
+        private const uint PeriodToCheckForLayoutSwitch = 1000;
+        private Stopwatch _lastInputElapsed = new Stopwatch() { };
+
+        private void EventService_Input()
+        {
+            _lastInputElapsed.Restart();
+            if (GetIsTimerPaused())
+                ResumeTimer();
+        }
 
         private void StartTimer()
         {
@@ -95,19 +114,50 @@ namespace Product
             }
         }
 
+        private void PauseTimer()
+        {
+            if (LanguageCheckTimer != null)
+            {
+                LanguageCheckTimer.Stop();
+            }
+        }
+
+        private void ResumeTimer()
+        {
+            if (LanguageCheckTimer != null)
+            {
+                LanguageCheckTimer.Start();
+            }
+        }
+
+        private bool GetIsTimerPaused()
+        {
+            return LanguageCheckTimer != null && !LanguageCheckTimer.Enabled;
+        }
+
         private IntPtr? _previousLayoutHandle;
 
         private void LanguageCheckTimer_Tick(object sender, System.EventArgs e)
         {
-            var currentLayoutHandle = LanguageService.GetCurrentLayoutHandle();
-            if (_previousLayoutHandle != null && _previousLayoutHandle != currentLayoutHandle)
+            if (_lastInputElapsed.IsRunning
+                && _lastInputElapsed.ElapsedMilliseconds < PeriodToCheckForLayoutSwitch)
             {
-                var currentLayout = LanguageService.GetCurrentLayout();
-                if (currentLayout == null)
-                    throw new NullReferenceException("currentLayout must not be null");
-                PushMessage(GetLanguageName(currentLayout), currentLayout.Name);
+                var currentLayoutHandle = LanguageService.GetCurrentLayoutHandle();
+                if (_previousLayoutHandle != null && _previousLayoutHandle != currentLayoutHandle)
+                {
+                    var currentLayout = LanguageService.GetCurrentLayout();
+                    if (currentLayout == null)
+                        throw new NullReferenceException("currentLayout must not be null");
+                    PushMessage(GetLanguageName(currentLayout), currentLayout.Name);
+                }
+                _previousLayoutHandle = currentLayoutHandle;
             }
-            _previousLayoutHandle = currentLayoutHandle;
+            else
+            {
+                _lastInputElapsed.Stop();
+                if (!GetIsTimerPaused())
+                    PauseTimer();
+            }
         }
 
         #endregion Timer
