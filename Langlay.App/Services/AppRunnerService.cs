@@ -32,8 +32,8 @@ namespace Product
 
             var settingsService = new SettingsService(configService, this);
 
-            var overlayService = new OverlayService(configService);
-            var languageService = new LanguageService(configService, overlayService);
+            var languageService = new LanguageService(configService);
+            var overlayService = new OverlayService(configService, languageService);
             var hotkeyService = new HookedHotkeyService(configService, languageService);
             var tooltipService = new TooltipService(configService);
             var mouseCursorService = new MouseCursorService(
@@ -57,8 +57,8 @@ namespace Product
 
             try
             {
-                // Here we check if we need to show the settings up immediately
-                // (it's likely the first app run)
+                // Here we check if we need to show the settings up
+                // immediately (it's likely the first app run)
                 if (configService.DoShowSettingsOnce)
                     settingsService.ShowSettings();
                 Application.Run();

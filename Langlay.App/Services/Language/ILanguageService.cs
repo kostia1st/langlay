@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Product
 {
@@ -7,6 +8,8 @@ namespace Product
         void ConductSwitch(KeyboardSwitch keyboardSwitch);
 
         InputLayout GetCurrentLayout();
+
+        IntPtr GetCurrentLayoutHandle();
 
         IList<InputLayout> GetInputLayouts();
     }

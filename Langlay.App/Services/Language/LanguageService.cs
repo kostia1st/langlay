@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Product.Common;
 
@@ -17,18 +16,15 @@ namespace Product
         public ILanguageSetterService LanguageSetterService { get; set; }
 
         public LanguageService(
-            IConfigService configService, IOverlayService overlayService)
+            IConfigService configService)
         {
             ConfigService = configService;
-            OverlayService = overlayService;
         }
 
         private void CheckServicesAreSet()
         {
             if (ConfigService == null)
                 throw new NullReferenceException("ConfigService must not be null");
-            if (OverlayService == null)
-                throw new NullReferenceException("OverlayService");
             if (LanguageSetterService == null)
                 throw new NullReferenceException("LanguageSetterService");
         }
@@ -82,10 +78,15 @@ namespace Product
 
         public InputLayout GetCurrentLayout()
         {
-            var currentLayoutHandle = Win32.GetKeyboardLayout(
-               Win32.GetWindowThreadProcessId(Win32.GetForegroundWindow(), IntPtr.Zero));
+            var currentLayoutHandle = GetCurrentLayoutHandle();
             return GetInputLayouts()
                 .FirstOrDefault(x => x.Handle == currentLayoutHandle);
+        }
+
+        public IntPtr GetCurrentLayoutHandle()
+        {
+            return Win32.GetKeyboardLayout(
+               Win32.GetWindowThreadProcessId(Win32.GetForegroundWindow(), IntPtr.Zero));
         }
 
         private string GetNextInputLanguageName(
@@ -120,23 +121,6 @@ namespace Product
             return inputLayouts.FirstOrDefault(x => x.LanguageName == languageName && x.Name == layoutName);
         }
 
-        private string GetLanguageName(InputLayout layout)
-        {
-            return ConfigService.DoShowLanguageNameInNative
-                ? layout.LanguageNameThreeLetterNative.ToUpper()
-                : layout.LanguageNameThreeLetter.ToUpper();
-        }
-
-        private void PushToOverlay()
-        {
-            var currentLayout = GetCurrentLayout();
-            if (currentLayout == null)
-                throw new NullReferenceException("currentLayout must not be null");
-            OverlayService.PushMessage(
-                GetLanguageName(currentLayout),
-                currentLayout.Name);
-        }
-
         protected void SwitchLanguage(bool restoreSavedLayout)
         {
             CheckServicesAreSet();
@@ -159,8 +143,6 @@ namespace Product
                 layoutToSet = GetDefaultLayoutForLanguage(
                     nextLanguageName);
             LanguageSetterService.SetCurrentLayout(layoutToSet);
-            Thread.Sleep(10);
-            PushToOverlay();
         }
 
         protected bool SwitchLayout(bool doWrap)
@@ -182,7 +164,6 @@ namespace Product
                 LanguageSetterService.SetCurrentLayout(layoutToSet);
 
                 CultureToLastUsedLayout[currentLayout.LanguageName] = layoutToSet;
-                PushToOverlay();
 
                 result = true;
             }
