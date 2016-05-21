@@ -11,22 +11,26 @@ namespace Product
         private IConfigService ConfigService { get; set; }
         private ILanguageService LanguageService { get; set; }
         private ITooltipService TooltipService { get; set; }
+        private IEventService EventService { get; set; }
 
         private bool IsLastDownHandled;
 
         public MouseCursorService(
             IConfigService configService, ILanguageService languageService,
-            ITooltipService tooltipService)
+            ITooltipService tooltipService, IEventService eventService)
         {
             if (configService == null)
-                throw new ArgumentNullException("configService");
+                throw new ArgumentNullException(nameof(configService));
             if (languageService == null)
-                throw new ArgumentNullException("languageService");
+                throw new ArgumentNullException(nameof(languageService));
             if (tooltipService == null)
-                throw new ArgumentNullException("tooltipService");
+                throw new ArgumentNullException(nameof(tooltipService));
+            if (eventService == null)
+                throw new ArgumentNullException(nameof(eventService));
             ConfigService = configService;
             LanguageService = languageService;
             TooltipService = tooltipService;
+            EventService = eventService;
         }
 
         #region Start/Stop
@@ -109,6 +113,7 @@ namespace Product
             }
             else
                 IsLastDownHandled = false;
+            EventService.RaiseMouseInput();
         }
 
         protected void Hooker_ButtonUp(object sender, MouseEventArgs2 e)
@@ -120,11 +125,13 @@ namespace Product
             {
                 ShowTooltip(e);
             }
+            EventService.RaiseMouseInput();
         }
 
         protected void Hooker_MouseMove(object sender, MouseEventArgs2 e)
         {
             UpdateTooltip(e);
+            EventService.RaiseMouseInput();
         }
 
         #endregion Hook handling

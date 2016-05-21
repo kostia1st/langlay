@@ -31,8 +31,7 @@ namespace Product.SettingsUi
 
         private void HotkeyEditor_Changed(object sender, RoutedEventArgs e)
         {
-            if (Changed != null)
-                Changed(this, e);
+            Changed?.Invoke(this, e);
         }
     }
 }

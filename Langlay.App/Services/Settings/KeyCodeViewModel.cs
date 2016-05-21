@@ -17,20 +17,19 @@ namespace Product.SettingsUi
                 if (_keyCode != value)
                 {
                     _keyCode = value;
-                    NotifyPropertyChanged(x => x.KeyCode);
+                    RaisePropertyChanged(x => x.KeyCode);
                 }
             }
         }
 
-        private void NotifyPropertyChanged<T1>(Expression<Func<KeyCodeViewModel, T1>> expression)
+        private void RaisePropertyChanged<T1>(Expression<Func<KeyCodeViewModel, T1>> expression)
         {
-            NotifyPropertyChanged(ExpressionUtils.GetMemberName(expression));
+            RaisePropertyChanged(ExpressionUtils.GetMemberName(expression));
         }
 
-        private void NotifyPropertyChanged(string propertyName)
+        private void RaisePropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

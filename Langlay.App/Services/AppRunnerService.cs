@@ -6,6 +6,16 @@ namespace Product
     public class AppRunnerService : IAppRunnerService
     {
         private bool _doRereadAndRun;
+        private AppMessageFilter _messageFilter;
+
+        public AppRunnerService()
+        {
+            _messageFilter = new AppMessageFilter
+            {
+                OnClose = delegate { Application.Exit(); },
+                OnRestart = delegate { Application.Restart(); }
+            };
+        }
 
         public IConfigService ReadConfig()
         {
@@ -24,20 +34,24 @@ namespace Product
             _doRereadAndRun = true;
         }
 
-        public void RunTheConfig(IConfigService configService)
+        /// <summary>
+        /// Runs the given config for one time.
+        /// </summary>
+        /// <returns>true if a restart requested</returns>
+        public bool RunTheConfig(IConfigService configService)
         {
             // Here we make sure that registry contains the proper value in
             // the Startup section
             WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
-
+            var eventService = new EventService();
             var settingsService = new SettingsService(configService, this);
 
-            var overlayService = new OverlayService(configService);
-            var languageService = new LanguageService(configService, overlayService);
-            var hotkeyService = new HookedHotkeyService(configService, languageService);
+            var languageService = new LanguageService(configService);
+            var overlayService = new OverlayService(configService, languageService, eventService);
+            var hotkeyService = new HookedHotkeyService(configService, languageService, eventService);
             var tooltipService = new TooltipService(configService);
             var mouseCursorService = new MouseCursorService(
-                configService, languageService, tooltipService);
+                configService, languageService, tooltipService, eventService);
             var trayService = new TrayService(configService, settingsService);
 
             ILanguageSetterService languageSetterService;
@@ -57,11 +71,16 @@ namespace Product
 
             try
             {
-                // Here we check if we need to show the settings up immediately
-                // (it's likely the first app run)
+                // Here we check if we need to show the settings up
+                // immediately (it's likely the first app run)
                 if (configService.DoShowSettingsOnce)
                     settingsService.ShowSettings();
+
+                // Make the app react properly to external events.
+                // Registration of a filter is required per each application Run.
+                Application.AddMessageFilter(_messageFilter);
                 Application.Run();
+                Application.RemoveMessageFilter(_messageFilter);
             }
             finally
             {
@@ -72,12 +91,9 @@ namespace Product
                 overlayService.Stop();
                 settingsService.Stop();
             }
-            if (_doRereadAndRun)
-            {
-                _doRereadAndRun = false;
-                configService = ReadConfig();
-                RunTheConfig(configService);
-            }
+            var doRereadAndRun = _doRereadAndRun;
+            _doRereadAndRun = false;
+            return doRereadAndRun;
         }
     }
 }

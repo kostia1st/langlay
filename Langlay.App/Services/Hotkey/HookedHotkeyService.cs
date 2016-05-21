@@ -13,20 +13,25 @@ namespace Product
         private KeyboardHooker Hooker { get; set; }
         private IConfigService ConfigService { get; set; }
         private ILanguageService LanguageService { get; set; }
+        private IEventService EventService { get; set; }
 
         private KeyboardSimulator KeyboardSimulator { get; set; }
 
         public HookedHotkeyService(
             IConfigService configService,
-            ILanguageService languageService)
+            ILanguageService languageService,
+            IEventService eventService)
         {
             if (configService == null)
-                throw new ArgumentNullException("configService");
+                throw new ArgumentNullException(nameof(configService));
             if (languageService == null)
-                throw new ArgumentNullException("languageService");
+                throw new ArgumentNullException(nameof(languageService));
+            if (eventService == null)
+                throw new ArgumentNullException(nameof(eventService));
 
             ConfigService = configService;
             LanguageService = languageService;
+            EventService = eventService;
 
             IsEnabled = true;
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
@@ -224,6 +229,7 @@ namespace Product
                         e.Handled = true;
                     }
                 }
+                EventService.RaiseKeyboardInput();
             }
         }
 
@@ -287,6 +293,7 @@ namespace Product
                         }
                     }
                 }
+                EventService.RaiseKeyboardInput();
             }
         }
 

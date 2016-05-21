@@ -18,13 +18,6 @@ namespace Product
                 // We must let Windows know that our app is DPI aware, so
                 // the sizes and coordinates don't get scaled behind the scene
                 Win32.SetProcessDPIAware();
-
-                // Make the app react properly to external events
-                Application.AddMessageFilter(new AppMessageFilter
-                {
-                    OnClose = delegate { Application.Exit(); },
-                    OnRestart = delegate { Application.Restart(); }
-                });
             }
         }
 
@@ -42,7 +35,12 @@ namespace Product
                 uniquenessService.Run(delegate
                 {
                     InitializeApp();
-                    appRunnerService.RunTheConfig(configService);
+                    var restartRequested = appRunnerService.RunTheConfig(configService);
+                    while (restartRequested)
+                    {
+                        configService = appRunnerService.ReadConfig();
+                        restartRequested = appRunnerService.RunTheConfig(configService);
+                    }
                 });
             }
             catch (Exception ex)

@@ -42,7 +42,11 @@ namespace Product
 
         public void ShowSettings()
         {
-            if (_mainWindow == null)
+            if (_mainWindow != null && _mainWindow.IsVisible)
+            {
+                _mainWindow.Activate();
+            }
+            else
             {
                 _mainWindow = new MainWindow(ConfigService);
                 _mainWindow.HandleSave = delegate
@@ -53,10 +57,18 @@ namespace Product
                 {
                     AppRunnerService.ReReadAndRunTheConfig();
                 };
+                _mainWindow.Closed += _mainWindow_Closed;
+                _mainWindow.ShowActivated = true;
                 _mainWindow.Show();
             }
-            else
-                _mainWindow.Activate();
+        }
+
+        private void _mainWindow_Closed(object sender, System.EventArgs e)
+        {
+            _mainWindow.HandleApply = null;
+            _mainWindow.HandleSave = null;
+            _mainWindow.Closed -= _mainWindow_Closed;
+            _mainWindow = null;
         }
     }
 }
