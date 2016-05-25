@@ -76,11 +76,21 @@ namespace Product
             return layoutNames[indexOfNext];
         }
 
+        /// <summary>
+        /// Returns the currently active input layout.
+        /// </summary>
+        /// <returns>
+        /// returning null makes no sense, so the method will throw an
+        /// exception if it cannot resolve the layout to a usable value.
+        /// </returns>
         public InputLayout GetCurrentLayout()
         {
             var currentLayoutHandle = GetCurrentLayoutHandle();
-            return GetInputLayouts()
+            var currentLayout = GetInputLayouts()
                 .FirstOrDefault(x => x.Handle == currentLayoutHandle);
+            if (currentLayout == null)
+                throw new NullReferenceException($"currentLayout must not be null, handle is {currentLayoutHandle}");
+            return currentLayout;
         }
 
         public IntPtr GetCurrentLayoutHandle()
@@ -127,8 +137,6 @@ namespace Product
 
             var inputLayouts = GetInputLayouts();
             var currentLayout = GetCurrentLayout();
-            if (currentLayout == null)
-                throw new NullReferenceException("currentLayout must not be null");
 
             // Here we save the layout last used within the language, so
             // that it could be restored later.
@@ -151,8 +159,6 @@ namespace Product
             var result = false;
             var inputLayouts = GetInputLayouts();
             var currentLayout = GetCurrentLayout();
-            if (currentLayout == null)
-                throw new NullReferenceException("currentLayout must not be null");
 
             var nextLayoutName = GetNextInputLayoutName(
                 currentLayout.LanguageName, currentLayout.Name, doWrap);

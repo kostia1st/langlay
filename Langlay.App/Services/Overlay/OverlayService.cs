@@ -146,8 +146,6 @@ namespace Product
                 if (_previousLayoutHandle != null && _previousLayoutHandle != currentLayoutHandle)
                 {
                     var currentLayout = LanguageService.GetCurrentLayout();
-                    if (currentLayout == null)
-                        throw new NullReferenceException("currentLayout must not be null");
                     PushMessage(GetLanguageName(currentLayout), currentLayout.Name);
                 }
                 _previousLayoutHandle = currentLayoutHandle;
