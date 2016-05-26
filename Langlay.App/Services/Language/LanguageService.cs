@@ -86,6 +86,7 @@ namespace Product
         public InputLayout GetCurrentLayout()
         {
             var currentLayoutHandle = GetCurrentLayoutHandle();
+
             var currentLayout = GetInputLayouts()
                 .FirstOrDefault(x => x.Handle == currentLayoutHandle);
             if (currentLayout == null)
@@ -95,8 +96,16 @@ namespace Product
 
         public IntPtr GetCurrentLayoutHandle()
         {
-            return Win32.GetKeyboardLayout(
+            var currentLayoutHandle = Win32.GetKeyboardLayout(
                Win32.GetWindowThreadProcessId(Win32.GetForegroundWindow(), IntPtr.Zero));
+
+            // There are (for now) cases when we cannot determine the
+            // currently used layout (in a command line prompt for example,
+            // or in a window with a higher level of elevation) so we need
+            // to handle this possible situation without a crash.
+            if (currentLayoutHandle == IntPtr.Zero)
+                currentLayoutHandle = GetInputLayouts().FirstOrDefault()?.Handle ?? IntPtr.Zero;
+            return currentLayoutHandle;
         }
 
         private string GetNextInputLanguageName(
