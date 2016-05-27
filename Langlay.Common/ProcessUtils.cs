@@ -9,9 +9,9 @@ namespace Product.Common
         public static bool StopOtherMainApp()
         {
             var result = false;
-            var mainAppProcesses = Process.GetProcessesByName(AppSpecific.MainAppProcessName);
             var currentProcess = Process.GetCurrentProcess();
-            var processes = mainAppProcesses
+            var processes = Process
+                .GetProcessesByName(AppSpecific.MainAppProcessName)
                 .Where(x => x.Id != currentProcess.Id)
                 .ToList();
 #if DEBUG
@@ -26,17 +26,23 @@ namespace Product.Common
 
             foreach (var process in processes)
             {
-                var thread = process.Threads.Cast<ProcessThread>().FirstOrDefault();
+                process.CloseMainWindow();
+
+                var thread = process.Threads
+                    .Cast<ProcessThread>()
+                    .FirstOrDefault();
+
                 if (thread != null)
+                {
                     Win32.PostThreadMessage(thread.Id, Win32.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                else
-                    process.CloseMainWindow();
+                }
 
                 if (!process.WaitForExit(2000))
                     process.Kill();
 
                 result |= true;
             }
+
             return result;
         }
 

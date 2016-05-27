@@ -30,8 +30,8 @@ namespace Product
 
         public void ReReadAndRunTheConfig()
         {
-            Application.Exit();
             _doRereadAndRun = true;
+            Application.Exit();
         }
 
         /// <summary>
@@ -71,19 +71,20 @@ namespace Product
 
             try
             {
+                // Make the app react properly to external events.
+                // Registration of a filter is required per each application Run.
+                Application.AddMessageFilter(_messageFilter);
+
                 // Here we check if we need to show the settings up
                 // immediately (it's likely the first app run)
                 if (configService.DoShowSettingsOnce)
                     settingsService.ShowSettings();
 
-                // Make the app react properly to external events.
-                // Registration of a filter is required per each application Run.
-                Application.AddMessageFilter(_messageFilter);
                 Application.Run();
-                Application.RemoveMessageFilter(_messageFilter);
             }
             finally
             {
+                Application.RemoveMessageFilter(_messageFilter);
                 trayService.Stop();
                 mouseCursorService.Stop();
                 tooltipService.Stop();

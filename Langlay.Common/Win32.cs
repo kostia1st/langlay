@@ -37,6 +37,7 @@ namespace Product.Common
         public const int WM_DESTROY = 0x0002;
         public const int WM_QUIT = 0x0012;
         public const int WM_USER_RESTART = 0x0400 + 20;
+        public const int WM_USER_QUIT = 0x0400 + 21;
 
         public static string MessageToString(uint message)
         {
@@ -125,12 +126,17 @@ namespace Product.Common
         public static extern bool GetKeyboardState(byte[] keyStateArray);
 
         /// <summary>
-        /// Sets the windows hook, do the desired event, one of hInstance or threadId must be non-null
+        /// Sets the windows hook, do the desired event, one of hInstance or
+        /// threadId must be non-null
         /// </summary>
         /// <param name="idHook">The id of the event you want to hook</param>
         /// <param name="callback">The callback.</param>
-        /// <param name="hInstance">The handle you want to attach the event to, can be null</param>
-        /// <param name="threadId">The thread you want to attach the event to, can be null</param>
+        /// <param name="hInstance">
+        /// The handle you want to attach the event to, can be null
+        /// </param>
+        /// <param name="threadId">
+        /// The thread you want to attach the event to, can be null
+        /// </param>
         /// <returns>a handle to the desired hook</returns>
         [DllImport("user32.dll")]
         public static extern IntPtr SetWindowsHookEx(int idHook, KeyboardHookProc callback, IntPtr hInstance, uint threadId);
@@ -141,7 +147,9 @@ namespace Product.Common
         /// <summary>
         /// Unhooks the windows hook.
         /// </summary>
-        /// <param name="hookHandle">The hook handle that was returned from SetWindowsHookEx</param>
+        /// <param name="hookHandle">
+        /// The hook handle that was returned from SetWindowsHookEx
+        /// </param>
         /// <returns>True if successful, false otherwise</returns>
         [DllImport("user32.dll")]
         public static extern bool UnhookWindowsHookEx(IntPtr hookHandle);
