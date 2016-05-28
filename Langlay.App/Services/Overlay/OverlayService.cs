@@ -143,14 +143,17 @@ namespace Product
                 && _lastInputElapsed.ElapsedMilliseconds < PeriodToCheckForLayoutSwitch)
             {
                 var currentLayoutHandle = LanguageService.GetCurrentLayoutHandle();
-                if (_previousLayoutHandle != null && _previousLayoutHandle != currentLayoutHandle)
+                if (currentLayoutHandle != IntPtr.Zero)
                 {
-                    var currentLayout = LanguageService.GetCurrentLayout();
-                    if (currentLayout == null)
-                        throw new NullReferenceException("currentLayout must not be null");
-                    PushMessage(GetLanguageName(currentLayout), currentLayout.Name);
+                    if (_previousLayoutHandle != null
+                        && _previousLayoutHandle != currentLayoutHandle)
+                    {
+                        var currentLayout = LanguageService.GetCurrentLayout();
+                        if (currentLayout != null)
+                            PushMessage(GetLanguageName(currentLayout), currentLayout.Name);
+                    }
+                    _previousLayoutHandle = currentLayoutHandle;
                 }
-                _previousLayoutHandle = currentLayoutHandle;
             }
             else
             {

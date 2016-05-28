@@ -76,7 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppMessageFilter.cs" />
+    <Compile Include="Services\AppMessageFilter.cs" />
     <Compile Include="Services\AppRunnerService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\IAppRunnerService.cs" />

@@ -61,8 +61,13 @@ namespace Product
         private int? HookInternals(int code, uint wParam, IntPtr lParam)
         {
             var result = (int?) null;
-            if (code >= 0
-                && (IsEnabledHandler == null || IsEnabledHandler()))
+#if TRACE
+            var doAttemptToHandle = true;
+#else
+            var doAttemptToHandle =
+                (IsEnabledHandler == null || IsEnabledHandler());
+#endif
+            if (code >= 0 && doAttemptToHandle)
             {
                 var keyInfo = (Win32.KeyboardInfo) Marshal.PtrToStructure(lParam, typeof(Win32.KeyboardInfo));
                 var key = (Keys) keyInfo.VirtualKeyCode;

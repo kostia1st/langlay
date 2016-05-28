@@ -94,8 +94,13 @@ namespace Product.SettingsUi
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            RaiseApplyConfig();
             this.Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            RaiseApplyConfig();
+            base.OnClosed(e);
         }
 
         private void HotkeyComposer_Layout_Changed(object sender, RoutedEventArgs e)

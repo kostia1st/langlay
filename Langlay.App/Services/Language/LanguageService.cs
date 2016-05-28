@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
@@ -76,17 +77,50 @@ namespace Product
             return layoutNames[indexOfNext];
         }
 
+        /// <summary>
+        /// Returns the currently active input layout.
+        /// </summary>
+        /// <returns>
+        /// returning null means we cannot determine the current input
+        /// layout from the OS.
+        /// </returns>
         public InputLayout GetCurrentLayout()
         {
             var currentLayoutHandle = GetCurrentLayoutHandle();
-            return GetInputLayouts()
+
+            var currentLayout = GetInputLayouts()
                 .FirstOrDefault(x => x.Handle == currentLayoutHandle);
+            return currentLayout;
+
+            // There are (for now) cases when we cannot determine the
+            // currently used layout (in a command line prompt for example,
+            // or in a window with a higher level of elevation, or in the
+            // taskbar) so we need to handle this possible situation without
+            // a crash.
         }
+
+#if TRACE
+        private uint _processId_old;
+#endif
 
         public IntPtr GetCurrentLayoutHandle()
         {
-            return Win32.GetKeyboardLayout(
-               Win32.GetWindowThreadProcessId(Win32.GetForegroundWindow(), IntPtr.Zero));
+            var currentLayoutHandle = IntPtr.Zero;
+            var processId = 0U;
+            var threadId = Win32.GetWindowThreadProcessId(
+                Win32.GetForegroundWindow(), out processId);
+
+            var process = Process.GetProcessById((int) processId);
+            if (process != null && process.ProcessName != "Idle")
+            {
+#if TRACE
+                if (processId != _processId_old)
+                    Trace.WriteLine($"Process name: {process.ProcessName}");
+                _processId_old = processId;
+#endif
+                currentLayoutHandle = Win32.GetKeyboardLayout(threadId);
+            }
+            return currentLayoutHandle;
         }
 
         private string GetNextInputLanguageName(
@@ -125,47 +159,48 @@ namespace Product
         {
             CheckServicesAreSet();
 
-            var inputLayouts = GetInputLayouts();
             var currentLayout = GetCurrentLayout();
-            if (currentLayout == null)
-                throw new NullReferenceException("currentLayout must not be null");
+            if (currentLayout != null)
+            {
+                var inputLayouts = GetInputLayouts();
 
-            // Here we save the layout last used within the language, so
-            // that it could be restored later.
-            CultureToLastUsedLayout[currentLayout.LanguageName] = currentLayout.Handle;
+                // Here we save the layout last used within the language, so
+                // that it could be restored later.
+                CultureToLastUsedLayout[currentLayout.LanguageName] = currentLayout.Handle;
 
-            var nextLanguageName = GetNextInputLanguageName(
-                currentLayout.LanguageName);
-            IntPtr layoutToSet;
-            if (restoreSavedLayout && CultureToLastUsedLayout.ContainsKey(nextLanguageName))
-                layoutToSet = CultureToLastUsedLayout[nextLanguageName];
-            else
-                layoutToSet = GetDefaultLayoutForLanguage(
-                    nextLanguageName);
-            LanguageSetterService.SetCurrentLayout(layoutToSet);
+                var nextLanguageName = GetNextInputLanguageName(
+                    currentLayout.LanguageName);
+                IntPtr layoutToSet;
+                if (restoreSavedLayout && CultureToLastUsedLayout.ContainsKey(nextLanguageName))
+                    layoutToSet = CultureToLastUsedLayout[nextLanguageName];
+                else
+                    layoutToSet = GetDefaultLayoutForLanguage(
+                        nextLanguageName);
+                LanguageSetterService.SetCurrentLayout(layoutToSet);
+            }
         }
 
         protected bool SwitchLayout(bool doWrap)
         {
             CheckServicesAreSet();
             var result = false;
-            var inputLayouts = GetInputLayouts();
             var currentLayout = GetCurrentLayout();
-            if (currentLayout == null)
-                throw new NullReferenceException("currentLayout must not be null");
-
-            var nextLayoutName = GetNextInputLayoutName(
-                currentLayout.LanguageName, currentLayout.Name, doWrap);
-
-            if (!string.IsNullOrEmpty(nextLayoutName))
+            if (currentLayout != null)
             {
-                var layoutToSet = GetLayoutByLanguageAndLayoutName(
-                    currentLayout.LanguageName, nextLayoutName).Handle;
-                LanguageSetterService.SetCurrentLayout(layoutToSet);
+                var inputLayouts = GetInputLayouts();
+                var nextLayoutName = GetNextInputLayoutName(
+                    currentLayout.LanguageName, currentLayout.Name, doWrap);
 
-                CultureToLastUsedLayout[currentLayout.LanguageName] = layoutToSet;
+                if (!string.IsNullOrEmpty(nextLayoutName))
+                {
+                    var layoutToSet = GetLayoutByLanguageAndLayoutName(
+                        currentLayout.LanguageName, nextLayoutName).Handle;
+                    LanguageSetterService.SetCurrentLayout(layoutToSet);
 
-                result = true;
+                    CultureToLastUsedLayout[currentLayout.LanguageName] = layoutToSet;
+
+                    result = true;
+                }
             }
             return result;
         }
