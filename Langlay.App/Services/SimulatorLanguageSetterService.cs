@@ -86,20 +86,23 @@ namespace Product
         {
             var result = 0;
 
-            var inputLayouts = LanguageService.GetInputLayouts();
             var currentLayout = LanguageService.GetCurrentLayout();
-            var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
-
-            var inputLanguageNames = inputLayouts
-                .Select(x => x.LanguageName)
-                .Distinct().ToList();
-            var indexOfCurrentLanguage = inputLanguageNames.IndexOf(currentLayout.LanguageName);
-            if (indexOfCurrentLanguage >= 0)
+            if (currentLayout != null)
             {
-                var indexOfTargetLanguage = inputLanguageNames.IndexOf(targetLayout.LanguageName);
-                result = indexOfTargetLanguage - indexOfCurrentLanguage;
-                if (result < 0)
-                    result += inputLanguageNames.Count;
+                var inputLayouts = LanguageService.GetInputLayouts();
+                var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
+
+                var inputLanguageNames = inputLayouts
+                    .Select(x => x.LanguageName)
+                    .Distinct().ToList();
+                var indexOfCurrentLanguage = inputLanguageNames.IndexOf(currentLayout.LanguageName);
+                if (indexOfCurrentLanguage >= 0)
+                {
+                    var indexOfTargetLanguage = inputLanguageNames.IndexOf(targetLayout.LanguageName);
+                    result = indexOfTargetLanguage - indexOfCurrentLanguage;
+                    if (result < 0)
+                        result += inputLanguageNames.Count;
+                }
             }
             return result;
         }
@@ -108,25 +111,27 @@ namespace Product
         {
             var result = 0;
 
-            var inputLayouts = LanguageService.GetInputLayouts();
-
             // Re-read the current layout, to find out what layout the
             // system language manager has selected within the layout group
             // of the language.
             var currentLayout = LanguageService.GetCurrentLayout();
-
-            var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
-            var inputLayoutNamesWithinLanguage = inputLayouts
-                .Where(x => x.LanguageName == targetLayout.LanguageName)
-                .Select(x => x.Name)
-                .ToList();
-            var indexOfCurrentLayout = inputLayoutNamesWithinLanguage.IndexOf(currentLayout.Name);
-            if (indexOfCurrentLayout >= 0)
+            if (currentLayout != null)
             {
-                var indexOfTargetLayout = inputLayoutNamesWithinLanguage.IndexOf(targetLayout.Name);
-                result = indexOfTargetLayout - indexOfCurrentLayout;
-                if (result < 0)
-                    result += inputLayoutNamesWithinLanguage.Count;
+                var inputLayouts = LanguageService.GetInputLayouts();
+                var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
+
+                var inputLayoutNamesWithinLanguage = inputLayouts
+                    .Where(x => x.LanguageName == targetLayout.LanguageName)
+                    .Select(x => x.Name)
+                    .ToList();
+                var indexOfCurrentLayout = inputLayoutNamesWithinLanguage.IndexOf(currentLayout.Name);
+                if (indexOfCurrentLayout >= 0)
+                {
+                    var indexOfTargetLayout = inputLayoutNamesWithinLanguage.IndexOf(targetLayout.Name);
+                    result = indexOfTargetLayout - indexOfCurrentLayout;
+                    if (result < 0)
+                        result += inputLayoutNamesWithinLanguage.Count;
+                }
             }
             return result;
         }

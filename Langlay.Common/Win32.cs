@@ -77,7 +77,10 @@ namespace Product.Common
         public static extern IntPtr GetKeyboardLayout(int threadId);
 
         [DllImport("user32.dll")]
-        public static extern int GetWindowThreadProcessId(IntPtr windowHandle, IntPtr id);
+        public static extern int GetWindowThreadProcessId(IntPtr windowHandle, IntPtr processId);
+
+        [DllImport("user32.dll")]
+        public static extern int GetWindowThreadProcessId(IntPtr windowHandle, out uint processId);
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();

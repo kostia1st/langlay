@@ -75,8 +75,11 @@ namespace Product
         private void ShowTooltip(MouseEventArgs2 e)
         {
             var currentLayout = LanguageService.GetCurrentLayout();
-            var text = GetLanguageName(currentLayout);
-            TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
+            if (currentLayout != null)
+            {
+                var text = GetLanguageName(currentLayout);
+                TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
+            }
         }
 
         private void UpdateTooltip(MouseEventArgs2 e)
