@@ -112,10 +112,19 @@ namespace Product
         private int HookProcedure(int code, uint wParam, IntPtr lParam)
         {
             var result = (int?) null;
-            if (HookProcedureWrapper != null)
-                result = HookProcedureWrapper(() => HookInternals(code, wParam, lParam));
-            else
-                result = HookInternals(code, wParam, lParam);
+            try
+            {
+                if (HookProcedureWrapper != null)
+                    result = HookProcedureWrapper(() => HookInternals(code, wParam, lParam));
+                else
+                    result = HookInternals(code, wParam, lParam);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Trace.TraceError(ex.ToString());
+#endif
+            }
             if (result == null)
                 result = Win32.CallNextHookEx(HookHandle, code, wParam, lParam);
             return result.Value;

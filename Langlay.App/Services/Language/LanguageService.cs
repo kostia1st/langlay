@@ -110,15 +110,18 @@ namespace Product
             var threadId = Win32.GetWindowThreadProcessId(
                 Win32.GetForegroundWindow(), out processId);
 
-            var process = Process.GetProcessById((int) processId);
-            if (process != null && process.ProcessName != "Idle")
+            if (processId != 0)
             {
+                var process = Process.GetProcessById((int) processId);
+                if (process != null && process.ProcessName != "Idle")
+                {
 #if TRACE
-                if (processId != _processId_old)
-                    Trace.WriteLine($"Process name: {process.ProcessName}");
-                _processId_old = processId;
+                    if (processId != _processId_old)
+                        Trace.WriteLine($"Process name: {process.ProcessName}");
+                    _processId_old = processId;
 #endif
-                currentLayoutHandle = Win32.GetKeyboardLayout(threadId);
+                    currentLayoutHandle = Win32.GetKeyboardLayout(threadId);
+                }
             }
             return currentLayoutHandle;
         }
