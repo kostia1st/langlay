@@ -60,14 +60,18 @@ namespace Product
                     {
                         if (!value)
                         {
+#if TRACE
                             Trace.WriteLine("-- START Simulating full keystroke up");
                             Trace.Indent();
+#endif
                             foreach (var key in keysToSimulate)
                             {
                                 KeyboardSimulator.KeyUp((VirtualKeyCode) key);
                             }
+#if TRACE
                             Trace.Unindent();
                             Trace.WriteLine("-- END Simulating full keystroke up");
+#endif
 
                             // This line (or equivalent) is necessary to
                             // avoid phantom KEY UP messages afterwards.
@@ -79,15 +83,19 @@ namespace Product
                             // avoid phantom KEY UP messages afterwards.
                             Application.DoEvents();
 
+#if TRACE
                             Trace.WriteLine("-- START Simulating full keystroke down");
                             Trace.Indent();
+#endif
 
                             foreach (var key in keysToSimulate.Reverse())
                             {
                                 KeyboardSimulator.KeyDown((VirtualKeyCode) key);
                             }
+#if TRACE
                             Trace.Unindent();
                             Trace.WriteLine("-- END Simulating full keystroke down");
+#endif
                         }
                     }
                 }
@@ -198,8 +206,9 @@ namespace Product
             }
             catch (Exception ex)
             {
+#if TRACE
                 Trace.TraceError(ex.ToString());
-#if DEBUG
+#elif DEBUG
                 MessageBox.Show(ex.ToString());
 #endif
             }
@@ -264,8 +273,9 @@ namespace Product
 
                         try
                         {
+#if TRACE
                             Trace.WriteLine("Pass the key-up thru");
-
+#endif
                             KeyboardSimulator.KeyUp((VirtualKeyCode) e.KeyStroke.KeyTriggeredEvent);
 
                             // Here we disable the Caps by fake-pressing Shift
@@ -276,11 +286,15 @@ namespace Product
                                 // - the hotkey is Caps Lock
                                 // - the Shift is set up to turn Caps off
                                 //   See issue #65 on GitHub for details.
+#if TRACE
                                 Trace.WriteLine("-- START #65 case");
                                 Trace.Indent();
+#endif
                                 KeyboardSimulator.KeyPress(VirtualKeyCode.LSHIFT);
+#if TRACE
                                 Trace.Unindent();
                                 Trace.WriteLine("-- END #65 case");
+#endif
 
                                 // -- end of workaround
                             }
