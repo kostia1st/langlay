@@ -137,7 +137,7 @@ namespace Product
 
         private IntPtr? _previousLayoutHandle;
 
-        private void LanguageCheckTimer_Tick(object sender, System.EventArgs e)
+        private void OnTimer()
         {
             if (_lastInputElapsed.IsRunning
                 && _lastInputElapsed.ElapsedMilliseconds < PeriodToCheckForLayoutSwitch)
@@ -160,6 +160,20 @@ namespace Product
                 _lastInputElapsed.Stop();
                 if (!GetIsTimerPaused())
                     PauseTimer();
+            }
+        }
+
+        private void LanguageCheckTimer_Tick(object sender, System.EventArgs e)
+        {
+            try
+            {
+                OnTimer();
+            }
+            catch (Exception ex)
+            {
+#if TRACE
+                Trace.TraceError(ex.ToString());
+#endif
             }
         }
 

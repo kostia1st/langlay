@@ -113,7 +113,9 @@ namespace Product
             if (processId != 0)
             {
                 var process = Process.GetProcessById((int) processId);
-                if (process != null && process.ProcessName != "Idle")
+                if (process != null
+                    && !process.HasExited
+                    && process.ProcessName != ProcessUtils.ProcessName_Idle)
                 {
 #if TRACE
                     if (processId != _processId_old)
