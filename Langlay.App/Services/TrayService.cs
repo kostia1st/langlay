@@ -84,9 +84,15 @@ namespace Product
             {
                 IsStarted = false;
                 if (ContextMenu != null)
+                {
                     ContextMenu.Dispose();
+                    ContextMenu = null;
+                }
                 if (Icon != null)
+                {
                     Icon.Dispose();
+                    Icon = null;
+                }
             }
         }
     }
