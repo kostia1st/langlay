@@ -12,12 +12,11 @@ namespace Product
         private IDictionary<string, IntPtr> CultureToLastUsedLayout
             = new Dictionary<string, IntPtr>();
 
-        private IOverlayService OverlayService { get; set; }
-        private IConfigService ConfigService { get; set; }
+        public IConfigService ConfigService { get; set; }
         public ILanguageSetterService LanguageSetterService { get; set; }
 
         public LanguageService(
-            IConfigService configService)
+            IConfigService configService = null)
         {
             ConfigService = configService;
         }
@@ -25,9 +24,9 @@ namespace Product
         private void CheckServicesAreSet()
         {
             if (ConfigService == null)
-                throw new NullReferenceException("ConfigService must not be null");
+                throw new NullReferenceException($"{nameof(ConfigService)} must not be null");
             if (LanguageSetterService == null)
-                throw new NullReferenceException("LanguageSetterService");
+                throw new NullReferenceException($"{nameof(LanguageSetterService)} must not be null");
         }
 
         private IDictionary<IntPtr, InputLayout> _inputLayouts
@@ -95,8 +94,8 @@ namespace Product
             // There are (for now) cases when we cannot determine the
             // currently used layout (in a command line prompt for example,
             // or in a window with a higher level of elevation, or in the
-            // taskbar) so we need to handle this possible situation without
-            // a crash.
+            // "idle" process) so we need to handle this possible situation
+            // without a crash.
         }
 
 #if TRACE
@@ -212,6 +211,7 @@ namespace Product
 
         protected void SwitchLanguageAndLayout()
         {
+            // If we have no layout to switch to, then we switch the language.
             if (!SwitchLayout(false))
                 SwitchLanguage(false);
         }

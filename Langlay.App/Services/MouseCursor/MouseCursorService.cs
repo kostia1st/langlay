@@ -8,10 +8,11 @@ namespace Product
     public class MouseCursorService : IDisposable
     {
         private MouseHooker Hooker { get; set; }
-        private IConfigService ConfigService { get; set; }
-        private ILanguageService LanguageService { get; set; }
-        private ITooltipService TooltipService { get; set; }
-        private IEventService EventService { get; set; }
+
+        public IConfigService ConfigService { get; private set; }
+        public ILanguageService LanguageService { get; private set; }
+        public ITooltipService TooltipService { get; private set; }
+        public IEventService EventService { get; private set; }
 
         private bool IsLastDownHandled;
 
@@ -60,6 +61,7 @@ namespace Product
                     Hooker.Dispose();
                     Hooker = null;
                 }
+                IsLastDownHandled = false;
             }
         }
 
@@ -86,7 +88,9 @@ namespace Product
         {
             if (TooltipService.GetIsVisible())
             {
-                TooltipService.Push(TooltipService.GetDisplayString(), new System.Drawing.Point(e.Point.X, e.Point.Y), false);
+                TooltipService.Push(
+                    TooltipService.GetDisplayString(),
+                    new System.Drawing.Point(e.Point.X, e.Point.Y), false);
             }
         }
 

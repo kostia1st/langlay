@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
@@ -11,11 +10,11 @@ namespace Product
     public class HookedHotkeyService : IDisposable, IHotkeyService
     {
         private KeyboardHooker Hooker { get; set; }
+        private KeyboardSimulator KeyboardSimulator { get; set; }
+
         private IConfigService ConfigService { get; set; }
         private ILanguageService LanguageService { get; set; }
         private IEventService EventService { get; set; }
-
-        private KeyboardSimulator KeyboardSimulator { get; set; }
 
         public HookedHotkeyService(
             IConfigService configService,
@@ -34,7 +33,6 @@ namespace Product
             EventService = eventService;
 
             IsEnabled = true;
-            KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
         #region Enabled/Disabled
@@ -115,6 +113,7 @@ namespace Product
             if (!IsStarted)
             {
                 IsStarted = true;
+                KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
                 Hooker = new KeyboardHooker(false, HookProcedureWrapper);
                 Hooker.KeyDown = Hooker_KeyDown;
                 Hooker.KeyUp = Hooker_KeyUp;
@@ -133,6 +132,9 @@ namespace Product
                     Hooker.Dispose();
                     Hooker = null;
                 }
+                if (KeyboardSimulator != null)
+                    KeyboardSimulator = null;
+                ResetKeyDown();
             }
         }
 

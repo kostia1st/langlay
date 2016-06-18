@@ -8,20 +8,30 @@ namespace Product
 {
     public class OverlayService : IOverlayService
     {
-        private IConfigService ConfigService { get; set; }
-        private ILanguageService LanguageService { get; set; }
-        private IEventService EventService { get; set; }
+        public IConfigService ConfigService { get; private set; }
+        public ILanguageService LanguageService { get; private set; }
+        public IEventService EventService { get; private set; }
+
         private bool IsStarted { get; set; }
         private IDictionary<string, OverlayForm> Overlays { get; set; }
         private Timer LanguageCheckTimer { get; set; }
 
         public OverlayService(
-            IConfigService configService, ILanguageService languageService,
+            IConfigService configService,
+            ILanguageService languageService,
             IEventService eventService)
         {
+            if (configService == null)
+                throw new ArgumentNullException(nameof(configService));
+            if (languageService == null)
+                throw new ArgumentNullException(nameof(languageService));
+            if (eventService == null)
+                throw new ArgumentNullException(nameof(eventService));
+
             ConfigService = configService;
             LanguageService = languageService;
             EventService = eventService;
+
             Overlays = new Dictionary<string, OverlayForm>();
         }
 
@@ -53,6 +63,7 @@ namespace Product
                         Overlays[screen.DeviceName] = CreateOverlay(screen);
                 }
                 StartTimer();
+
                 EventService.KeyboardInput += EventService_Input;
                 EventService.MouseInput += EventService_Input;
                 SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
@@ -66,10 +77,16 @@ namespace Product
                 IsStarted = false;
 
                 SystemEvents.DisplaySettingsChanged -= SystemEvents_DisplaySettingsChanged;
+
                 EventService.KeyboardInput -= EventService_Input;
                 EventService.MouseInput -= EventService_Input;
 
                 StopTimer();
+
+                if (_lastInputElapsed.IsRunning)
+                    _lastInputElapsed.Stop();
+                _previousLayoutHandle = null;
+
                 foreach (var pair in Overlays)
                 {
                     if (pair.Value != null)

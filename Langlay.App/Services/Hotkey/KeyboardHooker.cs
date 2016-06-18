@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -61,13 +60,12 @@ namespace Product
         private int? HookInternals(int code, uint wParam, IntPtr lParam)
         {
             var result = (int?) null;
-#if TRACE
-            var doAttemptToHandle = true;
-#else
-            var doAttemptToHandle =
-                (IsEnabledHandler == null || IsEnabledHandler());
+            var doAttemptToHandle = code >= 0;
+#if !TRACE
+            doAttemptToHandle &=
+                IsEnabledHandler == null || IsEnabledHandler();
 #endif
-            if (code >= 0 && doAttemptToHandle)
+            if (doAttemptToHandle)
             {
                 var keyInfo = (Win32.KeyboardInfo) Marshal.PtrToStructure(lParam, typeof(Win32.KeyboardInfo));
                 var key = (Keys) keyInfo.VirtualKeyCode;
