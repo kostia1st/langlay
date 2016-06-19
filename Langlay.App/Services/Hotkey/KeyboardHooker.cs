@@ -3,6 +3,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Product.Common;
+#if TRACE
+
+using System.Diagnostics;
+#endif
 
 namespace Product
 {

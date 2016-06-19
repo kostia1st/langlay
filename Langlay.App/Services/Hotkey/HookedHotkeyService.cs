@@ -4,6 +4,10 @@ using System.Windows.Forms;
 using Product.Common;
 using WindowsInput;
 using WindowsInput.Native;
+#if TRACE
+
+using System.Diagnostics;
+#endif
 
 namespace Product
 {
