@@ -16,4 +16,5 @@
 /Langlay.SettingsUi/bin/Release
 /Langlay.SettingsUi/obj/Release
 /Langlay.Common/bin/Release
-/Langley.Installer.Actions/obj/Release
+/Langlay.Installer.Actions/obj/Release
+/Langlay.Installer.Actions/obj/Debug

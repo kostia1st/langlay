@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Langley.Installer.Actions")]
+[assembly: AssemblyTitle("Langlay.Installer.Actions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Langlay")]
-[assembly: AssemblyProduct("Langley")]
+[assembly: AssemblyProduct("Langlay")]
 [assembly: AssemblyCopyright("Copyright © Estorski (GitHub) 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -7,8 +7,8 @@
     <ProjectGuid>{F7C560AB-7308-4579-B5A9-1A69BA7FEEA2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Langley.Installer.Actions</RootNamespace>
-    <AssemblyName>Langley.Installer.Actions</AssemblyName>
+    <RootNamespace>Langlay.Installer.Actions</RootNamespace>
+    <AssemblyName>Langlay.Installer.Actions</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -9,7 +9,7 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Langlay.Installer", "Langla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langlay.Common", "Langlay.Common\Langlay.Common.csproj", "{D0BFF2F2-F0A4-48E4-8F29-8FCB93175970}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langley.Installer.Actions", "Langley.Installer.Actions\Langley.Installer.Actions.csproj", "{F7C560AB-7308-4579-B5A9-1A69BA7FEEA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langlay.Installer.Actions", "Langlay.Installer.Actions\Langlay.Installer.Actions.csproj", "{F7C560AB-7308-4579-B5A9-1A69BA7FEEA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

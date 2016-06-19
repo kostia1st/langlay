@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace Langley.Installer.Actions
+namespace Langlay.Installer.Actions
 {
     [RunInstaller(true)]
     public partial class Installer : System.Configuration.Install.Installer
