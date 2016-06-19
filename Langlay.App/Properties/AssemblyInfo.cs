@@ -3,11 +3,11 @@ using System.Runtime.InteropServices;
 using Product.Common;
 
 [assembly: AssemblyTitle("Langlay")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("An app for convenient switching of an input language")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Langlay")]
 [assembly: AssemblyProduct("Langlay")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © Estorski (GitHub) 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
