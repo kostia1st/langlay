@@ -137,7 +137,16 @@ namespace Product
 
         private void timerTooltip_Tick(object sender, EventArgs e)
         {
-            OnTimer();
+            try
+            {
+                OnTimer();
+            }
+            catch (Exception ex)
+            {
+#if TRACE
+                Trace.TraceError(ex.ToString());
+#endif
+            }
         }
 
         private void TooltipForm_Paint(object sender, PaintEventArgs e)

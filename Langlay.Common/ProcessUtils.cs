@@ -6,6 +6,8 @@ namespace Product.Common
 {
     public static class ProcessUtils
     {
+        public const string ProcessName_Idle = "Idle";
+
         public static bool StopOtherMainApp()
         {
             var result = false;

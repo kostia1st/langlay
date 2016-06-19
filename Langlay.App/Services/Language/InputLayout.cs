@@ -5,14 +5,14 @@ namespace Product
 {
     public class InputLayout
     {
-        public string LanguageName { get; set; }
-        public string LanguageNameNative { get; set; }
-        public string LanguageNameTwoLetter { get; set; }
-        public string LanguageNameTwoLetterNative { get; set; }
-        public string LanguageNameThreeLetter { get; set; }
-        public string LanguageNameThreeLetterNative { get; set; }
-        public string Name { get; set; }
-        public IntPtr Handle { get; set; }
+        public string LanguageName { get; private set; }
+        public string LanguageNameNative { get; private set; }
+        public string LanguageNameTwoLetter { get; private set; }
+        public string LanguageNameTwoLetterNative { get; private set; }
+        public string LanguageNameThreeLetter { get; private set; }
+        public string LanguageNameThreeLetterNative { get; private set; }
+        public string Name { get; private set; }
+        public IntPtr Handle { get; private set; }
 
         public InputLayout(InputLanguage inputLanguage)
         {

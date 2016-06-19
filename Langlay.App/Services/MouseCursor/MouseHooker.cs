@@ -1,7 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Product.Common;
+
+#if TRACE
+
+using System.Diagnostics;
+#endif
 
 namespace Product
 {
@@ -121,7 +125,7 @@ namespace Product
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if TRACE
                 Trace.TraceError(ex.ToString());
 #endif
             }

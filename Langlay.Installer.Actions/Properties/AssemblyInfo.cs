@@ -1,9 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-using Product.Common;
 
-[assembly: AssemblyTitle("Langlay")]
-[assembly: AssemblyDescription("An app for convenient switching of an input language")]
+[assembly: AssemblyTitle("Langlay.Installer.Actions")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Langlay")]
 [assembly: AssemblyProduct("Langlay")]
@@ -11,6 +10,6 @@ using Product.Common;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-[assembly: Guid("764b8166-cdce-4c65-bfdd-ddbbd4789870")]
-[assembly: AssemblyVersion(AppSpecific.AppVersion + ".*")]
-[assembly: AssemblyFileVersion(AppSpecific.AppVersion + ".0.0")]
+[assembly: Guid("f7c560ab-7308-4579-b5a9-1a69ba7feea2")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

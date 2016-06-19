@@ -1,9 +1,12 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Product.Common;
+#if TRACE
+
+using System.Diagnostics;
+#endif
 
 namespace Product
 {
@@ -61,13 +64,12 @@ namespace Product
         private int? HookInternals(int code, uint wParam, IntPtr lParam)
         {
             var result = (int?) null;
-#if TRACE
-            var doAttemptToHandle = true;
-#else
-            var doAttemptToHandle =
-                (IsEnabledHandler == null || IsEnabledHandler());
+            var doAttemptToHandle = code >= 0;
+#if !TRACE
+            doAttemptToHandle &=
+                IsEnabledHandler == null || IsEnabledHandler();
 #endif
-            if (code >= 0 && doAttemptToHandle)
+            if (doAttemptToHandle)
             {
                 var keyInfo = (Win32.KeyboardInfo) Marshal.PtrToStructure(lParam, typeof(Win32.KeyboardInfo));
                 var key = (Keys) keyInfo.VirtualKeyCode;
@@ -83,19 +85,25 @@ namespace Product
 
                 if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null)
                 {
+#if TRACE
                     Trace.WriteLine($"Hooked { getEventString() }");
+#endif
                     KeyDown(this, kea);
                 }
                 else if (wParam.In(Win32.WM_KEYUP, Win32.WM_SYSKEYUP) && KeyUp != null)
                 {
+#if TRACE
                     Trace.WriteLine($"Hooked { getEventString() }");
+#endif
                     KeyUp(this, kea);
                 }
 
                 if (kea.Handled)
                     result = 1;
+#if TRACE
                 else
                     Trace.WriteLine($">> Not handled { getEventString() }");
+#endif
             }
             return result;
         }
@@ -121,7 +129,7 @@ namespace Product
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if TRACE
                 Trace.TraceError(ex.ToString());
 #endif
             }

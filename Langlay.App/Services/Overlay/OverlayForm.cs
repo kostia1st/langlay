@@ -161,7 +161,8 @@ namespace Product
             }
             if (RegionHandle != IntPtr.Zero)
             {
-                // Make sure we free this unmanaged resource whenever we don't use it anymore
+                // Make sure we free this unmanaged resource whenever we
+                // don't use it anymore
                 Win32.DeleteObject(RegionHandle);
                 RegionHandle = IntPtr.Zero;
             }
@@ -218,7 +219,16 @@ namespace Product
 
         private void timerOverlay_Tick(object sender, EventArgs e)
         {
-            OnTimer();
+            try
+            {
+                OnTimer();
+            }
+            catch (Exception ex)
+            {
+#if TRACE
+                Trace.TraceError(ex.ToString());
+#endif
+            }
         }
 
         private void OverlayForm_Paint(object sender, PaintEventArgs e)

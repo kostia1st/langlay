@@ -7,6 +7,6 @@
         public const string MainAppProcessNameDebug = MainAppProcessName + ".vshost";
         public const string MainAppFilename = "Langlay.exe";
         public const string MainAppConfigFilename = MainAppFilename + ".config";
-        public const string AppVersion = "1.10";
+        public const string AppVersion = "1.13";
     }
 }

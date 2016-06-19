@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Product.Common;
 using WindowsInput;
 using WindowsInput.Native;
+
+#if TRACE
+using System.Diagnostics;
+#endif
 
 namespace Product
 {
@@ -16,18 +19,21 @@ namespace Product
         private WindowsSequenceCode? CurrentLayoutSwitchSequence { get; set; }
 
         public IHotkeyService HotkeyService { get; set; }
-        private ILanguageService LanguageService { get; set; }
+        public ILanguageService LanguageService { get; private set; }
+
         private KeyboardSimulator KeyboardSimulator { get; set; }
 
         public SimulatorLanguageSetterService(
             IHotkeyService hotkeyService, ILanguageService languageService)
         {
             if (hotkeyService == null)
-                throw new ArgumentNullException("hotkeyService");
+                throw new ArgumentNullException(nameof(hotkeyService));
             if (languageService == null)
-                throw new ArgumentNullException("languageService");
+                throw new ArgumentNullException(nameof(languageService));
+
             HotkeyService = hotkeyService;
             LanguageService = languageService;
+
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
@@ -62,8 +68,10 @@ namespace Product
 
         private void SendSequence(WindowsSequenceCode sequenceCode, int amount)
         {
+#if TRACE
             Trace.WriteLine("-- START Simulating switch sequence");
             Trace.Indent();
+#endif
             switch (sequenceCode)
             {
                 case WindowsSequenceCode.CtrlShift:
@@ -78,8 +86,10 @@ namespace Product
                     SendGraveAccent(amount);
                     break;
             }
+#if TRACE
             Trace.Unindent();
             Trace.WriteLine("-- END Simulating switch sequence");
+#endif
         }
 
         private int GetAmountOfLanguageSwitchesRequired(IntPtr targetHandle)
@@ -165,7 +175,8 @@ namespace Product
                 if (result)
                 {
                     // Simulate "interruption" so that the system can
-                    // process the key sequence.
+                    // process the key sequence before we re-read the
+                    // current language.
                     Thread.Sleep(InterruptionDelay);
                 }
 
@@ -177,14 +188,6 @@ namespace Product
                             "Cannot enumerate layouts because the system key sequence was not set");
                     SendSequence(CurrentLayoutSwitchSequence.Value, amountOfLayoutSwitches);
                     result = true;
-                }
-
-                if (result)
-                {
-                    // Simulating "interruption" once again, so that
-                    // synchronous code can read the current (new) layout
-                    // from OS after this method finishes.
-                    Thread.Sleep(InterruptionDelay);
                 }
             }
             finally
