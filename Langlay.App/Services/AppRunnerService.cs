@@ -6,14 +6,19 @@ namespace Product
     public class AppRunnerService : IAppRunnerService
     {
         private bool _doRereadAndRun;
+        private bool _isExiting;
         private AppMessageFilter _messageFilter;
+
+        public bool IsExiting
+        {
+            get { return _isExiting; }
+        }
 
         public AppRunnerService()
         {
             _messageFilter = new AppMessageFilter
             {
-                OnClose = delegate { Application.Exit(); },
-                OnRestart = delegate { Application.Restart(); }
+                OnClose = delegate { ExitApplication(); },
             };
         }
 
@@ -31,6 +36,12 @@ namespace Product
         public void ReReadAndRunTheConfig()
         {
             _doRereadAndRun = true;
+            Application.Exit();
+        }
+
+        public void ExitApplication()
+        {
+            _isExiting = true;
             Application.Exit();
         }
 
@@ -52,7 +63,7 @@ namespace Product
             var tooltipService = new TooltipService(configService);
             var mouseCursorService = new MouseCursorService(
                 configService, languageService, tooltipService, eventService);
-            var trayService = new TrayService(configService, settingsService);
+            var trayService = new TrayService(configService, settingsService, this);
 
             ILanguageSetterService languageSetterService;
             if (configService.SwitchMethod == SwitchMethod.InputSimulation)

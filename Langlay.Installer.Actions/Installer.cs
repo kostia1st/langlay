@@ -13,7 +13,8 @@ namespace Langlay.Installer.Actions
             Process.Start(
                 new ProcessStartInfo
                 {
-                    FileName = Context.Parameters["target"],
+                    FileName = "explorer.exe",
+                    Arguments = Context.Parameters["target"],
                     UseShellExecute = true
                 });
         }

@@ -36,7 +36,7 @@ namespace Product.Common
 
                 if (thread != null)
                 {
-                    Win32.PostThreadMessage(thread.Id, Win32.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    Win32.PostThreadMessage(thread.Id, Win32.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
                 }
 
                 if (!process.WaitForExit(2000))
