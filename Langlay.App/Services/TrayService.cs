@@ -10,14 +10,26 @@ namespace Product
     {
         private IConfigService ConfigService { get; set; }
         private ISettingsService SettingsService { get; set; }
+        private IAppRunnerService AppRunnerService { get; set; }
+
         private ContextMenu ContextMenu { get; set; }
         private NotifyIcon Icon { get; set; }
         private bool IsStarted { get; set; }
 
-        public TrayService(IConfigService configService, ISettingsService settingsService)
+        public TrayService(
+            IConfigService configService, ISettingsService settingsService,
+            IAppRunnerService appRunnerService)
         {
+            if (configService == null)
+                throw new ArgumentNullException(nameof(configService));
+            if (settingsService == null)
+                throw new ArgumentNullException(nameof(settingsService));
+            if (appRunnerService == null)
+                throw new ArgumentNullException(nameof(appRunnerService));
+
             ConfigService = configService;
             SettingsService = settingsService;
+            AppRunnerService = appRunnerService;
         }
 
         private void OpenHomepage()
@@ -47,7 +59,7 @@ namespace Product
 
         private void ExitApplication()
         {
-            Application.Exit();
+            AppRunnerService.ExitApplication();
         }
 
         public void Start()

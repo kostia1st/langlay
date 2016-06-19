@@ -55,11 +55,13 @@ namespace Product
                 };
                 _mainWindow.HandleApply = delegate
                 {
-                    AppRunnerService.ReReadAndRunTheConfig();
+                    if (!AppRunnerService.IsExiting)
+                        AppRunnerService.ReReadAndRunTheConfig();
                 };
                 _mainWindow.Closed += _mainWindow_Closed;
                 _mainWindow.ShowActivated = true;
                 _mainWindow.Show();
+                _mainWindow.Activate();
             }
         }
 

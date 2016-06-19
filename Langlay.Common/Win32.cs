@@ -36,7 +36,6 @@ namespace Product.Common
         public const int WM_CLOSE = 0x0010;
         public const int WM_DESTROY = 0x0002;
         public const int WM_QUIT = 0x0012;
-        public const int WM_USER_RESTART = 0x0400 + 20;
         public const int WM_USER_QUIT = 0x0400 + 21;
 
         public static string MessageToString(uint message)
