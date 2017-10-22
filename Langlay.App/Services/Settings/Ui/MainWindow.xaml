@@ -149,7 +149,7 @@
                               VerticalAlignment="Top"
                               Margin="0 2 2 0"
                               Width="150" />
-                    <local:HotkeyComposer DataContext="{Binding LanguageSwitchSequence}"
+                    <local:HotkeyComposer DataContext="{Binding LanguageSequence}"
                                           x:Name="HotkeyComposer_Language"
                                           Changed="HotkeyComposer_Language_Changed" />
                 </StackPanel>
@@ -160,11 +160,28 @@
                               VerticalAlignment="Top"
                               Margin="0 2 2 0"
                               Width="150" />
-                    <local:HotkeyComposer DataContext="{Binding LayoutSwitchSequence}"
+                    <local:HotkeyComposer DataContext="{Binding LayoutSequence}"
                                           x:Name="HotkeyComposer_Layout"
                                           Changed="HotkeyComposer_Layout_Changed" />
                 </StackPanel>
                 <TextBlock x:Name="tbkFeedbackLayout" Foreground="Red" TextWrapping="Wrap" />
+
+                <Rectangle Style="{StaticResource separator}"
+                           Margin="0 10 0 0" />
+
+                <TextBlock Text="Here you can set up a key sequence for pasting text without formatting."
+                           VerticalAlignment="Center"
+                           Margin="0 10 0 0" />
+                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+                    <CheckBox Content="Use the sequence"
+                              IsChecked="{Binding PasteWithoutFormatting}"
+                              VerticalAlignment="Top"
+                              Margin="0 2 2 0"
+                              Width="150" />
+                    <local:HotkeyComposer DataContext="{Binding PasteSequence}"
+                                          x:Name="HotkeyComposer_Paste"
+                                          Changed="HotkeyComposer_Paste_Changed" />
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
         <Rectangle Style="{StaticResource separator}"

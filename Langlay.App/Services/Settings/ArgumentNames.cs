@@ -4,8 +4,12 @@
     {
         public const string SwitchLanguage = "SwitchLanguage";
         public const string SwitchLayout = "SwitchLayout";
+        public const string PasteWithoutFormatting = "PasteWithoutFormatting";
+
         public const string LanguageSwitchKeys = "LanguageSwitchKeys";
         public const string LayoutSwitchKeys = "LayoutSwitchKeys";
+        public const string PasteKeys = "PasteKeys";
+
         public const string DisableCapsLockToggle = "DisableCapsLockToggle";
         public const string ShowOverlay = "ShowOverlay";
         public const string ShowOverlayOnMainDisplayOnly = "ShowOverlayOnMainDisplayOnly";

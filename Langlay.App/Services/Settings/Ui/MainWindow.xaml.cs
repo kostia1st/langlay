@@ -112,5 +112,10 @@ namespace Product.SettingsUi
         {
             ViewModel.RaiseLanguageSequenceChanged();
         }
+
+        private void HotkeyComposer_Paste_Changed(object sender, RoutedEventArgs e)
+        {
+            ViewModel.RaisePasteSequenceChanged();
+        }
     }
 }

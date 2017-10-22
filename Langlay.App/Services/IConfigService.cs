@@ -20,6 +20,9 @@ namespace Product
         bool DoSwitchLayout { get; set; }
         IList<KeyCode> LayoutSwitchKeyArray { get; set; }
 
+        bool DoPasteWithoutFormatting { get; set; }
+        IList<KeyCode> PasteKeyArray { get; set; }
+
         bool DoDisableCapsLockToggle { get; set; }
         bool DoShowSettingsOnce { get; set; }
         bool DoShowCursorTooltip { get; set; }
