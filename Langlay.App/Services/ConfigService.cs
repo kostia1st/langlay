@@ -17,6 +17,10 @@ namespace Product
 
         public bool DoSwitchLayout { get; set; }
         public IList<KeyCode> LayoutSwitchKeyArray { get; set; }
+
+        public bool DoPasteWithoutFormatting { get; set; }
+        public IList<KeyCode> PasteKeyArray { get; set; }
+
         public bool DoDisableCapsLockToggle { get; set; }
 
         public bool DoShowOverlay { get; set; }
@@ -46,9 +50,13 @@ namespace Product
             DoShowSettingsOnce = true;
 
             DoSwitchLanguage = true;
-            DoSwitchLayout = false;
             LanguageSwitchKeyArray = new KeyCode[] { KeyCode.CapsLock };
+
+            DoSwitchLayout = false;
             LayoutSwitchKeyArray = new KeyCode[] { };
+
+            DoPasteWithoutFormatting = false;
+            PasteKeyArray = new KeyCode[] { KeyCode.LControlKey, KeyCode.LShiftKey, KeyCode.V };
 
             DoDisableCapsLockToggle = false;
             SwitchMethod = SwitchMethod.InputSimulation;
@@ -62,8 +70,12 @@ namespace Product
             {
                 { ArgumentNames.SwitchLanguage, x => DoSwitchLanguage = Utils.ParseBool(x, DoSwitchLanguage) },
                 { ArgumentNames.SwitchLayout, x => DoSwitchLayout = Utils.ParseBool(x, DoSwitchLayout) },
+                { ArgumentNames.PasteWithoutFormatting, x=> DoPasteWithoutFormatting = Utils.ParseBool(x, DoPasteWithoutFormatting) },
+
                 { ArgumentNames.LanguageSwitchKeys, x => LanguageSwitchKeyArray = KeyStringToArray(x) },
                 { ArgumentNames.LayoutSwitchKeys, x => LayoutSwitchKeyArray = KeyStringToArray(x) },
+                { ArgumentNames.PasteKeys, x => PasteKeyArray = KeyStringToArray(x) },
+
                 { ArgumentNames.DisableCapsLockToggle, x => DoDisableCapsLockToggle = Utils.ParseBool(x, DoDisableCapsLockToggle) },
                 { ArgumentNames.ShowOverlay, x => DoShowOverlay = Utils.ParseBool(x, DoShowOverlay) },
                 { ArgumentNames.ShowOverlayOnMainDisplayOnly, x => DoShowOverlayOnMainDisplayOnly = Utils.ParseBool(x, DoShowOverlayOnMainDisplayOnly) },
@@ -210,10 +222,16 @@ namespace Product
             WriteArgument(ArgumentNames.OverlayScale, OverlayScale.ToString());
             WriteArgument(ArgumentNames.OverlayLocation, OverlayLocation.ToString());
             WriteArgument(ArgumentNames.SwitchMethod, SwitchMethod.ToString());
+
             WriteArgument(ArgumentNames.SwitchLanguage, DoSwitchLanguage.ToString());
             WriteArgument(ArgumentNames.LanguageSwitchKeys, ArrayToKeyString(LanguageSwitchKeyArray));
+
             WriteArgument(ArgumentNames.SwitchLayout, DoSwitchLayout.ToString());
             WriteArgument(ArgumentNames.LayoutSwitchKeys, ArrayToKeyString(LayoutSwitchKeyArray));
+
+            WriteArgument(ArgumentNames.PasteWithoutFormatting, DoPasteWithoutFormatting.ToString());
+            WriteArgument(ArgumentNames.PasteKeys, ArrayToKeyString(PasteKeyArray));
+
             WriteArgument(ArgumentNames.DisableCapsLockToggle, DoDisableCapsLockToggle.ToString());
             WriteArgument(ArgumentNames.ShowSettingsOnce, DoShowSettingsOnce.ToString());
             WriteArgument(ArgumentNames.ShowCursorTooltip, DoShowCursorTooltip.ToString());

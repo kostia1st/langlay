@@ -12,18 +12,30 @@ namespace Product.SettingsUi
     public class ConfigViewModel : INotifyPropertyChanged
     {
         private IConfigService ConfigService { get; set; }
-        private ObservableCollection<KeyCodeViewModel> LanguageSequence { get; set; }
-        private ObservableCollection<KeyCodeViewModel> LayoutSequence { get; set; }
+        public ObservableCollection<KeyCodeViewModel> LanguageSequence { get; private set; }
+        public ObservableCollection<KeyCodeViewModel> LayoutSequence { get; private set; }
+        public ObservableCollection<KeyCodeViewModel> PasteSequence { get; private set; }
 
         public ConfigViewModel(IConfigService configService)
         {
             ConfigService = configService;
+
             LanguageSequence = new ObservableCollection<KeyCodeViewModel>(
                 ConfigService.LanguageSwitchKeyArray.Select(x => new KeyCodeViewModel { KeyCode = x }));
             LanguageSequence.CollectionChanged += LanguageSequence_CollectionChanged;
+
             LayoutSequence = new ObservableCollection<KeyCodeViewModel>(
                 ConfigService.LayoutSwitchKeyArray.Select(x => new KeyCodeViewModel { KeyCode = x }));
             LayoutSequence.CollectionChanged += LayoutSequence_CollectionChanged;
+
+            PasteSequence = new ObservableCollection<KeyCodeViewModel>(
+                ConfigService.PasteKeyArray.Select(x => new KeyCodeViewModel { KeyCode = x }));
+            PasteSequence.CollectionChanged += PasteSequence_CollectionChanged;
+        }
+
+        private void PasteSequence_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            NotifyLayoutSequenceChanged();
         }
 
         public void NotifyLayoutSequenceChanged()
@@ -41,6 +53,12 @@ namespace Product.SettingsUi
         {
             ConfigService.LanguageSwitchKeyArray = LanguageSequence.Select(x => x.KeyCode).ToList();
             RaisePropertyChanged(x => x.LanguageSequence);
+        }
+
+        public void RaisePasteSequenceChanged()
+        {
+            ConfigService.PasteKeyArray = PasteSequence.Select(x => x.KeyCode).ToList();
+            RaisePropertyChanged(x => x.PasteSequence);
         }
 
         private void LanguageSequence_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -140,6 +158,12 @@ namespace Product.SettingsUi
         {
             get { return ConfigService.DoSwitchLayout; }
             set { SetPropertyValue(x => x.SwitchLayout, x => x.DoSwitchLayout, value); }
+        }
+
+        public bool PasteWithoutFormatting
+        {
+            get { return ConfigService.DoPasteWithoutFormatting; }
+            set { SetPropertyValue(x => x.PasteWithoutFormatting, x => x.DoPasteWithoutFormatting, value); }
         }
 
         public bool ShowSettingsOnce

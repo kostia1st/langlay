@@ -1,9 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
 namespace Product.Common
 {
+    public class ProcessInfo
+    {
+        private Process _process;
+
+        public int ProcessId { get; set; }
+        public string ProcessName { get; set; }
+        public bool HasExited { get { return _process.HasExited; } }
+
+        public ProcessInfo(Process process)
+        {
+            _process = process;
+            ProcessId = process.Id;
+            // This is an expensive operation
+            ProcessName = process.ProcessName;
+        }
+    }
+
     public static class ProcessUtils
     {
         public const string ProcessName_Idle = "Idle";
@@ -65,6 +83,19 @@ namespace Product.Common
                 LoadUserProfile = true
             };
             Process.Start(psi);
+        }
+
+        private static IDictionary<int, ProcessInfo> _processCache = new Dictionary<int, ProcessInfo>();
+        public static ProcessInfo GetProcessById(int processId)
+        {
+            if (!_processCache.ContainsKey(processId))
+            {
+                // This is very expensive, thus we attempt to cache it.
+                var process = Process.GetProcessById(processId);
+                if (process != null)
+                    _processCache[processId] = new ProcessInfo(process);
+            }
+            return _processCache[processId];
         }
     }
 }

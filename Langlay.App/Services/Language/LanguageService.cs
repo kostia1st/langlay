@@ -111,7 +111,7 @@ namespace Product
 
             if (processId != 0)
             {
-                var process = Process.GetProcessById((int) processId);
+                var process = ProcessUtils.GetProcessById((int) processId);
                 if (process != null
                     && !process.HasExited
                     && process.ProcessName != ProcessUtils.ProcessName_Idle)

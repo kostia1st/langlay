@@ -15,14 +15,8 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_235309F71AB30787E6BFA7ECD7571A41"
-        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A36A1C54673D7566E18EE7FB8FE61BA9"
-        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
+        "MsmKey" = "8:_161D3ED2973C4C7E8D83F8ACBDEE4D58"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -35,30 +29,6 @@
         {
         "MsmKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A36A1C54673D7566E18EE7FB8FE61BA9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_235309F71AB30787E6BFA7ECD7571A41"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C5C489D9350F4AADA868C4A1A5CD3B6A"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -194,21 +164,10 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_235309F71AB30787E6BFA7ECD7571A41"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_161D3ED2973C4C7E8D83F8ACBDEE4D58"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Langlay.Common, Version=1.10.6008.40370, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_235309F71AB30787E6BFA7ECD7571A41"
-                    {
-                    "Name" = "8:Langlay.Common.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Langlay.Common.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\Langlay.App\\Keyboard-Filled-2-16.ico"
+            "TargetName" = "8:Keyboard-Filled-2-16.ico"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
             "Condition" = "8:"
@@ -222,38 +181,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A36A1C54673D7566E18EE7FB8FE61BA9"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_A36A1C54673D7566E18EE7FB8FE61BA9"
-                    {
-                    "Name" = "8:WindowsInput.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:WindowsInput.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
@@ -341,7 +269,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_161D3ED2973C4C7E8D83F8ACBDEE4D58"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -733,7 +661,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C5C489D9350F4AADA868C4A1A5CD3B6A"
             {
-            "SourcePath" = "8:..\\Langley.Installer.Actions\\obj\\Release\\Langley.Installer.Actions.dll"
+            "SourcePath" = "8:..\\Langlay.Installer.Actions\\obj\\Release\\Langlay.Installer.Actions.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"

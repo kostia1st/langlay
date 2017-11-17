@@ -115,7 +115,7 @@ namespace Product
         private void StartTimer()
         {
             LanguageCheckTimer = new Timer();
-            LanguageCheckTimer.Interval = 25;
+            LanguageCheckTimer.Interval = 50;
             LanguageCheckTimer.Tick += LanguageCheckTimer_Tick;
             LanguageCheckTimer.Start();
         }
@@ -136,6 +136,7 @@ namespace Product
             if (LanguageCheckTimer != null)
             {
                 LanguageCheckTimer.Stop();
+                LanguageCheckTimer_Tick(LanguageCheckTimer, EventArgs.Empty);
             }
         }
 
@@ -182,15 +183,20 @@ namespace Product
 
         private void LanguageCheckTimer_Tick(object sender, System.EventArgs e)
         {
-            try
+            // Use the condition to make sure we don't get any "old" timer
+            // influencing our overlay.
+            if (sender == this.LanguageCheckTimer)
             {
-                OnTimer();
-            }
-            catch (Exception ex)
-            {
+                try
+                {
+                    OnTimer();
+                }
+                catch (Exception ex)
+                {
 #if TRACE
-                Trace.TraceError(ex.ToString());
+                    Trace.TraceError(ex.ToString());
 #endif
+                }
             }
         }
 
