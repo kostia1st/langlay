@@ -115,7 +115,7 @@ namespace Product
         private void StartTimer()
         {
             LanguageCheckTimer = new Timer();
-            LanguageCheckTimer.Interval = 25;
+            LanguageCheckTimer.Interval = 50;
             LanguageCheckTimer.Tick += LanguageCheckTimer_Tick;
             LanguageCheckTimer.Start();
         }

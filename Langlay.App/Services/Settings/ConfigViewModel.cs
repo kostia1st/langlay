@@ -12,7 +12,7 @@ namespace Product.SettingsUi
     public class ConfigViewModel : INotifyPropertyChanged
     {
         private IConfigService ConfigService { get; set; }
-        public ObservableCollection<KeyCodeViewModel> LanguageSequence { get;private set; }
+        public ObservableCollection<KeyCodeViewModel> LanguageSequence { get; private set; }
         public ObservableCollection<KeyCodeViewModel> LayoutSequence { get; private set; }
         public ObservableCollection<KeyCodeViewModel> PasteSequence { get; private set; }
 
