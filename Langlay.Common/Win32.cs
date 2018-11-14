@@ -198,7 +198,7 @@ namespace Product.Common
             public int Time;
             private IntPtr _extraInfo;
 
-            public IntPtr ExtraInfo { get { return _extraInfo; } }
+            public IntPtr ExtraInfo => _extraInfo;
         }
 
         public struct MouseInfo
@@ -209,7 +209,7 @@ namespace Product.Common
             public int Time;
             private IntPtr _extraInfo;
 
-            public IntPtr ExtraInfo { get { return _extraInfo; } }
+            public IntPtr ExtraInfo => _extraInfo;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -227,7 +227,7 @@ namespace Product.Common
             private IntPtr _cursorHandle;
             public Point ScreenPosition;
 
-            public IntPtr Handle { get { return _cursorHandle; } }
+            public IntPtr Handle => _cursorHandle;
         }
 
         [DllImport("user32.dll")]

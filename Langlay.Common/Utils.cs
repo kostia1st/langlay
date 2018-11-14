@@ -18,11 +18,9 @@ namespace Product.Common
 
         public static T ParseEnum<T>(string value, T defaultValue) where T : struct
         {
-            T result;
-            if (Enum.TryParse(value, out result))
-            {
+            if (Enum.TryParse(value, out T result))
                 return result;
-            }
+
             return defaultValue;
         }
 
@@ -70,8 +68,7 @@ namespace Product.Common
             {
                 if (value is string)
                 {
-                    long number;
-                    if (long.TryParse((string) value, out number))
+                    if (long.TryParse((string) value, out var number))
                         result = number;
                 }
                 else
@@ -103,8 +100,7 @@ namespace Product.Common
             {
                 if (value is string)
                 {
-                    bool result;
-                    if (bool.TryParse((string) value, out result))
+                    if (bool.TryParse((string) value, out var result))
                         return result;
                 }
                 else

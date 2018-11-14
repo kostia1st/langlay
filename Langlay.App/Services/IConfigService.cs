@@ -26,6 +26,7 @@ namespace Product
         bool DoDisableCapsLockToggle { get; set; }
         bool DoShowSettingsOnce { get; set; }
         bool DoShowCursorTooltip { get; set; }
+        bool DoShowCursorTooltip_WhenFocusNotChanged { get; set; }
         bool DoForceThisInstance { get; set; }
         SwitchMethod SwitchMethod { get; set; }
 

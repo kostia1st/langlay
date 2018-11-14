@@ -25,7 +25,7 @@ namespace Product
             }
         }
 
-        public Win32.Point Point { get { return MouseInfo.Point; } }
+        public Win32.Point Point => MouseInfo.Point;
         public bool Handled { get; set; }
 
         public MouseEventArgs2(MouseButtons buttons, IntPtr mouseInfoPtr)

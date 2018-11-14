@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -12,16 +13,20 @@ namespace Product.SettingsUi
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ConfigViewModel ViewModel { get; set; }
-        public Action HandleSave { get; set; }
-        public Action HandleApply { get; set; }
+        private ConfigViewModel ViewModel
+        {
+            get => (ConfigViewModel) DataContext;
+            set => DataContext = value;
+        }
+
+        public Action OnSave { get; set; }
+        public Action OnApply { get; set; }
 
         public MainWindow(IConfigService configService)
         {
             ViewModel = new ConfigViewModel(configService);
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
             ViewModel.ShowSettingsOnce = false;
-            DataContext = ViewModel;
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             Unloaded += MainWindow_Unloaded;
@@ -29,65 +34,35 @@ namespace Product.SettingsUi
 
         private void MainWindow_Unloaded(object sender, RoutedEventArgs e)
         {
-            HandleSave = null;
-            HandleApply = null;
+            OnSave = null;
+            OnApply = null;
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
             ViewModel = null;
-            DataContext = null;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             tbrVersion.Text = $"Version {AppSpecific.AppVersion}";
             tbrLocation.Text = PathUtils.GetAppDirectory();
-            UpdateHotkeyAnalysis();
+            spMain.ViewModel = ViewModel;
         }
 
         private void RaiseSaveConfig()
         {
-            HandleSave?.Invoke();
+            OnSave?.Invoke();
         }
 
         private void RaiseApplyConfig()
         {
-            HandleApply?.Invoke();
+            OnApply?.Invoke();
         }
 
         private void DoOnViewModelChanged()
         {
-            // Save configuration
             RaiseSaveConfig();
-            UpdateHotkeyAnalysis();
         }
 
-        private void UpdateHotkeyAnalysis()
-        {
-            if (this.IsLoaded)
-            {
-                tbkFeedbackLanguage.Text = GetAnalysisByHotkey(ViewModel.LanguageSwitchSequence);
-                tbkFeedbackLayout.Text = GetAnalysisByHotkey(ViewModel.LayoutSwitchSequence);
-            }
-        }
-
-        private string GetAnalysisByHotkey(IList<KeyCodeViewModel> keyViewModels)
-        {
-            var keys = keyViewModels.Select(x => x.KeyCode).ToList();
-            var result = new StringBuilder();
-            if (keys.Count == 1)
-            {
-                if (keys[0] == KeyCode.CapsLock)
-                    result.AppendLine("Note, to press the *actual* Caps Lock you can use Shift + Caps Lock.");
-            }
-            else if (keys.Count > 1)
-            {
-                if (keys.Contains(KeyCode.LWin) || keys.Contains(KeyCode.RWin))
-                    result.AppendLine("The use of the Win key in a combination could probably lead to issues"
-                        + " if Win is applied not the last in the sequence.");
-            }
-            return result.ToString().TrimEnd('\r', '\n');
-        }
-
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             DoOnViewModelChanged();
         }
@@ -103,19 +78,5 @@ namespace Product.SettingsUi
             base.OnClosed(e);
         }
 
-        private void HotkeyComposer_Layout_Changed(object sender, RoutedEventArgs e)
-        {
-            ViewModel.NotifyLayoutSequenceChanged();
-        }
-
-        private void HotkeyComposer_Language_Changed(object sender, RoutedEventArgs e)
-        {
-            ViewModel.RaiseLanguageSequenceChanged();
-        }
-
-        private void HotkeyComposer_Paste_Changed(object sender, RoutedEventArgs e)
-        {
-            ViewModel.RaisePasteSequenceChanged();
-        }
     }
 }

@@ -39,6 +39,8 @@ namespace Product
         public bool DoForceThisInstance { get; set; }
 
         public bool DoShowCursorTooltip { get; set; }
+        public bool DoShowCursorTooltip_WhenFocusNotChanged { get; set; }
+
         private IDictionary<string, Action<string>> ReadStrategies { get; set; }
 
         public ConfigService()
@@ -176,7 +178,7 @@ namespace Product
         protected static Configuration OpenOrCreateFile(string configPath)
         {
             if (string.IsNullOrEmpty(configPath))
-                throw new ArgumentNullException("exeFilepath");
+                throw new ArgumentNullException($"{nameof(configPath)}");
             if (!File.Exists(configPath))
             {
                 var directoryPath = Path.GetDirectoryName(configPath);

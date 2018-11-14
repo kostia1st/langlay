@@ -10,7 +10,7 @@ namespace Product.SettingsUi
     /// </summary>
     public partial class HotkeyComposer : UserControl
     {
-        private IList<KeyCodeViewModel> KeyList { get { return (IList<KeyCodeViewModel>) DataContext; } }
+        private IList<KeyCodeViewModel> KeyList => (IList<KeyCodeViewModel>) DataContext;
         public event RoutedEventHandler Changed;
 
         public HotkeyComposer()

@@ -20,18 +20,10 @@ namespace Product
             IConfigService configService, ILanguageService languageService,
             ITooltipService tooltipService, IEventService eventService)
         {
-            if (configService == null)
-                throw new ArgumentNullException(nameof(configService));
-            if (languageService == null)
-                throw new ArgumentNullException(nameof(languageService));
-            if (tooltipService == null)
-                throw new ArgumentNullException(nameof(tooltipService));
-            if (eventService == null)
-                throw new ArgumentNullException(nameof(eventService));
-            ConfigService = configService;
-            LanguageService = languageService;
-            TooltipService = tooltipService;
-            EventService = eventService;
+            ConfigService = configService ?? throw new ArgumentNullException(nameof(configService));
+            LanguageService = languageService ?? throw new ArgumentNullException(nameof(languageService));
+            TooltipService = tooltipService ?? throw new ArgumentNullException(nameof(tooltipService));
+            EventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
         }
 
         #region Start/Stop
@@ -132,6 +124,7 @@ namespace Product
             {
                 ShowTooltip(e);
             }
+            IsLastDownHandled = false;
             EventService.RaiseMouseInput();
         }
 

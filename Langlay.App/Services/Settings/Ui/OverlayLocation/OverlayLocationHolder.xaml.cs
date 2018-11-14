@@ -17,8 +17,8 @@ namespace Product.SettingsUi
 
         public OverlayLocation Location
         {
-            get { return (OverlayLocation) GetValue(LocationProperty); }
-            set { SetValue(LocationProperty, value); }
+            get => (OverlayLocation) GetValue(LocationProperty);
+            set => SetValue(LocationProperty, value);
         }
 
         public static readonly DependencyProperty IsSelectedProperty
@@ -28,8 +28,8 @@ namespace Product.SettingsUi
 
         public bool IsSelected
         {
-            get { return (bool) GetValue(IsSelectedProperty); }
-            set { SetValue(IsSelectedProperty, value); }
+            get => (bool) GetValue(IsSelectedProperty);
+            set => SetValue(IsSelectedProperty, value);
         }
 
         public OverlayLocationHolder()
