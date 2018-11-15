@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Product.SettingsUi"
         mc:Ignorable="d"
 
-        Title="Settings" Height="500" Width="550"
+        Title="Settings" Height="400" Width="650"
         ResizeMode="NoResize" SizeToContent="Manual"
 
         Background="{x:Static SystemColors.ControlBrush}"
@@ -15,17 +15,17 @@
         WindowStartupLocation="CenterScreen">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" Padding="20 0"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      Grid.ColumnSpan="2">
-            <local:SettingPanel x:Name="spMain" />
-        </ScrollViewer>
-        <local:Separator Margin="0 0 0 0" Grid.Row="1" />
-        <Grid Grid.Row="2">
+        <TextBlock Padding="5" TextWrapping="Wrap" Background="LightGoldenrodYellow">
+                <Run Text="Note, the settings get applied just after you close the settings window." />
+        </TextBlock>
+        <local:SettingPanel x:Name="spMain" Grid.Row="1" />
+        <local:Separator Margin="0 0 0 0" Grid.Row="2" />
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />

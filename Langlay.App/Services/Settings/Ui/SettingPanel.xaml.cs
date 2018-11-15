@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using Product.Common;
 
 namespace Product.SettingsUi
 {
@@ -21,58 +17,41 @@ namespace Product.SettingsUi
         public SettingPanel()
         {
             InitializeComponent();
-            Loaded += SettingPanel_Loaded;
         }
 
-        private void SettingPanel_Loaded(object sender, RoutedEventArgs e)
+        private void ListBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            UpdateHotkeyAnalysis();
-        }
-
-        private void UpdateHotkeyAnalysis()
-        {
-            if (IsLoaded)
+            spSettings.Content = null;
+            var item = (ListBoxItem) lbCategory.SelectedItem;
+            if (item != null)
             {
-                tbkFeedbackLanguage.Text = GetAnalysisByHotkey(ViewModel.LanguageSwitchSequence);
-                tbkFeedbackLayout.Text = GetAnalysisByHotkey(ViewModel.LayoutSwitchSequence);
+                UserControl control = null;
+                switch (item.Name)
+                {
+                    case "lbiGeneral":
+                        control = new GeneralSettings();
+                        break;
+                    case "lbiOverlay":
+                        control = new OverlaySettings();
+                        break;
+                    case "lbiLanguage":
+                        control = new LanguageSwitchSettings();
+                        break;
+                    case "lbiPlainPaste":
+                        control = new PlainPasteSettings();
+                        break;
+                }
+                if (control != null)
+                {
+                    control.DataContext = ViewModel;
+                    spSettings.Content = control;
+                }
             }
         }
 
-        private string GetAnalysisByHotkey(IList<KeyCodeViewModel> keyViewModels)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var keys = keyViewModels.Select(x => x.KeyCode).ToList();
-            var result = new StringBuilder();
-            if (keys.Count == 1)
-            {
-                if (keys[0] == KeyCode.CapsLock)
-                    result.AppendLine("Note, to press the *actual* Caps Lock you can use Shift + Caps Lock.");
-            }
-            else if (keys.Count > 1)
-            {
-                if (keys.Contains(KeyCode.LWin) || keys.Contains(KeyCode.RWin))
-                    result.AppendLine("The use of the Win key in a combination could probably lead to issues"
-                        + " if Win is applied not the last in the sequence.");
-            }
-            return result.ToString().TrimEnd('\r', '\n');
-        }
-        private void DoOnViewModelChanged()
-        {
-            UpdateHotkeyAnalysis();
-        }
-
-        private void HotkeyComposer_Layout_Changed(object sender, RoutedEventArgs e)
-        {
-            ViewModel.NotifyLayoutSequenceChanged();
-        }
-
-        private void HotkeyComposer_Language_Changed(object sender, RoutedEventArgs e)
-        {
-            ViewModel.RaiseLanguageSequenceChanged();
-        }
-
-        private void HotkeyComposer_Paste_Changed(object sender, RoutedEventArgs e)
-        {
-            ViewModel.RaisePasteSequenceChanged();
+            lbCategory.SelectedIndex = 0;
         }
     }
 }

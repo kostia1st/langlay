@@ -6,160 +6,27 @@
              xmlns:local="clr-namespace:Product.SettingsUi"
              xmlns:common="clr-namespace:Product.Common;assembly=Langlay.Common"
              mc:Ignorable="d" 
-             d:DesignHeight="850" d:DesignWidth="500">
+             d:DesignHeight="350" d:DesignWidth="500"
+             Loaded="UserControl_Loaded"
+             >
     <UserControl.Resources>
         <common:EnumValueConverter x:Key="enumConverter" />
     </UserControl.Resources>
-    <StackPanel Orientation="Vertical" Margin="0 0 0 10">
-        <TextBlock Margin="0 10 0 0" TextWrapping="Wrap">
-                    <Run Text="Note, the settings get applied just after you close the settings window." />
-        </TextBlock>
-        <CheckBox x:Name="chbRunAtStartup"
-                          Content="Run at Windows startup"
-                          Margin="0 20 0 0"
-                          IsChecked="{Binding RunAtWindowsStartup}" />
-        <local:Separator Margin="0 10 0 0" />
-
-        <CheckBox x:Name="chbShowOverlay"
-                          Content="Show overlay" Margin="0 10 0 0"
-                          IsChecked="{Binding ShowOverlay}" />
-        <CheckBox x:Name="chbShowOverlayMainDisplayOnly"
-                          Content="on main display only" Margin="0 10 0 0"
-                          IsChecked="{Binding ShowOverlayOnMainDisplayOnly}" />
-        <CheckBox x:Name="chbRoundOverlayCorner"
-                          Content="with round corners" Margin="0 10 0 0"
-                          IsChecked="{Binding ShowOverlayRoundCorners}" />
-
-        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-            <TextBlock Text="Stays visible for" Width="150" Margin="0 2 2 0" />
-            <Slider x:Name="sliderOverlayTime" Width="200" Minimum="0" Maximum="3000"
-                            IsSnapToTickEnabled="True"
-                            TickFrequency="50"
-                            Value="{Binding OverlayMilliseconds}" />
-            <TextBlock x:Name="tbkOverlayTime" Width="50" Margin="4 0 0 0">
-                        <Run Text="{Binding OverlayMilliseconds}" />
-                        <Run Text="ms" />
-            </TextBlock>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-            <TextBlock Text="scaled to" Width="150" Margin="0 2 2 0" />
-            <Slider x:Name="sliderOverlayScale" Width="200" Minimum="50" Maximum="500"
-                            IsSnapToTickEnabled="True"
-                            TickFrequency="5"
-                            Value="{Binding OverlayScale}" />
-            <TextBlock x:Name="tbkOverlayScale" Width="50" Margin="4 0 0 0">
-                        <Run Text="{Binding OverlayScale}" />
-                        <Run Text="%" />
-            </TextBlock>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-            <TextBlock Text="with opacity" Width="150" Margin="0 2 2 0" />
-            <Slider x:Name="sliderOverlayOpacity" Width="200" Minimum="5" Maximum="100"
-                            IsSnapToTickEnabled="True"
-                            TickFrequency="5"
-                            Value="{Binding OverlayOpacity}" />
-            <TextBlock x:Name="tbkOverlayOpacity" Width="50" Margin="4 0 0 0">
-                        <Run Text="{Binding OverlayOpacity}" />
-                        <Run Text="%" />
-            </TextBlock>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-            <TextBlock Text="Location on the screen" Width="150" Margin="0 2 2 0" />
-            <local:OverlayLocationEditor x:Name="oleOverlayLocation"
-                                                 Width="100"
-                                                 Height="100"
-                                                 Margin="0 0 50 0"
-                                                 Value="{Binding OverlayLocation, Mode=TwoWay}" />
-            <TextBlock x:Name="tbkOverlayLocation" Width="170" Margin="10 0 0 0" TextWrapping="Wrap">
-                        <Run Text="Consider the image to the left as your display." />
-                        <Run Text="Select a place for the overlay by clicking in the preferred area." />
-            </TextBlock>
-        </StackPanel>
-        <local:Separator Margin="0 10 0 0" />
-
-        <CheckBox x:Name="chbShowCursorTooltip"
-                          Margin="0 10 0 0"
-                          IsChecked="{Binding ShowCursorTooltip}">
-            <TextBlock TextWrapping="Wrap">
-                Show a tooltip with the language name next to the mouse pointer 
-                upon clicking an input area (when the mouse cursor is a beam)
-            </TextBlock>
-        </CheckBox>
-        <CheckBox x:Name="chbShowCursorTooltip_WhenFocusNotChanged"
-                          Margin="20 5 0 0"
-                          IsChecked="{Binding ShowCursorTooltip_WhenFocusNotChanged}">
-            <TextBlock TextWrapping="Wrap">
-                even if the focus has not changed
-            </TextBlock>
-        </CheckBox>
-        <CheckBox x:Name="chbUseNativeLabels"
-                          Content="Show language name in native" Margin="0 10 0 0"
-                          IsChecked="{Binding ShowLanguageNameInNative}" />
-        <CheckBox x:Name="chbDisableCapsToggle"
-                          Content="Disable standard Caps Lock toggle" Margin="0 10 0 0"
-                          IsChecked="{Binding DisableCapsLockToggle}" />
-
-        <local:Separator Margin="0 10 0 0" />
-
-        <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
-            <TextBlock Text="Switch method:" Width="150"
-                               VerticalAlignment="Top" Margin="0 2 2 0" />
-            <ComboBox x:Name="cbSwitchMethod"
-                              ItemsSource="{Binding SwitchMethod, Mode=OneTime, Converter={StaticResource enumConverter}}"
-                              SelectedValue="{Binding SwitchMethod}"
-                              DisplayMemberPath="Text"
-                              SelectedValuePath="Key"
-                              Width="150"
-                              VerticalAlignment="Top" />
-
-            <TextBlock Text="Leave 'Input Simulation' if you are not sure about it."
-                               TextWrapping="Wrap" HorizontalAlignment="Stretch"
-                               Margin="10 2 0 0"
-                               Width="170" MinWidth="0" />
-        </StackPanel>
-
-        <local:Separator Margin="0 10 0 0" />
-
-        <TextBlock Text="Here you can set up a key sequence for switching either language or layout, or both."
-                           VerticalAlignment="Center"
-                           Margin="0 10 0 0" />
-        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-            <CheckBox Content="Language:"
-                              IsChecked="{Binding SwitchLanguage}"
-                              VerticalAlignment="Top"
-                              Margin="0 2 2 0"
-                              Width="150" />
-            <local:HotkeyComposer DataContext="{Binding LanguageSequence}"
-                                          x:Name="HotkeyComposer_Language"
-                                          Changed="HotkeyComposer_Language_Changed" />
-        </StackPanel>
-        <TextBlock x:Name="tbkFeedbackLanguage" Foreground="Red" TextWrapping="Wrap" />
-        <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-            <CheckBox Content="Layout:"
-                              IsChecked="{Binding SwitchLayout}"
-                              VerticalAlignment="Top"
-                              Margin="0 2 2 0"
-                              Width="150" />
-            <local:HotkeyComposer DataContext="{Binding LayoutSequence}"
-                                          x:Name="HotkeyComposer_Layout"
-                                          Changed="HotkeyComposer_Layout_Changed" />
-        </StackPanel>
-        <TextBlock x:Name="tbkFeedbackLayout" Foreground="Red" TextWrapping="Wrap" />
-
-        <local:Separator Margin="0 10 0 0" />
-
-        <TextBlock Text="Here you can set up a key sequence for pasting text without formatting."
-                   VerticalAlignment="Center"
-                   Margin="0 10 0 0" />
-        <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-            <CheckBox Content="Use the sequence"
-                      IsChecked="{Binding PasteWithoutFormatting}"
-                      VerticalAlignment="Top"
-                      Margin="0 2 2 0"
-                      Width="150" />
-            <local:HotkeyComposer DataContext="{Binding PasteSequence}"
-                                  x:Name="HotkeyComposer_Paste"
-                                  Changed="HotkeyComposer_Paste_Changed" />
-        </StackPanel>
-    </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="lbCategory" SelectionChanged="ListBox_SelectionChanged">
+            <ListBoxItem x:Name="lbiGeneral">General</ListBoxItem>
+            <ListBoxItem x:Name="lbiOverlay">Overlay</ListBoxItem>
+            <ListBoxItem x:Name="lbiLanguage">Language/layout</ListBoxItem>
+            <ListBoxItem x:Name="lbiPlainPaste">Plain paste</ListBoxItem>
+        </ListBox>
+        <ScrollViewer 
+            x:Name="spSettings"
+            Padding="20 10"
+            Grid.Column="1"
+            ScrollViewer.VerticalScrollBarVisibility="Auto" />
+    </Grid>
 </UserControl>
