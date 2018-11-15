@@ -20,7 +20,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <TextBlock Padding="5" TextWrapping="Wrap" Background="LightGoldenrodYellow">
+        <TextBlock Padding="10 5" TextWrapping="Wrap" Background="LightGoldenrodYellow">
                 <Run Text="Note, the settings get applied just after you close the settings window." />
         </TextBlock>
         <local:SettingPanel x:Name="spMain" Grid.Row="1" />
