@@ -8,6 +8,7 @@
     xmlns:common="clr-namespace:Product.Common;assembly=Langlay.Common"
     mc:Ignorable="d" 
     Loaded="UserControl_Loaded"
+    Unloaded="UserControl_Unloaded"
     d:DesignHeight="450" d:DesignWidth="500"
 >
     <UserControl.Resources>

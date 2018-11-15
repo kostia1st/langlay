@@ -54,14 +54,9 @@ namespace Product.SettingsUi
             OnApply?.Invoke();
         }
 
-        private void DoOnViewModelChanged()
-        {
-            RaiseSaveConfig();
-        }
-
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            DoOnViewModelChanged();
+            RaiseSaveConfig();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

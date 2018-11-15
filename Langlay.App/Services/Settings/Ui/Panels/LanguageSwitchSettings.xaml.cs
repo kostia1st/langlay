@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -50,12 +51,13 @@ namespace Product.SettingsUi
             return result.ToString().TrimEnd('\r', '\n');
         }
 
-        private void DoOnViewModelChanged()
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateHotkeyAnalysis();
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             UpdateHotkeyAnalysis();
         }
@@ -70,5 +72,9 @@ namespace Product.SettingsUi
             ViewModel.RaiseLanguageSequenceChanged();
         }
 
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+        }
     }
 }
