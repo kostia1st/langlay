@@ -44,15 +44,20 @@ namespace Product.Common
             {
                 case WM_KEYDOWN:
                     return "Key Down";
-
                 case WM_KEYUP:
                     return "Key Up";
 
                 case WM_SYSKEYDOWN:
                     return "Key Down (Sys)";
-
                 case WM_SYSKEYUP:
                     return "Key Up (Sys)";
+
+                case WM_MOUSEMOVE:
+                    return "Mouse Move";
+                case WM_LBUTTONDOWN:
+                    return "Left Mouse Button Down";
+                case WM_LBUTTONUP:
+                    return "Left Mouse Button Up";
             }
             return null;
         }
@@ -86,6 +91,9 @@ namespace Product.Common
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetActiveWindow();
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetFocus();
 
         [DllImport("user32.dll")]
         public static extern bool PostMessage(IntPtr hWnd, uint messageId, IntPtr wParam, IntPtr lParam);

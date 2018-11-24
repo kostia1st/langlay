@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Product.SettingsUi"
         mc:Ignorable="d"
 
-        Title="Settings" Height="400" Width="650"
+        Title="Settings" Height="420" Width="650"
         ResizeMode="NoResize" SizeToContent="Manual"
 
         Background="{x:Static SystemColors.ControlBrush}"

@@ -27,7 +27,7 @@
                           Margin="20 5 0 0"
                           IsChecked="{Binding ShowCursorTooltip_WhenFocusNotChanged}">
             <TextBlock TextWrapping="Wrap">
-                even if the focus has not changed
+                even if the focus has not changed since the previous click
             </TextBlock>
         </CheckBox>
     </StackPanel>

@@ -179,7 +179,7 @@ namespace Product
         protected static Configuration OpenOrCreateFile(string configPath)
         {
             if (string.IsNullOrEmpty(configPath))
-                throw new ArgumentNullException($"{nameof(configPath)}");
+                throw new ArgumentNullException(nameof(configPath));
             if (!File.Exists(configPath))
             {
                 var directoryPath = Path.GetDirectoryName(configPath);
