@@ -68,108 +68,111 @@ namespace Product.SettingsUi
 
         public bool RunAtWindowsStartup
         {
-            get { return ConfigService.DoRunAtWindowsStartup; }
-            set { SetPropertyValue(x => x.RunAtWindowsStartup, x => x.DoRunAtWindowsStartup, value); }
+            get => ConfigService.DoRunAtWindowsStartup;
+            set => SetPropertyValue(x => x.RunAtWindowsStartup, x => x.DoRunAtWindowsStartup, value);
         }
 
         public bool ShowOverlay
         {
-            get { return ConfigService.DoShowOverlay; }
-            set { SetPropertyValue(x => x.ShowOverlay, x => x.DoShowOverlay, value); }
+            get => ConfigService.DoShowOverlay;
+            set => SetPropertyValue(x => x.ShowOverlay, x => x.DoShowOverlay, value);
         }
 
         public bool ShowOverlayOnMainDisplayOnly
         {
-            get { return ConfigService.DoShowOverlayOnMainDisplayOnly; }
-            set { SetPropertyValue(x => x.ShowOverlayOnMainDisplayOnly, x => x.DoShowOverlayOnMainDisplayOnly, value); }
+            get => ConfigService.DoShowOverlayOnMainDisplayOnly;
+            set => SetPropertyValue(x => x.ShowOverlayOnMainDisplayOnly, x => x.DoShowOverlayOnMainDisplayOnly, value);
         }
 
         public bool ShowOverlayRoundCorners
         {
-            get { return ConfigService.DoShowOverlayRoundCorners; }
-            set { SetPropertyValue(x => x.ShowOverlayRoundCorners, x => x.DoShowOverlayRoundCorners, value); }
+            get => ConfigService.DoShowOverlayRoundCorners;
+            set => SetPropertyValue(x => x.ShowOverlayRoundCorners, x => x.DoShowOverlayRoundCorners, value);
         }
 
         public bool ShowLanguageNameInNative
         {
-            get { return ConfigService.DoShowLanguageNameInNative; }
-            set { SetPropertyValue(x => x.ShowLanguageNameInNative, x => x.DoShowLanguageNameInNative, value); }
+            get => ConfigService.DoShowLanguageNameInNative;
+            set => SetPropertyValue(x => x.ShowLanguageNameInNative, x => x.DoShowLanguageNameInNative, value);
         }
 
         public bool ShowCursorTooltip
         {
-            get { return ConfigService.DoShowCursorTooltip; }
-            set { SetPropertyValue(x => x.ShowCursorTooltip, x => x.DoShowCursorTooltip, value); }
+            get => ConfigService.DoShowCursorTooltip;
+            set => SetPropertyValue(x => x.ShowCursorTooltip, x => x.DoShowCursorTooltip, value);
+        }
+
+        public bool ShowCursorTooltip_WhenFocusNotChanged
+        {
+            get => ConfigService.DoShowCursorTooltip_WhenFocusNotChanged;
+            set => SetPropertyValue(
+                  x => x.ShowCursorTooltip_WhenFocusNotChanged,
+                  x => x.DoShowCursorTooltip_WhenFocusNotChanged,
+                  value);
         }
 
         public uint OverlayMilliseconds
         {
-            get { return ConfigService.OverlayDuration; }
-            set { SetPropertyValue(x => x.OverlayMilliseconds, x => x.OverlayDuration, value); }
+            get => ConfigService.OverlayDuration;
+            set => SetPropertyValue(x => x.OverlayMilliseconds, x => x.OverlayDuration, value);
         }
 
         public uint OverlayOpacity
         {
-            get { return ConfigService.OverlayOpacity; }
-            set { SetPropertyValue(x => x.OverlayOpacity, x => x.OverlayOpacity, value); }
+            get => ConfigService.OverlayOpacity;
+            set => SetPropertyValue(x => x.OverlayOpacity, x => x.OverlayOpacity, value);
         }
 
         public uint OverlayScale
         {
-            get { return ConfigService.OverlayScale; }
-            set { SetPropertyValue(x => x.OverlayScale, x => x.OverlayScale, value); }
+            get => ConfigService.OverlayScale;
+            set => SetPropertyValue(x => x.OverlayScale, x => x.OverlayScale, value);
         }
 
         public OverlayLocation OverlayLocation
         {
-            get { return ConfigService.OverlayLocation; }
-            set { SetPropertyValue(x => x.OverlayLocation, x => x.OverlayLocation, value); }
+            get => ConfigService.OverlayLocation;
+            set => SetPropertyValue(x => x.OverlayLocation, x => x.OverlayLocation, value);
         }
 
         public SwitchMethod SwitchMethod
         {
-            get { return ConfigService.SwitchMethod; }
-            set { SetPropertyValue(x => x.SwitchMethod, x => x.SwitchMethod, value); }
+            get => ConfigService.SwitchMethod;
+            set => SetPropertyValue(x => x.SwitchMethod, x => x.SwitchMethod, value);
         }
 
-        public ObservableCollection<KeyCodeViewModel> LanguageSwitchSequence
-        {
-            get { return LanguageSequence; }
-        }
+        public ObservableCollection<KeyCodeViewModel> LanguageSwitchSequence => LanguageSequence;
 
-        public ObservableCollection<KeyCodeViewModel> LayoutSwitchSequence
-        {
-            get { return LayoutSequence; }
-        }
+        public ObservableCollection<KeyCodeViewModel> LayoutSwitchSequence => LayoutSequence;
 
         public bool DisableCapsLockToggle
         {
-            get { return ConfigService.DoDisableCapsLockToggle; }
-            set { SetPropertyValue(x => x.DisableCapsLockToggle, x => x.DoDisableCapsLockToggle, value); }
+            get => ConfigService.DoDisableCapsLockToggle;
+            set => SetPropertyValue(x => x.DisableCapsLockToggle, x => x.DoDisableCapsLockToggle, value);
         }
 
         public bool SwitchLanguage
         {
-            get { return ConfigService.DoSwitchLanguage; }
-            set { SetPropertyValue(x => x.SwitchLanguage, x => x.DoSwitchLanguage, value); }
+            get => ConfigService.DoSwitchLanguage;
+            set => SetPropertyValue(x => x.SwitchLanguage, x => x.DoSwitchLanguage, value);
         }
 
         public bool SwitchLayout
         {
-            get { return ConfigService.DoSwitchLayout; }
-            set { SetPropertyValue(x => x.SwitchLayout, x => x.DoSwitchLayout, value); }
+            get => ConfigService.DoSwitchLayout;
+            set => SetPropertyValue(x => x.SwitchLayout, x => x.DoSwitchLayout, value);
         }
 
         public bool PasteWithoutFormatting
         {
-            get { return ConfigService.DoPasteWithoutFormatting; }
-            set { SetPropertyValue(x => x.PasteWithoutFormatting, x => x.DoPasteWithoutFormatting, value); }
+            get => ConfigService.DoPasteWithoutFormatting;
+            set => SetPropertyValue(x => x.PasteWithoutFormatting, x => x.DoPasteWithoutFormatting, value);
         }
 
         public bool ShowSettingsOnce
         {
-            get { return ConfigService.DoShowSettingsOnce; }
-            set { SetPropertyValue(x => x.ShowSettingsOnce, x => x.DoShowSettingsOnce, value); }
+            get => ConfigService.DoShowSettingsOnce;
+            set => SetPropertyValue(x => x.ShowSettingsOnce, x => x.DoShowSettingsOnce, value);
         }
 
         private void SetPropertyValue<T1>(

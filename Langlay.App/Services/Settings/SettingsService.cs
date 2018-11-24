@@ -48,18 +48,20 @@ namespace Product
             }
             else
             {
-                _mainWindow = new MainWindow(ConfigService);
-                _mainWindow.HandleSave = delegate
+                _mainWindow = new MainWindow(ConfigService)
                 {
-                    ConfigService.SaveToFile();
-                };
-                _mainWindow.HandleApply = delegate
-                {
-                    if (!AppRunnerService.IsExiting)
-                        AppRunnerService.ReReadAndRunTheConfig();
+                    OnSave = delegate
+                    {
+                        ConfigService.SaveToFile();
+                    },
+                    OnApply = delegate
+                    {
+                        if (!AppRunnerService.IsExiting)
+                            AppRunnerService.ReReadAndRunTheConfig();
+                    },
+                    ShowActivated = true
                 };
                 _mainWindow.Closed += _mainWindow_Closed;
-                _mainWindow.ShowActivated = true;
                 _mainWindow.Show();
                 _mainWindow.Activate();
             }
@@ -67,8 +69,8 @@ namespace Product
 
         private void _mainWindow_Closed(object sender, System.EventArgs e)
         {
-            _mainWindow.HandleApply = null;
-            _mainWindow.HandleSave = null;
+            _mainWindow.OnApply = null;
+            _mainWindow.OnSave = null;
             _mainWindow.Closed -= _mainWindow_Closed;
             _mainWindow = null;
         }

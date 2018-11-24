@@ -10,16 +10,12 @@ namespace Product
 
         public TooltipService(IConfigService configService)
         {
-            if (configService == null)
-                throw new ArgumentNullException(nameof(configService));
-
-            ConfigService = configService;
+            ConfigService = configService ?? throw new ArgumentNullException(nameof(configService));
         }
 
-        private TooltipForm CreateTooltip()
+        private TooltipForm CreateTooltipForm()
         {
-            var form = new TooltipForm();
-            return form;
+            return new TooltipForm();
         }
 
         #region Start/Stop
@@ -33,7 +29,7 @@ namespace Product
                 if (ConfigService.DoShowCursorTooltip)
                 {
                     IsStarted = true;
-                    TooltipForm = CreateTooltip();
+                    TooltipForm = CreateTooltipForm();
                 }
             }
         }

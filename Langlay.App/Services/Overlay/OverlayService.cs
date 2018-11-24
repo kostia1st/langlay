@@ -21,29 +21,24 @@ namespace Product
             ILanguageService languageService,
             IEventService eventService)
         {
-            if (configService == null)
-                throw new ArgumentNullException(nameof(configService));
-            if (languageService == null)
-                throw new ArgumentNullException(nameof(languageService));
-            if (eventService == null)
-                throw new ArgumentNullException(nameof(eventService));
-
-            ConfigService = configService;
-            LanguageService = languageService;
-            EventService = eventService;
+            ConfigService = configService ?? throw new ArgumentNullException(nameof(configService));
+            LanguageService = languageService ?? throw new ArgumentNullException(nameof(languageService));
+            EventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
 
             Overlays = new Dictionary<string, OverlayForm>();
         }
 
         private OverlayForm CreateOverlay(Screen screen)
         {
-            var overlayForm = new OverlayForm();
-            overlayForm.MillisecondsToKeepVisible = ConfigService.OverlayDuration;
-            overlayForm.OpacityWhenVisible = ConfigService.OverlayOpacity;
-            overlayForm.ScalingPercent = ConfigService.OverlayScale;
-            overlayForm.DisplayLocation = ConfigService.OverlayLocation;
-            overlayForm.RoundCorners = ConfigService.DoShowOverlayRoundCorners;
-            overlayForm.Screen = screen;
+            var overlayForm = new OverlayForm
+            {
+                MillisecondsToKeepVisible = ConfigService.OverlayDuration,
+                OpacityWhenVisible = ConfigService.OverlayOpacity,
+                ScalingPercent = ConfigService.OverlayScale,
+                DisplayLocation = ConfigService.OverlayLocation,
+                RoundCorners = ConfigService.DoShowOverlayRoundCorners,
+                Screen = screen
+            };
 
             overlayForm.InitializeRenderingCoefficient();
 
@@ -114,8 +109,7 @@ namespace Product
 
         private void StartTimer()
         {
-            LanguageCheckTimer = new Timer();
-            LanguageCheckTimer.Interval = 50;
+            LanguageCheckTimer = new Timer { Interval = 50 };
             LanguageCheckTimer.Tick += LanguageCheckTimer_Tick;
             LanguageCheckTimer.Start();
         }

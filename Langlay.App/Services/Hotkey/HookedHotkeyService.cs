@@ -25,16 +25,9 @@ namespace Product
             ILanguageService languageService,
             IEventService eventService)
         {
-            if (configService == null)
-                throw new ArgumentNullException(nameof(configService));
-            if (languageService == null)
-                throw new ArgumentNullException(nameof(languageService));
-            if (eventService == null)
-                throw new ArgumentNullException(nameof(eventService));
-
-            ConfigService = configService;
-            LanguageService = languageService;
-            EventService = eventService;
+            ConfigService = configService ?? throw new ArgumentNullException(nameof(configService));
+            LanguageService = languageService ?? throw new ArgumentNullException(nameof(languageService));
+            EventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
 
             IsEnabled = true;
         }

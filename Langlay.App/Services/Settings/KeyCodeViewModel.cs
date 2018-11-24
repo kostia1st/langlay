@@ -11,7 +11,7 @@ namespace Product.SettingsUi
 
         public KeyCode KeyCode
         {
-            get { return _keyCode; }
+            get => _keyCode;
             set
             {
                 if (_keyCode != value)

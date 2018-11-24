@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Product.SettingsUi.SettingPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Product.SettingsUi"
+             xmlns:common="clr-namespace:Product.Common;assembly=Langlay.Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="500"
+             Loaded="UserControl_Loaded"
+             >
+    <UserControl.Resources>
+        <common:EnumValueConverter x:Key="enumConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="lbCategory" SelectionChanged="ListBox_SelectionChanged">
+            <ListBoxItem x:Name="lbiGeneral">General</ListBoxItem>
+            <ListBoxItem x:Name="lbiOverlay">Overlay</ListBoxItem>
+            <ListBoxItem x:Name="lbiLanguage">Language/layout</ListBoxItem>
+            <ListBoxItem x:Name="lbiPlainPaste" Visibility="Collapsed">Plain paste</ListBoxItem>
+        </ListBox>
+        <ScrollViewer 
+            x:Name="spSettings"
+            Padding="20 10"
+            Grid.Column="1"
+            ScrollViewer.VerticalScrollBarVisibility="Auto" />
+    </Grid>
+</UserControl>

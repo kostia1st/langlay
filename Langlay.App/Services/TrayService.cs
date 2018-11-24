@@ -20,16 +20,9 @@ namespace Product
             IConfigService configService, ISettingsService settingsService,
             IAppRunnerService appRunnerService)
         {
-            if (configService == null)
-                throw new ArgumentNullException(nameof(configService));
-            if (settingsService == null)
-                throw new ArgumentNullException(nameof(settingsService));
-            if (appRunnerService == null)
-                throw new ArgumentNullException(nameof(appRunnerService));
-
-            ConfigService = configService;
-            SettingsService = settingsService;
-            AppRunnerService = appRunnerService;
+            ConfigService = configService ?? throw new ArgumentNullException(nameof(configService));
+            SettingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            AppRunnerService = appRunnerService ?? throw new ArgumentNullException(nameof(appRunnerService));
         }
 
         private void OpenHomepage()
@@ -67,7 +60,7 @@ namespace Product
             if (!IsStarted)
             {
                 IsStarted = true;
-                var actionOpenSettings = (Action) delegate { SettingsService.ShowSettings(); };
+                void actionOpenSettings() { SettingsService.ShowSettings(); }
 
                 ContextMenu = new ContextMenu(new[]
                 {

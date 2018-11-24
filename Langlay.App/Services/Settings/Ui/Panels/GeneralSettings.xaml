@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Product.SettingsUi.GeneralSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Product.SettingsUi"
+             xmlns:common="clr-namespace:Product.Common;assembly=Langlay.Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="500">
+    <UserControl.Resources>
+        <common:EnumValueConverter x:Key="enumConverter" />
+    </UserControl.Resources>
+    <StackPanel Orientation="Vertical" Margin="0 0 0 0">
+        <CheckBox x:Name="chbRunAtStartup"
+                          Content="Run at Windows startup"
+                          Margin="0 0 0 0"
+                          IsChecked="{Binding RunAtWindowsStartup}" />
+        <CheckBox x:Name="chbShowCursorTooltip"
+                          Margin="0 10 0 0"
+                          IsChecked="{Binding ShowCursorTooltip}">
+            <TextBlock TextWrapping="Wrap">
+                Show a tooltip with the language name next to the mouse pointer 
+                upon clicking an input area (when the mouse cursor is a beam)
+            </TextBlock>
+        </CheckBox>
+        <CheckBox x:Name="chbShowCursorTooltip_WhenFocusNotChanged"
+                          Margin="20 5 0 0"
+                          IsChecked="{Binding ShowCursorTooltip_WhenFocusNotChanged}">
+            <TextBlock TextWrapping="Wrap">
+                even if the focus has not changed since the previous click
+            </TextBlock>
+        </CheckBox>
+    </StackPanel>
+</UserControl>

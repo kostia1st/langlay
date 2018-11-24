@@ -39,6 +39,8 @@ namespace Product
         public bool DoForceThisInstance { get; set; }
 
         public bool DoShowCursorTooltip { get; set; }
+        public bool DoShowCursorTooltip_WhenFocusNotChanged { get; set; }
+
         private IDictionary<string, Action<string>> ReadStrategies { get; set; }
 
         public ConfigService()
@@ -89,6 +91,7 @@ namespace Product
                 { ArgumentNames.RunAtWindowsStartup, x => DoRunAtWindowsStartup = Utils.ParseBool(x, DoRunAtWindowsStartup) },
                 { ArgumentNames.ShowSettingsOnce, x => DoShowSettingsOnce = Utils.ParseBool(x, DoShowSettingsOnce) },
                 { ArgumentNames.ShowCursorTooltip, x => DoShowCursorTooltip = Utils.ParseBool(x, DoShowCursorTooltip) },
+                { ArgumentNames.ShowCursorTooltip_WhenFocusNotChanged, x => DoShowCursorTooltip_WhenFocusNotChanged = Utils.ParseBool(x, DoShowCursorTooltip_WhenFocusNotChanged) },
                 { ArgumentNames.ForceThisInstance, x => DoForceThisInstance = Utils.ParseBool(x, DoForceThisInstance) },
             };
         }
@@ -176,7 +179,7 @@ namespace Product
         protected static Configuration OpenOrCreateFile(string configPath)
         {
             if (string.IsNullOrEmpty(configPath))
-                throw new ArgumentNullException("exeFilepath");
+                throw new ArgumentNullException(nameof(configPath));
             if (!File.Exists(configPath))
             {
                 var directoryPath = Path.GetDirectoryName(configPath);
@@ -235,6 +238,7 @@ namespace Product
             WriteArgument(ArgumentNames.DisableCapsLockToggle, DoDisableCapsLockToggle.ToString());
             WriteArgument(ArgumentNames.ShowSettingsOnce, DoShowSettingsOnce.ToString());
             WriteArgument(ArgumentNames.ShowCursorTooltip, DoShowCursorTooltip.ToString());
+            WriteArgument(ArgumentNames.ShowCursorTooltip_WhenFocusNotChanged, DoShowCursorTooltip_WhenFocusNotChanged.ToString());
             UserConfig.Save(ConfigurationSaveMode.Minimal, false);
         }
 

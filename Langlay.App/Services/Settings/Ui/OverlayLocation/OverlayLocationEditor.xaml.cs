@@ -17,8 +17,8 @@ namespace Product.SettingsUi
 
         public OverlayLocation Value
         {
-            get { return (OverlayLocation) GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get => (OverlayLocation) GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
 
         private OverlayLocationHolder[] Holders { get; set; }

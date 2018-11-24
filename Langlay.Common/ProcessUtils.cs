@@ -11,7 +11,20 @@ namespace Product.Common
 
         public int ProcessId { get; set; }
         public string ProcessName { get; set; }
-        public bool HasExited { get { return _process.HasExited; } }
+        public bool HasExited
+        {
+            get
+            {
+                try
+                {
+                    return _process.HasExited;
+                }
+                catch
+                {
+                    return true;
+                }
+            }
+        }
 
         public ProcessInfo(Process process)
         {

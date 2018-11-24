@@ -98,7 +98,10 @@ namespace Product
                     result = 1;
                 else
                 {
-                    //Trace.WriteLine("Not handled " + Win32.MessageToString(wParam) + ": ");
+#if TRACE
+                    if (wParam != Win32.WM_MOUSEMOVE)
+                        Trace.WriteLine("Not handled " + Win32.MessageToString(wParam));
+#endif
                 }
             }
             return result;
@@ -134,7 +137,7 @@ namespace Product
             return result.Value;
         }
 
-        #region IDisposable Support
+#region IDisposable Support
 
         private bool disposedValue = false;
 
@@ -164,6 +167,6 @@ namespace Product
             GC.SuppressFinalize(this);
         }
 
-        #endregion IDisposable Support
+#endregion IDisposable Support
     }
 }

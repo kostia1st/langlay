@@ -5,14 +5,9 @@ namespace Product
 {
     public class AppRunnerService : IAppRunnerService
     {
+        private readonly AppMessageFilter _messageFilter;
         private bool _doRereadAndRun;
-        private bool _isExiting;
-        private AppMessageFilter _messageFilter;
-
-        public bool IsExiting
-        {
-            get { return _isExiting; }
-        }
+        public bool IsExiting { get; private set; }
 
         public AppRunnerService()
         {
@@ -41,7 +36,7 @@ namespace Product
 
         public void ExitApplication()
         {
-            _isExiting = true;
+            IsExiting = true;
             Application.Exit();
         }
 

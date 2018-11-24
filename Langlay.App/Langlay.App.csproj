@@ -113,6 +113,24 @@
     <Compile Include="Services\Settings\ArgumentNames.cs" />
     <Compile Include="Services\Settings\ISettingsService.cs" />
     <Compile Include="Services\Settings\SettingsService.cs" />
+    <Compile Include="Services\Settings\Ui\Panels\GeneralSettings.xaml.cs">
+      <DependentUpon>GeneralSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\Panels\LanguageSwitchSettings.xaml.cs">
+      <DependentUpon>LanguageSwitchSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\Panels\OverlaySettings.xaml.cs">
+      <DependentUpon>OverlaySettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\Panels\PlainPasteSettings.xaml.cs">
+      <DependentUpon>PlainPasteSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\Separator.xaml.cs">
+      <DependentUpon>Separator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\SettingPanel.xaml.cs">
+      <DependentUpon>SettingPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\SimulatorLanguageSetterService.cs" />
     <Compile Include="Services\SwitchMethod.cs" />
     <Compile Include="Services\Tooltip\ITooltipService.cs" />
@@ -194,6 +212,30 @@
     <Page Include="Services\Settings\Ui\OverlayLocation\OverlayLocationHolder.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Settings\Ui\Panels\GeneralSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\Panels\LanguageSwitchSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\Panels\OverlaySettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\Panels\PlainPasteSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\Separator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\SettingPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -56,6 +56,7 @@ namespace Product
 #endif
 
                 // In the release environment we don't show exceptions up
+                // TODO: write to log
             }
         }
     }

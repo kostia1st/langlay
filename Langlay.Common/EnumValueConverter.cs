@@ -24,8 +24,7 @@ namespace Product.Common
             if (!type.IsEnum)
                 throw new ArgumentException("Type '" + type.Name + "' is not an enum");
 
-            object[] values;
-            if (!Cache.TryGetValue(type, out values))
+            if (!Cache.TryGetValue(type, out var values))
             {
                 values = type.GetFields()
                     .Where(x => x.IsLiteral)

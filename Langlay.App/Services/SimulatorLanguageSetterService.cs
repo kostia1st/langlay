@@ -26,13 +26,8 @@ namespace Product
         public SimulatorLanguageSetterService(
             IHotkeyService hotkeyService, ILanguageService languageService)
         {
-            if (hotkeyService == null)
-                throw new ArgumentNullException(nameof(hotkeyService));
-            if (languageService == null)
-                throw new ArgumentNullException(nameof(languageService));
-
-            HotkeyService = hotkeyService;
-            LanguageService = languageService;
+            HotkeyService = hotkeyService ?? throw new ArgumentNullException(nameof(hotkeyService));
+            LanguageService = languageService ?? throw new ArgumentNullException(nameof(languageService));
 
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }

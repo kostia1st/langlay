@@ -178,6 +178,7 @@ namespace Product
 
             // Make sure the window has redrawn itself empty
             Invalidate();
+            Visible = true;
             Application.DoEvents();
             Visible = false;
 

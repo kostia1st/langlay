@@ -8,6 +8,7 @@ namespace Product
     public class MouseCursorService : IDisposable
     {
         private MouseHooker Hooker { get; set; }
+        private IntPtr LastFocusedWindowHandle { get; set; }
 
         public IConfigService ConfigService { get; private set; }
         public ILanguageService LanguageService { get; private set; }
@@ -20,18 +21,10 @@ namespace Product
             IConfigService configService, ILanguageService languageService,
             ITooltipService tooltipService, IEventService eventService)
         {
-            if (configService == null)
-                throw new ArgumentNullException(nameof(configService));
-            if (languageService == null)
-                throw new ArgumentNullException(nameof(languageService));
-            if (tooltipService == null)
-                throw new ArgumentNullException(nameof(tooltipService));
-            if (eventService == null)
-                throw new ArgumentNullException(nameof(eventService));
-            ConfigService = configService;
-            LanguageService = languageService;
-            TooltipService = tooltipService;
-            EventService = eventService;
+            ConfigService = configService ?? throw new ArgumentNullException(nameof(configService));
+            LanguageService = languageService ?? throw new ArgumentNullException(nameof(languageService));
+            TooltipService = tooltipService ?? throw new ArgumentNullException(nameof(tooltipService));
+            EventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
         }
 
         #region Start/Stop
@@ -74,13 +67,32 @@ namespace Product
                 : layout.LanguageNameThreeLetter.ToLower();
         }
 
+        private bool GetDoShowTooltip()
+        {
+            var doShowTooltip = ConfigService.DoShowCursorTooltip_WhenFocusNotChanged;
+            if (!doShowTooltip)
+            {
+                var currentFocusedWindowHandle = Win32.GetForegroundWindow();
+                doShowTooltip = currentFocusedWindowHandle != LastFocusedWindowHandle;
+#if TRACE
+                Trace.WriteLine($"Last focused handle was {LastFocusedWindowHandle}");
+                Trace.WriteLine($"New focused handle is {currentFocusedWindowHandle}");
+#endif
+                LastFocusedWindowHandle = currentFocusedWindowHandle;
+            }
+            return doShowTooltip;
+        }
+
         private void ShowTooltip(MouseEventArgs2 e)
         {
-            var currentLayout = LanguageService.GetCurrentLayout();
-            if (currentLayout != null)
+            if (GetDoShowTooltip())
             {
-                var text = GetLanguageName(currentLayout);
-                TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
+                var currentLayout = LanguageService.GetCurrentLayout();
+                if (currentLayout != null)
+                {
+                    var text = GetLanguageName(currentLayout);
+                    TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
+                }
             }
         }
 
@@ -132,6 +144,7 @@ namespace Product
             {
                 ShowTooltip(e);
             }
+            IsLastDownHandled = false;
             EventService.RaiseMouseInput();
         }
 
