@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using Product.Common;
 
 #if TRACE
-
 using System.Diagnostics;
 #endif
 
