@@ -1,7 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Product.Common;
+
+#if TRACE
+using System.Diagnostics;
+#endif
 
 namespace Product {
 
@@ -93,7 +96,9 @@ namespace Product {
             try {
                 result = func();
             } catch (Exception ex) {
+#if TRACE
                 Trace.TraceError(ex.ToString());
+#endif
             }
             return result;
         }
