@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Product.Common
 {
@@ -58,6 +59,8 @@ namespace Product.Common
                     return "Left Mouse Button Down";
                 case WM_LBUTTONUP:
                     return "Left Mouse Button Up";
+                case WM_MOUSEWHEEL:
+                    return "Mouse Wheel";
             }
             return null;
         }
@@ -94,6 +97,19 @@ namespace Product.Common
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetFocus();
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern int GetWindowTextLength(IntPtr hWnd);
+
+        public static string GetWindowText(IntPtr handle) {
+            var length = GetWindowTextLength(handle) + 1;
+            var sb = new StringBuilder(length);
+            GetWindowText(handle, sb, length);
+            return sb.ToString();
+        }
 
         [DllImport("user32.dll")]
         public static extern bool PostMessage(IntPtr hWnd, uint messageId, IntPtr wParam, IntPtr lParam);

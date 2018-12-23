@@ -5,41 +5,19 @@ using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
 
-namespace Product
-{
-    public class LanguageService : ILanguageService
-    {
+namespace Product {
+    public class LanguageService : ILanguageService {
         private IDictionary<string, IntPtr> CultureToLastUsedLayout
             = new Dictionary<string, IntPtr>();
-
-        public IConfigService ConfigService { get; set; }
-        public ILanguageSetterService LanguageSetterService { get; set; }
-
-        public LanguageService(
-            IConfigService configService = null)
-        {
-            ConfigService = configService;
-        }
-
-        private void CheckServicesAreSet()
-        {
-            if (ConfigService == null)
-                throw new NullReferenceException($"{nameof(ConfigService)} must not be null");
-            if (LanguageSetterService == null)
-                throw new NullReferenceException($"{nameof(LanguageSetterService)} must not be null");
-        }
 
         private IDictionary<IntPtr, InputLayout> _inputLayouts
             = new Dictionary<IntPtr, InputLayout>();
 
-        public IList<InputLayout> GetInputLayouts()
-        {
+        public IList<InputLayout> GetInputLayouts() {
             return InputLanguage.InstalledInputLanguages
               .Cast<InputLanguage>()
-              .Select(x =>
-              {
-                  if (!_inputLayouts.ContainsKey(x.Handle))
-                  {
+              .Select(x => {
+                  if (!_inputLayouts.ContainsKey(x.Handle)) {
                       // Surprisingly, this is quite expensive. According to
                       // ILSpy there're lots of unsafe method and registry
                       // usage each time you read the property and sub-properties.
@@ -51,8 +29,7 @@ namespace Product
         }
 
         private IList<InputLayout> GetLayoutsByLanguage(
-            string languageName, IList<InputLayout> inputLayouts = null)
-        {
+            string languageName, IList<InputLayout> inputLayouts = null) {
             if (inputLayouts == null)
                 inputLayouts = GetInputLayouts();
             return inputLayouts.Where(x => x.LanguageName == languageName).ToList();
@@ -60,14 +37,12 @@ namespace Product
 
         private string GetNextInputLayoutName(
             string currentLanguageName, string currentLayoutName, bool doWrap,
-            IList<InputLayout> inputLayouts = null)
-        {
+            IList<InputLayout> inputLayouts = null) {
             var layoutNames = GetLayoutsByLanguage(currentLanguageName, inputLayouts)
                 .Select(x => x.Name)
                 .ToList();
             var indexOfNext = layoutNames.IndexOf(currentLayoutName) + 1;
-            if (indexOfNext >= layoutNames.Count)
-            {
+            if (indexOfNext >= layoutNames.Count) {
                 if (doWrap)
                     return layoutNames[0];
                 else
@@ -83,8 +58,7 @@ namespace Product
         /// returning null means we cannot determine the current input
         /// layout from the OS.
         /// </returns>
-        public InputLayout GetCurrentLayout()
-        {
+        public InputLayout GetCurrentLayout() {
             var currentLayoutHandle = GetCurrentLayoutHandle();
 
             var currentLayout = GetInputLayouts()
@@ -102,20 +76,17 @@ namespace Product
         private uint _processId_old;
 #endif
 
-        public IntPtr GetCurrentLayoutHandle()
-        {
+        public IntPtr GetCurrentLayoutHandle() {
             var currentLayoutHandle = IntPtr.Zero;
             var processId = 0U;
             var threadId = Win32.GetWindowThreadProcessId(
                 Win32.GetForegroundWindow(), out processId);
 
-            if (processId != 0)
-            {
+            if (processId != 0) {
                 var process = ProcessUtils.GetProcessById((int) processId);
                 if (process != null
                     && !process.HasExited
-                    && process.ProcessName != ProcessUtils.ProcessName_Idle)
-                {
+                    && process.ProcessName != ProcessUtils.ProcessName_Idle) {
 #if TRACE
                     if (processId != _processId_old)
                         Trace.WriteLine($"Process name: {process.ProcessName}");
@@ -128,8 +99,7 @@ namespace Product
         }
 
         private string GetNextInputLanguageName(
-            string currentLanguageName)
-        {
+            string currentLanguageName) {
             var inputLayouts = GetInputLayouts();
             var languageNames = inputLayouts.Select(x => x.LanguageName).Distinct().ToList();
             var indexOfNext = languageNames.IndexOf(currentLanguageName) + 1;
@@ -139,8 +109,7 @@ namespace Product
         }
 
         private IntPtr GetDefaultLayoutForLanguage(
-            string languageName)
-        {
+            string languageName) {
             // Avoid re-evaluating properties
             var inputLayouts = GetInputLayouts();
             var firstLanguageLayout = inputLayouts.FirstOrDefault(x => x.LanguageName == languageName);
@@ -153,19 +122,14 @@ namespace Product
         }
 
         private InputLayout GetLayoutByLanguageAndLayoutName(
-            string languageName, string layoutName)
-        {
+            string languageName, string layoutName) {
             var inputLayouts = GetInputLayouts();
             return inputLayouts.FirstOrDefault(x => x.LanguageName == languageName && x.Name == layoutName);
         }
 
-        protected void SwitchLanguage(bool restoreSavedLayout)
-        {
-            CheckServicesAreSet();
-
+        protected void SwitchLanguage(bool restoreSavedLayout) {
             var currentLayout = GetCurrentLayout();
-            if (currentLayout != null)
-            {
+            if (currentLayout != null) {
                 var inputLayouts = GetInputLayouts();
 
                 // Here we save the layout last used within the language, so
@@ -178,28 +142,25 @@ namespace Product
                 if (restoreSavedLayout && CultureToLastUsedLayout.ContainsKey(nextLanguageName))
                     layoutToSet = CultureToLastUsedLayout[nextLanguageName];
                 else
-                    layoutToSet = GetDefaultLayoutForLanguage(
-                        nextLanguageName);
-                LanguageSetterService.SetCurrentLayout(layoutToSet);
+                    layoutToSet = GetDefaultLayoutForLanguage(nextLanguageName);
+                var languageSetterService = ServiceRegistry.Instance.Get<ILanguageSetterService>();
+                languageSetterService.SetCurrentLayout(layoutToSet);
             }
         }
 
-        protected bool SwitchLayout(bool doWrap)
-        {
-            CheckServicesAreSet();
+        protected bool SwitchLayout(bool doWrap) {
             var result = false;
             var currentLayout = GetCurrentLayout();
-            if (currentLayout != null)
-            {
+            if (currentLayout != null) {
                 var inputLayouts = GetInputLayouts();
                 var nextLayoutName = GetNextInputLayoutName(
                     currentLayout.LanguageName, currentLayout.Name, doWrap);
 
-                if (!string.IsNullOrEmpty(nextLayoutName))
-                {
+                if (!string.IsNullOrEmpty(nextLayoutName)) {
                     var layoutToSet = GetLayoutByLanguageAndLayoutName(
                         currentLayout.LanguageName, nextLayoutName).Handle;
-                    LanguageSetterService.SetCurrentLayout(layoutToSet);
+                    var languageSetterService = ServiceRegistry.Instance.Get<ILanguageSetterService>();
+                    languageSetterService.SetCurrentLayout(layoutToSet);
 
                     CultureToLastUsedLayout[currentLayout.LanguageName] = layoutToSet;
 
@@ -209,17 +170,14 @@ namespace Product
             return result;
         }
 
-        protected void SwitchLanguageAndLayout()
-        {
+        protected void SwitchLanguageAndLayout() {
             // If we have no layout to switch to, then we switch the language.
             if (!SwitchLayout(false))
                 SwitchLanguage(false);
         }
 
-        public void ConductSwitch(KeyboardSwitch keyboardSwitch)
-        {
-            switch (keyboardSwitch)
-            {
+        public void ConductSwitch(KeyboardSwitch keyboardSwitch) {
+            switch (keyboardSwitch) {
                 case KeyboardSwitch.Language:
                     SwitchLanguage(false);
                     break;

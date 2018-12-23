@@ -5,10 +5,8 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 using Product.Common;
 
-namespace Product
-{
-    public partial class TooltipForm : Form
-    {
+namespace Product {
+    public partial class TooltipForm : Form {
         private const int MillisecondsToKeepVisible = 500;
         private Stopwatch PeriodElapsed { get; set; }
         public string DisplayString { get; set; }
@@ -19,8 +17,7 @@ namespace Product
 
         private const int MinWidth = 10;
 
-        public TooltipForm()
-        {
+        public TooltipForm() {
             InitializeComponent();
 
             PeriodElapsed = new Stopwatch();
@@ -28,10 +25,8 @@ namespace Product
             TextFont = new Font(Font.FontFamily, 10);
         }
 
-        protected override CreateParams CreateParams
-        {
-            get
-            {
+        protected override CreateParams CreateParams {
+            get {
                 CreateParams baseParams = base.CreateParams;
                 baseParams.ExStyle |=
                     (Win32.WS_EX_NOACTIVATE | Win32.WS_EX_TOOLWINDOW | Win32.WS_EX_TOPMOST);
@@ -40,11 +35,9 @@ namespace Product
             }
         }
 
-        public void Push(string displayString, Point position, bool resetTimer)
-        {
+        public void Push(string displayString, Point position, bool resetTimer) {
             PivotPosition = position;
-            if (resetTimer)
-            {
+            if (resetTimer) {
                 DisplayString = string.Empty;
 
                 Invalidate();
@@ -53,13 +46,10 @@ namespace Product
 
                 DisplayString = displayString;
                 ResetAndRun();
-            }
-            else
-            {
+            } else {
                 PivotPosition = position;
                 UpdateRegionAndPosition();
-                if (!string.Equals(DisplayString, displayString))
-                {
+                if (!string.Equals(DisplayString, displayString)) {
                     DisplayString = displayString;
                     Invalidate();
                 }
@@ -67,8 +57,7 @@ namespace Product
             }
         }
 
-        private void ResetAndRun()
-        {
+        private void ResetAndRun() {
             Visible = false;
             if (timerTooltip.Enabled)
                 timerTooltip.Stop();
@@ -84,8 +73,7 @@ namespace Product
 
         private Graphics _graphicsForMeasuring;
 
-        private void UpdateRegionAndPosition()
-        {
+        private void UpdateRegionAndPosition() {
             if (_graphicsForMeasuring == null)
                 _graphicsForMeasuring = CreateGraphics();
             var sizeOfText = _graphicsForMeasuring.MeasureString(DisplayString, TextFont);
@@ -106,51 +94,39 @@ namespace Product
             Bounds = new Rectangle(position, size);
         }
 
-        public bool GetIsVisible()
-        {
+        public bool GetIsVisible() {
             return PeriodElapsed.IsRunning
                 && PeriodElapsed.ElapsedMilliseconds < MillisecondsToKeepVisible;
         }
 
-        private double GetOpacity(long elapsed)
-        {
-            if (elapsed <= MillisecondsToKeepVisible)
-            {
+        private double GetOpacity(long elapsed) {
+            if (elapsed <= MillisecondsToKeepVisible) {
                 return (double) OpacityWhenVisible / 100;
-            }
-            else
-            {
+            } else {
                 return 0;
             }
         }
 
-        private void OnTimer()
-        {
+        private void OnTimer() {
             Opacity = GetOpacity(PeriodElapsed.ElapsedMilliseconds);
-            if (Opacity == 0)
-            {
+            if (Opacity == 0) {
                 timerTooltip.Stop();
                 PeriodElapsed.Stop();
                 Visible = false;
             }
         }
 
-        private void timerTooltip_Tick(object sender, EventArgs e)
-        {
-            try
-            {
+        private void timerTooltip_Tick(object sender, EventArgs e) {
+            try {
                 OnTimer();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
 #if TRACE
                 Trace.TraceError(ex.ToString());
 #endif
             }
         }
 
-        private void TooltipForm_Paint(object sender, PaintEventArgs e)
-        {
+        private void TooltipForm_Paint(object sender, PaintEventArgs e) {
             var sizeOfText = e.Graphics.MeasureString(DisplayString, TextFont);
             var positionOfText = new PointF((Width - sizeOfText.Width - 1) / 2, (Height - sizeOfText.Height - 1) / 2);
 

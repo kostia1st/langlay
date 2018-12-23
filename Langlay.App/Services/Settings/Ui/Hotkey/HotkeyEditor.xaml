@@ -3,10 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Product.SettingsUi"
              xmlns:common="clr-namespace:Product.Common;assembly=Langlay.Common"
              mc:Ignorable="d"
-             d:DesignHeight="30" d:DesignWidth="300">
+             d:DesignHeight="30" d:DesignWidth="200">
     <UserControl.Resources>
         <common:EnumValueConverter x:Key="enumConverter" />
     </UserControl.Resources>
@@ -15,15 +14,18 @@
             <ColumnDefinition Width="120" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="cbLanguageSwitchKeys"
-                  ItemsSource="{Binding KeyCode, Mode=OneTime, Converter={StaticResource enumConverter}}"
-                  SelectedValue="{Binding KeyCode}"
-                  DisplayMemberPath="Text"
-                  SelectedValuePath="Key">
-        </ComboBox>
-        <Button Content="Remove"
-                Grid.Column="1"
-                Click="Button_Click"
-                Padding="4 2" Margin="10 0 0 0" />
+        <ComboBox 
+            x:Name="cbLanguageSwitchKeys"
+            ItemsSource="{Binding KeyCode, Mode=OneTime, Converter={StaticResource enumConverter}}"
+            SelectedValue="{Binding KeyCode}"
+            DisplayMemberPath="Text"
+            SelectedValuePath="Key"
+        />
+        <Button 
+            Content="Remove"
+            Grid.Column="1"
+            Click="Button_Click"
+            Padding="4 2" Margin="10 0 0 0" 
+        />
     </Grid>
 </UserControl>

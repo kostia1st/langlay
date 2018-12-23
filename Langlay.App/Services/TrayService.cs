@@ -1,29 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Product.Common;
 
 namespace Product
 {
-    public class TrayService
+    public class TrayService : ITrayService, ILifecycled
     {
-        private IConfigService ConfigService { get; set; }
-        private ISettingsService SettingsService { get; set; }
-        private IAppRunnerService AppRunnerService { get; set; }
-
         private ContextMenu ContextMenu { get; set; }
         private NotifyIcon Icon { get; set; }
-        private bool IsStarted { get; set; }
-
-        public TrayService(
-            IConfigService configService, ISettingsService settingsService,
-            IAppRunnerService appRunnerService)
-        {
-            ConfigService = configService ?? throw new ArgumentNullException(nameof(configService));
-            SettingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
-            AppRunnerService = appRunnerService ?? throw new ArgumentNullException(nameof(appRunnerService));
-        }
 
         private void OpenHomepage()
         {
@@ -52,15 +37,23 @@ namespace Product
 
         private void ExitApplication()
         {
-            AppRunnerService.ExitApplication();
+            var appRunnerService = ServiceRegistry.Instance.Get<IAppRunnerService>();
+            appRunnerService?.ExitApplication();
         }
+
+        #region Start/Stop
+        public bool IsStarted { get; private set; }
 
         public void Start()
         {
             if (!IsStarted)
             {
                 IsStarted = true;
-                void actionOpenSettings() { SettingsService.ShowSettings(); }
+                void actionOpenSettings()
+                {
+                    var settingsService = ServiceRegistry.Instance.Get<ISettingsService>();
+                    settingsService.ShowSettings();
+                }
 
                 ContextMenu = new ContextMenu(new[]
                 {
@@ -100,5 +93,6 @@ namespace Product
                 }
             }
         }
+        #endregion Start/Stop
     }
 }

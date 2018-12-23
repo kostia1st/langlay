@@ -1,36 +1,23 @@
-﻿using Product.SettingsUi;
+﻿using System.Windows.Forms.Integration;
+using Product.SettingsUi;
 
-namespace Product
-{
-    public class SettingsService : ISettingsService
-    {
-        private IConfigService ConfigService { get; set; }
-        private IAppRunnerService AppRunnerService { get; set; }
+namespace Product {
+    public class SettingsService : ISettingsService, ILifecycled {
         private MainWindow _mainWindow;
-
-        public SettingsService(IConfigService configService, IAppRunnerService appRunnerService)
-        {
-            ConfigService = configService;
-            AppRunnerService = appRunnerService;
-        }
 
         #region Start/Stop
 
-        private bool IsStarted { get; set; }
+        public bool IsStarted { get; private set; }
 
-        public void Start()
-        {
+        public void Start() {
             if (!IsStarted)
                 IsStarted = true;
         }
 
-        public void Stop()
-        {
-            if (IsStarted)
-            {
+        public void Stop() {
+            if (IsStarted) {
                 IsStarted = false;
-                if (_mainWindow != null)
-                {
+                if (_mainWindow != null) {
                     if (_mainWindow.IsVisible)
                         _mainWindow.Close();
                     _mainWindow = null;
@@ -40,35 +27,30 @@ namespace Product
 
         #endregion Start/Stop
 
-        public void ShowSettings()
-        {
-            if (_mainWindow != null && _mainWindow.IsVisible)
-            {
+        public void ShowSettings() {
+            if (_mainWindow != null && _mainWindow.IsVisible) {
                 _mainWindow.Activate();
-            }
-            else
-            {
-                _mainWindow = new MainWindow(ConfigService)
-                {
-                    OnSave = delegate
-                    {
-                        ConfigService.SaveToFile();
+            } else {
+                var configService = ServiceRegistry.Instance.Get<IConfigService>();
+                _mainWindow = new MainWindow(configService) {
+                    OnSave = delegate {
+                        configService.SaveToFile();
                     },
-                    OnApply = delegate
-                    {
-                        if (!AppRunnerService.IsExiting)
-                            AppRunnerService.ReReadAndRunTheConfig();
+                    OnApply = delegate {
+                        var appRunnerService = ServiceRegistry.Instance.Get<IAppRunnerService>();
+                        if (!appRunnerService.IsExiting)
+                            appRunnerService.ReReadAndRunTheConfig();
                     },
                     ShowActivated = true
                 };
+                ElementHost.EnableModelessKeyboardInterop(_mainWindow);
                 _mainWindow.Closed += _mainWindow_Closed;
                 _mainWindow.Show();
                 _mainWindow.Activate();
             }
         }
 
-        private void _mainWindow_Closed(object sender, System.EventArgs e)
-        {
+        private void _mainWindow_Closed(object sender, System.EventArgs e) {
             _mainWindow.OnApply = null;
             _mainWindow.OnSave = null;
             _mainWindow.Closed -= _mainWindow_Closed;

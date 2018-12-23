@@ -1,12 +1,9 @@
 ﻿using System;
 using Product.Common;
 
-namespace Product
-{
-    public class MessageLanguageSetterService : ILanguageSetterService
-    {
-        public bool SetCurrentLayout(IntPtr handle)
-        {
+namespace Product {
+    public class MessageLanguageSetterService : ILanguageSetterService {
+        public bool SetCurrentLayout(IntPtr handle) {
             var foregroundWindowHandle = Win32.GetForegroundWindow();
 
             // TODO: this does not work with Skype, for some reason.

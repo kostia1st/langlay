@@ -37,6 +37,9 @@ namespace Product.SettingsUi
                     case "lbiLanguage":
                         control = new LanguageSwitchSettings();
                         break;
+                    case "lbiAutoSwitch":
+                        control = new AutoSwitchSettings();
+                        break;
                     case "lbiPlainPaste":
                         control = new PlainPasteSettings();
                         break;

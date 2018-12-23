@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Product.Common;
 
-namespace Product
-{
-    public interface IConfigService
-    {
+namespace Product {
+    public interface IConfigService {
         bool DoShowOverlay { get; set; }
         bool DoShowOverlayOnMainDisplayOnly { get; set; }
         bool DoShowOverlayRoundCorners { get; set; }
@@ -22,6 +20,8 @@ namespace Product
 
         bool DoPasteWithoutFormatting { get; set; }
         IList<KeyCode> PasteKeyArray { get; set; }
+
+        IList<AppAttachment> AppAttachmentArray { get; set; }
 
         bool DoDisableCapsLockToggle { get; set; }
         bool DoShowSettingsOnce { get; set; }

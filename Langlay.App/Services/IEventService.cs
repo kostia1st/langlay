@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace Product
-{
-    public interface IEventService
-    {
+namespace Product {
+    public interface IEventService {
         event Action MouseInput;
         event Action KeyboardInput;
 
