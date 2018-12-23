@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace Product
-{
-    public interface ILanguageSetterService
-    {
+namespace Product {
+    public interface ILanguageSetterService {
         bool SetCurrentLayout(IntPtr handle);
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Product
-{
-    public enum OverlayLocation
-    {
+namespace Product {
+    public enum OverlayLocation {
         None,
 
         [Display(Name = "Top Left")]

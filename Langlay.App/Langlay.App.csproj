@@ -71,22 +71,29 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="WindowsInput">
       <HintPath>..\Langlay.Libs\WindowsInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\AppAttachment.cs" />
     <Compile Include="Services\AppMessageFilter.cs" />
     <Compile Include="Services\AppRunnerService.cs" />
+    <Compile Include="Services\AutoSwitchService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\IAppRunnerService.cs" />
+    <Compile Include="Services\IAutoSwitchService.cs" />
     <Compile Include="Services\IEventService.cs" />
+    <Compile Include="Services\ILifecycled.cs" />
+    <Compile Include="Services\ITrayService.cs" />
     <Compile Include="Services\Language\InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
     <Compile Include="Services\Hotkey\KeyEventArgs2.cs" />
     <Compile Include="Services\Hotkey\KeyEventHandler2.cs" />
     <Compile Include="Services\Hotkey\KeyStroke.cs" />
     <Compile Include="Services\Language\KeyboardSwitch.cs" />
+    <Compile Include="Services\MouseCursor\IMouseCursorService.cs" />
     <Compile Include="Services\MouseCursor\MouseCursorService.cs" />
     <Compile Include="Services\MouseCursor\MouseEventArgs2.cs" />
     <Compile Include="Services\MouseCursor\MouseEventHandler2.cs" />
@@ -110,9 +117,21 @@
     <Compile Include="Services\Overlay\OverlayService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ServiceRegistry.cs" />
     <Compile Include="Services\Settings\ArgumentNames.cs" />
+    <Compile Include="Services\Settings\AttachmentViewModel.cs" />
     <Compile Include="Services\Settings\ISettingsService.cs" />
+    <Compile Include="Services\Settings\LayoutViewModel.cs" />
     <Compile Include="Services\Settings\SettingsService.cs" />
+    <Compile Include="Services\Settings\Ui\Attachment\AttachmentComposer.xaml.cs">
+      <DependentUpon>AttachmentComposer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\Attachment\AttachmentEditor.xaml.cs">
+      <DependentUpon>AttachmentEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\Panels\AutoSwitchSettings.xaml.cs">
+      <DependentUpon>AutoSwitchSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\Settings\Ui\Panels\GeneralSettings.xaml.cs">
       <DependentUpon>GeneralSettings.xaml</DependentUpon>
     </Compile>
@@ -201,6 +220,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Services\Settings\Ui\Attachment\AttachmentComposer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\Attachment\AttachmentEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Services\Settings\Ui\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -212,6 +239,10 @@
     <Page Include="Services\Settings\Ui\OverlayLocation\OverlayLocationHolder.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Settings\Ui\Panels\AutoSwitchSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Services\Settings\Ui\Panels\GeneralSettings.xaml">
       <SubType>Designer</SubType>
@@ -238,6 +269,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

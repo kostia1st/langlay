@@ -1,7 +1,5 @@
-﻿namespace Product
-{
-    public interface ISettingsService
-    {
+﻿namespace Product {
+    public interface ISettingsService {
         void ShowSettings();
     }
 }

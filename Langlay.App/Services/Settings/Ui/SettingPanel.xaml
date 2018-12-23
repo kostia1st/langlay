@@ -21,6 +21,7 @@
             <ListBoxItem x:Name="lbiGeneral">General</ListBoxItem>
             <ListBoxItem x:Name="lbiOverlay">Overlay</ListBoxItem>
             <ListBoxItem x:Name="lbiLanguage">Language/layout</ListBoxItem>
+            <ListBoxItem x:Name="lbiAutoSwitch">Auto-switch</ListBoxItem>
             <ListBoxItem x:Name="lbiPlainPaste" Visibility="Collapsed">Plain paste</ListBoxItem>
         </ListBox>
         <ScrollViewer 

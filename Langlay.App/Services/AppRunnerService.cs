@@ -1,24 +1,20 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using Product.Common;
 
-namespace Product
-{
-    public class AppRunnerService : IAppRunnerService
-    {
+namespace Product {
+    public class AppRunnerService : IAppRunnerService {
         private readonly AppMessageFilter _messageFilter;
         private bool _doRereadAndRun;
         public bool IsExiting { get; private set; }
 
-        public AppRunnerService()
-        {
-            _messageFilter = new AppMessageFilter
-            {
+        public AppRunnerService() {
+            _messageFilter = new AppMessageFilter {
                 OnClose = delegate { ExitApplication(); },
             };
         }
 
-        public IConfigService ReadConfig()
-        {
+        public IConfigService ReadConfig() {
             // We read the global config first, then the user's one (higher
             // priority) and finally the command line (the highest priority).
             var configService = new ConfigService();
@@ -28,75 +24,72 @@ namespace Product
             return configService;
         }
 
-        public void ReReadAndRunTheConfig()
-        {
+        public void ReReadAndRunTheConfig() {
             _doRereadAndRun = true;
             Application.Exit();
         }
 
-        public void ExitApplication()
-        {
+        public void ExitApplication() {
             IsExiting = true;
             Application.Exit();
+        }
+
+        private IList<object> CreateServices() {
+            var configService = ServiceRegistry.Instance.Get<IConfigService>();
+            return new object[] {
+                new EventService(),
+                new SettingsService(),
+                new LanguageService(),
+                new OverlayService(),
+                new HookedHotkeyService(),
+                new TooltipService(),
+                new MouseCursorService(),
+                new TrayService(),
+                new AutoSwitchService(),
+                configService.SwitchMethod == SwitchMethod.InputSimulation 
+                    ? (ILanguageSetterService) new SimulatorLanguageSetterService() 
+                    : (ILanguageSetterService) new MessageLanguageSetterService()
+            };
         }
 
         /// <summary>
         /// Runs the given config for one time.
         /// </summary>
         /// <returns>true if a restart requested</returns>
-        public bool RunTheConfig(IConfigService configService)
-        {
+        public bool RunTheConfig() {
+            var configService = ServiceRegistry.Instance.Get<IConfigService>();
             // Here we make sure that registry contains the proper value in
             // the Startup section
             WindowsStartupUtils.WriteRunValue(configService.DoRunAtWindowsStartup);
-            var eventService = new EventService();
-            var settingsService = new SettingsService(configService, this);
 
-            var languageService = new LanguageService(configService);
-            var overlayService = new OverlayService(configService, languageService, eventService);
-            var hotkeyService = new HookedHotkeyService(configService, languageService, eventService);
-            var tooltipService = new TooltipService(configService);
-            var mouseCursorService = new MouseCursorService(
-                configService, languageService, tooltipService, eventService);
-            var trayService = new TrayService(configService, settingsService, this);
+            var services = CreateServices();
+            ServiceRegistry.Instance.RegisterMany(services);
 
-            ILanguageSetterService languageSetterService;
-            if (configService.SwitchMethod == SwitchMethod.InputSimulation)
-                languageSetterService = new SimulatorLanguageSetterService(hotkeyService, languageService);
-            else
-                languageSetterService = new MessageLanguageSetterService();
+            var lifecycledServices = ServiceRegistry.Instance.GetMany<ILifecycled>();
+            foreach (var service in lifecycledServices) {
+                service.Start();
+            }
 
-            languageService.LanguageSetterService = languageSetterService;
-
-            settingsService.Start();
-            overlayService.Start();
-            hotkeyService.Start();
-            tooltipService.Start();
-            mouseCursorService.Start();
-            trayService.Start();
-
-            try
-            {
+            try {
                 // Make the app react properly to external events.
                 // Registration of a filter is required per each application Run.
                 Application.AddMessageFilter(_messageFilter);
 
                 // Here we check if we need to show the settings up
                 // immediately (it's likely the first app run)
-                if (configService.DoShowSettingsOnce)
+                if (configService.DoShowSettingsOnce) {
+                    var settingsService = ServiceRegistry.Instance.Get<ISettingsService>();
                     settingsService.ShowSettings();
+                }
 
                 Application.Run();
-            }
-            finally
-            {
+            } finally {
                 Application.RemoveMessageFilter(_messageFilter);
-                trayService.Stop();
-                mouseCursorService.Stop();
-                tooltipService.Stop();
-                hotkeyService.Stop();
-                overlayService.Stop();
-                settingsService.Stop();
+
+                foreach (var service in lifecycledServices) {
+                    service.Stop();
+                }
+                ServiceRegistry.Instance.UnregisterMany(services);
             }
             var doRereadAndRun = _doRereadAndRun;
             _doRereadAndRun = false;

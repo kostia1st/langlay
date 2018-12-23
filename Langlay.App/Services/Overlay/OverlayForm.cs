@@ -4,10 +4,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using Product.Common;
 
-namespace Product
-{
-    public partial class OverlayForm : Form
-    {
+namespace Product {
+    public partial class OverlayForm : Form {
         private Stopwatch PeriodElapsed { get; set; }
         public uint MillisecondsToKeepVisible { get; set; }
         public uint OpacityWhenVisible { get; set; }
@@ -33,18 +31,15 @@ namespace Product
         private int ScreenMargin;
         private IntPtr RegionHandle { get; set; }
 
-        public OverlayForm()
-        {
+        public OverlayForm() {
             InitializeComponent();
             PeriodElapsed = new Stopwatch();
             LanguageBrush = new SolidBrush(Color.White);
             LayoutBrush = new SolidBrush(Color.Gray);
         }
 
-        protected override CreateParams CreateParams
-        {
-            get
-            {
+        protected override CreateParams CreateParams {
+            get {
                 CreateParams baseParams = base.CreateParams;
                 baseParams.ExStyle |=
                     (Win32.WS_EX_NOACTIVATE | Win32.WS_EX_TOOLWINDOW | Win32.WS_EX_TOPMOST);
@@ -53,8 +48,7 @@ namespace Product
             }
         }
 
-        private void ResetAndRun()
-        {
+        private void ResetAndRun() {
             Visible = false;
             if (timerOverlay.Enabled)
                 timerOverlay.Stop();
@@ -68,13 +62,11 @@ namespace Product
             timerOverlay.Start();
         }
 
-        private int ToPixels(float relativeValue)
-        {
+        private int ToPixels(float relativeValue) {
             return (int) (relativeValue * RenderingCoefficient);
         }
 
-        internal void InitializeRenderingCoefficient()
-        {
+        internal void InitializeRenderingCoefficient() {
             if (Screen == null)
                 throw new NullReferenceException("Screen property must not be null");
             var minAxisValue = Math.Min(Screen.Bounds.Width, Screen.Bounds.Height);
@@ -89,8 +81,7 @@ namespace Product
 
         private Graphics _graphicsForMeasuring;
 
-        private void UpdateRegionAndPosition()
-        {
+        private void UpdateRegionAndPosition() {
             if (RenderingCoefficient == 0)
                 InitializeRenderingCoefficient();
 
@@ -105,8 +96,7 @@ namespace Product
 
             var position = new Point();
             var screenBounds = Screen.Bounds;
-            switch (DisplayLocation)
-            {
+            switch (DisplayLocation) {
                 case OverlayLocation.TopLeft:
                 case OverlayLocation.MiddleLeft:
                 case OverlayLocation.BottomLeft:
@@ -126,8 +116,7 @@ namespace Product
                     break;
             }
 
-            switch (DisplayLocation)
-            {
+            switch (DisplayLocation) {
                 case OverlayLocation.TopLeft:
                 case OverlayLocation.TopCenter:
                 case OverlayLocation.TopRight:
@@ -152,15 +141,12 @@ namespace Product
                 SetRoundedRegion();
         }
 
-        private void SetRoundedRegion()
-        {
-            if (Region != null)
-            {
+        private void SetRoundedRegion() {
+            if (Region != null) {
                 Region.Dispose();
                 Region = null;
             }
-            if (RegionHandle != IntPtr.Zero)
-            {
+            if (RegionHandle != IntPtr.Zero) {
                 // Make sure we free this unmanaged resource whenever we
                 // don't use it anymore
                 Win32.DeleteObject(RegionHandle);
@@ -171,8 +157,7 @@ namespace Product
             UpdateBounds();
         }
 
-        public void PushMessage(string languageName, string layoutName)
-        {
+        public void PushMessage(string languageName, string layoutName) {
             LanguageName = string.Empty;
             LayoutName = string.Empty;
 
@@ -189,51 +174,38 @@ namespace Product
             ResetAndRun();
         }
 
-        private double GetOpacity(long elapsed)
-        {
-            if (elapsed <= MillisecondsToKeepVisible)
-            {
+        private double GetOpacity(long elapsed) {
+            if (elapsed <= MillisecondsToKeepVisible) {
                 return (double) OpacityWhenVisible / 100;
-            }
-            else if (elapsed <= MillisecondsToKeepVisible + MillisecondsToFadeOut)
-            {
+            } else if (elapsed <= MillisecondsToKeepVisible + MillisecondsToFadeOut) {
                 return ((double) Math.Max(MillisecondsToKeepVisible + MillisecondsToFadeOut - elapsed, 0))
                     / MillisecondsToFadeOut
                     * OpacityWhenVisible / 100;
-            }
-            else
-            {
+            } else {
                 return 0;
             }
         }
 
-        private void OnTimer()
-        {
+        private void OnTimer() {
             Opacity = GetOpacity(PeriodElapsed.ElapsedMilliseconds);
-            if (Opacity == 0)
-            {
+            if (Opacity == 0) {
                 timerOverlay.Stop();
                 PeriodElapsed.Stop();
                 Visible = false;
             }
         }
 
-        private void timerOverlay_Tick(object sender, EventArgs e)
-        {
-            try
-            {
+        private void timerOverlay_Tick(object sender, EventArgs e) {
+            try {
                 OnTimer();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
 #if TRACE
                 Trace.TraceError(ex.ToString());
 #endif
             }
         }
 
-        private void OverlayForm_Paint(object sender, PaintEventArgs e)
-        {
+        private void OverlayForm_Paint(object sender, PaintEventArgs e) {
             var sizeLanguage = e.Graphics.MeasureString(LanguageName, LanguageFont);
             var sizeLayout = e.Graphics.MeasureString(LayoutName, LayoutFont);
             var pointLanguage = new PointF((Width - sizeLanguage.Width) / 2, (Height - sizeLanguage.Height - sizeLayout.Height) / 2);

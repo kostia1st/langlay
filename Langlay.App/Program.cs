@@ -30,8 +30,9 @@ namespace Product
         {
             try
             {
-                var appRunnerService = new AppRunnerService();
-                var configService = appRunnerService.ReadConfig();
+                ServiceRegistry.Instance = new ServiceRegistry();
+                var appRunnerService = ServiceRegistry.Instance.Register(new AppRunnerService());
+                var configService = ServiceRegistry.Instance.Register(appRunnerService.ReadConfig());
 
                 var uniquenessService = new UniquenessService(
                     Application.ProductName, configService.DoForceThisInstance,
@@ -39,11 +40,13 @@ namespace Product
                 uniquenessService.Run(delegate
                 {
                     InitializeApp();
-                    var restartRequested = appRunnerService.RunTheConfig(configService);
+                    var restartRequested = appRunnerService.RunTheConfig();
                     while (restartRequested)
                     {
-                        configService = appRunnerService.ReadConfig();
-                        restartRequested = appRunnerService.RunTheConfig(configService);
+                        ServiceRegistry.Instance.Unregister(configService);
+                        configService = ServiceRegistry.Instance.Register(appRunnerService.ReadConfig());
+
+                        restartRequested = appRunnerService.RunTheConfig();
                     }
                 });
             }

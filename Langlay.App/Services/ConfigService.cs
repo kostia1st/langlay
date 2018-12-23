@@ -5,10 +5,8 @@ using System.IO;
 using System.Linq;
 using Product.Common;
 
-namespace Product
-{
-    public class ConfigService : IConfigService
-    {
+namespace Product {
+    public class ConfigService : IConfigService {
         protected Configuration GlobalConfig { get; set; }
         protected Configuration UserConfig { get; set; }
 
@@ -20,6 +18,8 @@ namespace Product
 
         public bool DoPasteWithoutFormatting { get; set; }
         public IList<KeyCode> PasteKeyArray { get; set; }
+
+        public IList<AppAttachment> AppAttachmentArray { get; set; }
 
         public bool DoDisableCapsLockToggle { get; set; }
 
@@ -43,8 +43,7 @@ namespace Product
 
         private IDictionary<string, Action<string>> ReadStrategies { get; set; }
 
-        public ConfigService()
-        {
+        public ConfigService() {
             GlobalConfig = OpenConfiguration(false);
             UserConfig = OpenConfiguration(true);
 
@@ -60,6 +59,8 @@ namespace Product
             DoPasteWithoutFormatting = false;
             PasteKeyArray = new KeyCode[] { KeyCode.LControlKey, KeyCode.LShiftKey, KeyCode.V };
 
+            AppAttachmentArray = new AppAttachment[] { };
+
             DoDisableCapsLockToggle = false;
             SwitchMethod = SwitchMethod.InputSimulation;
             DoShowOverlay = true;
@@ -72,11 +73,12 @@ namespace Product
             {
                 { ArgumentNames.SwitchLanguage, x => DoSwitchLanguage = Utils.ParseBool(x, DoSwitchLanguage) },
                 { ArgumentNames.SwitchLayout, x => DoSwitchLayout = Utils.ParseBool(x, DoSwitchLayout) },
-                { ArgumentNames.PasteWithoutFormatting, x=> DoPasteWithoutFormatting = Utils.ParseBool(x, DoPasteWithoutFormatting) },
+                { ArgumentNames.PasteWithoutFormatting, x => DoPasteWithoutFormatting = Utils.ParseBool(x, DoPasteWithoutFormatting) },
 
                 { ArgumentNames.LanguageSwitchKeys, x => LanguageSwitchKeyArray = KeyStringToArray(x) },
                 { ArgumentNames.LayoutSwitchKeys, x => LayoutSwitchKeyArray = KeyStringToArray(x) },
                 { ArgumentNames.PasteKeys, x => PasteKeyArray = KeyStringToArray(x) },
+                { ArgumentNames.AppAttachments, x => AppAttachmentArray = StringToAppAttachments(x) },
 
                 { ArgumentNames.DisableCapsLockToggle, x => DoDisableCapsLockToggle = Utils.ParseBool(x, DoDisableCapsLockToggle) },
                 { ArgumentNames.ShowOverlay, x => DoShowOverlay = Utils.ParseBool(x, DoShowOverlay) },
@@ -96,14 +98,12 @@ namespace Product
             };
         }
 
-        private void ReadArgument(string name, string value)
-        {
+        private void ReadArgument(string name, string value) {
             if (ReadStrategies.ContainsKey(name))
                 ReadStrategies[name](value);
         }
 
-        private void ReadArgument(string argument)
-        {
+        private void ReadArgument(string argument) {
             if (!argument.StartsWith("--"))
                 throw new ArgumentException("Arguments must start with '--'");
             var parts = argument.Substring(2).Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -111,64 +111,74 @@ namespace Product
                 ReadArgument(parts[0], parts[1]);
         }
 
-        private void ReadFromString(string str)
-        {
+        private void ReadFromString(string str) {
             var arguments = str.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             arguments.ForEach(x => ReadArgument(x));
         }
 
-        private IList<KeyCode> KeyStringToArray(string arrayString)
-        {
+        private IList<KeyCode> KeyStringToArray(string arrayString) {
             return arrayString.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => (KeyCode) Utils.ParseInt(x, 0))
                 .Where(x => x != KeyCode.None)
                 .ToList();
         }
 
-        public void ReadFromConfigFile(bool isUserLevel)
-        {
+        private string AppAttachmentToString(AppAttachment attachment) {
+            return attachment.AppMask + "," + attachment.LayoutId.ToString();
+        }
+
+        private string AppAttachmentsToString(IList<AppAttachment> attachments) {
+            return string.Join("|", attachments.Select(x => AppAttachmentToString(x)).ToList());
+        }
+
+        private AppAttachment StringToAppAttachment(string str) {
+            var parts = str.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 2)
+                return new AppAttachment { AppMask = parts[0], LayoutId = Utils.ParseInt(parts[1]) };
+            return null;
+        }
+
+        private IList<AppAttachment> StringToAppAttachments(string str) {
+            var itemStrings = str.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            return itemStrings
+                .Select(x => StringToAppAttachment(x))
+                .Where(x => x != null)
+                .ToList();
+        }
+
+        public void ReadFromConfigFile(bool isUserLevel) {
             if (isUserLevel)
                 ReadFromConfigFile(UserConfig);
             else
                 ReadFromConfigFile(GlobalConfig);
         }
 
-        protected void ReadFromConfigFile(Configuration configuration)
-        {
+        protected void ReadFromConfigFile(Configuration configuration) {
             var appSettings = configuration.AppSettings.Settings;
-            foreach (var key in appSettings.AllKeys)
-            {
-                if (key.StartsWith("app:"))
-                {
+            foreach (var key in appSettings.AllKeys) {
+                if (key.StartsWith("app:")) {
                     var settingName = key.Substring(4);
-                    if (settingName == "arguments")
-                    {
+                    if (settingName == "arguments") {
                         var arguments = appSettings[key].GetValueOrDefault(x => x.Value);
                         ReadFromString(arguments);
-                    }
-                    else
+                    } else
                         ReadArgument(settingName, appSettings[key].GetValueOrDefault(x => x.Value));
                 }
             }
         }
 
-        public void ReadFromCommandLineArguments()
-        {
-            var arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1));
-            ReadFromString(arguments);
+        public void ReadFromCommandLineArguments() {
+            var arguments = Environment.GetCommandLineArgs().Skip(1).ToList();
+            arguments.ForEach(x => ReadArgument(x));
         }
 
-        protected static Configuration OpenConfiguration(bool isUserSpecific)
-        {
+        protected static Configuration OpenConfiguration(bool isUserSpecific) {
             string rootPath;
-            if (isUserSpecific)
-            {
+            if (isUserSpecific) {
                 rootPath = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     AppSpecific.MainAppTitle);
-            }
-            else
-            {
+            } else {
                 rootPath = PathUtils.GetAppDirectory();
             }
 
@@ -176,15 +186,12 @@ namespace Product
             return OpenOrCreateFile(configPath);
         }
 
-        protected static Configuration OpenOrCreateFile(string configPath)
-        {
+        protected static Configuration OpenOrCreateFile(string configPath) {
             if (string.IsNullOrEmpty(configPath))
                 throw new ArgumentNullException(nameof(configPath));
-            if (!File.Exists(configPath))
-            {
+            if (!File.Exists(configPath)) {
                 var directoryPath = Path.GetDirectoryName(configPath);
-                if (!Directory.Exists(directoryPath))
-                {
+                if (!Directory.Exists(directoryPath)) {
                     Directory.CreateDirectory(directoryPath);
                 }
                 File.WriteAllText(configPath, @"<?xml version=""1.0"" encoding=""utf-8"" ?>
@@ -193,28 +200,24 @@ namespace Product
   </appSettings>
 </configuration>");
             }
-            return ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap()
-            {
+            return ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap() {
                 RoamingUserConfigFilename = configPath,
                 LocalUserConfigFilename = configPath,
                 ExeConfigFilename = configPath
             }, ConfigurationUserLevel.None);
         }
 
-        public bool GetLanguageSwitchConfigured()
-        {
+        public bool GetLanguageSwitchConfigured() {
             return DoSwitchLanguage
                 && LanguageSwitchKeyArray.Count > 0;
         }
 
-        public bool GetLayoutSwitchConfigured()
-        {
+        public bool GetLayoutSwitchConfigured() {
             return DoSwitchLayout
                 && LayoutSwitchKeyArray.Count > 0;
         }
 
-        public void SaveToFile()
-        {
+        public void SaveToFile() {
             WriteArgument(ArgumentNames.RunAtWindowsStartup, DoRunAtWindowsStartup.ToString());
             WriteArgument(ArgumentNames.ShowOverlay, DoShowOverlay.ToString());
             WriteArgument(ArgumentNames.ShowOverlayOnMainDisplayOnly, DoShowOverlayOnMainDisplayOnly.ToString());
@@ -235,6 +238,8 @@ namespace Product
             WriteArgument(ArgumentNames.PasteWithoutFormatting, DoPasteWithoutFormatting.ToString());
             WriteArgument(ArgumentNames.PasteKeys, ArrayToKeyString(PasteKeyArray));
 
+            WriteArgument(ArgumentNames.AppAttachments, AppAttachmentsToString(AppAttachmentArray));
+
             WriteArgument(ArgumentNames.DisableCapsLockToggle, DoDisableCapsLockToggle.ToString());
             WriteArgument(ArgumentNames.ShowSettingsOnce, DoShowSettingsOnce.ToString());
             WriteArgument(ArgumentNames.ShowCursorTooltip, DoShowCursorTooltip.ToString());
@@ -242,8 +247,7 @@ namespace Product
             UserConfig.Save(ConfigurationSaveMode.Minimal, false);
         }
 
-        public void WriteArgument(string name, string value)
-        {
+        public void WriteArgument(string name, string value) {
             var appSettings = UserConfig.AppSettings.Settings;
             var key = "app:" + name;
             if (!appSettings.AllKeys.Contains(key))
@@ -252,8 +256,7 @@ namespace Product
                 appSettings[key].Value = value;
         }
 
-        private string ArrayToKeyString(IList<KeyCode> keys)
-        {
+        private string ArrayToKeyString(IList<KeyCode> keys) {
             return string.Join("+", keys.Select(x => ((int) x).ToString()));
         }
     }

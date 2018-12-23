@@ -12,20 +12,28 @@ namespace Product
         public string LanguageNameThreeLetter { get; private set; }
         public string LanguageNameThreeLetterNative { get; private set; }
         public string Name { get; private set; }
+        public int Id { get; private set; }
         public IntPtr Handle { get; private set; }
 
         public InputLayout(InputLanguage inputLanguage)
         {
             Handle = inputLanguage.Handle;
-            LanguageName = inputLanguage.Culture.EnglishName;
-            LanguageNameNative = inputLanguage.Culture.NativeName;
-
-            LanguageNameTwoLetter = inputLanguage.Culture.TwoLetterISOLanguageName;
-            LanguageNameTwoLetterNative = inputLanguage.Culture.NativeName.Substring(0, 2);
-            LanguageNameThreeLetter = inputLanguage.Culture.ThreeLetterISOLanguageName;
-            LanguageNameThreeLetterNative = inputLanguage.Culture.NativeName.Substring(0, 3);
-
             Name = inputLanguage.LayoutName;
+            Id = Name.GetHashCode();
+
+            var culture = inputLanguage.Culture;
+
+            LanguageName = culture.EnglishName;
+            LanguageNameNative = culture.NativeName;
+
+            LanguageNameTwoLetter = culture.TwoLetterISOLanguageName;
+            LanguageNameTwoLetterNative = culture.NativeName.Substring(0, 2);
+            LanguageNameThreeLetter = culture.ThreeLetterISOLanguageName;
+            LanguageNameThreeLetterNative = culture.NativeName.Substring(0, 3);
+        }
+
+        public override string ToString() {
+            return $"{LanguageName} - {Name} - {Id}";
         }
     }
 }

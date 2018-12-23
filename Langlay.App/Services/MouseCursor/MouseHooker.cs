@@ -7,10 +7,10 @@ using Product.Common;
 using System.Diagnostics;
 #endif
 
-namespace Product
-{
-    public class MouseHooker : IDisposable
-    {
+namespace Product {
+
+    public class MouseHooker : IDisposable {
+
         private IntPtr HookHandle = IntPtr.Zero;
 
         #region Events
@@ -28,8 +28,7 @@ namespace Product
         private Win32.MouseHookProc HookProcedureHolder;
 
         public MouseHooker(
-            bool doHookImmediately = true, Func<Func<int?>, int?> hookProcedureWrapper = null)
-        {
+            bool doHookImmediately = true, Func<Func<int?>, int?> hookProcedureWrapper = null) {
             // This is a c# hack in order to keep a firm reference to a
             // dynamically created delegate so that it won't be collected by GC.
             HookProcedureHolder = HookProcedure;
@@ -41,8 +40,7 @@ namespace Product
         /// <summary>
         /// Installs the global hook
         /// </summary>
-        public void SetHook()
-        {
+        public void SetHook() {
             var hInstance = Win32.LoadLibrary("User32");
             HookHandle = Win32.SetWindowsHookEx(
                 Win32.WH_MOUSE_LL, HookProcedureHolder, hInstance, 0);
@@ -51,19 +49,15 @@ namespace Product
         /// <summary>
         /// Uninstalls the global hook
         /// </summary>
-        public void UnsetHook()
-        {
+        public void UnsetHook() {
             Win32.UnhookWindowsHookEx(HookHandle);
         }
 
-        private int? HookInternals(int code, uint wParam, IntPtr lParam)
-        {
+        private int? HookInternals(int code, uint wParam, IntPtr lParam) {
             int? result = null;
-            if (code >= 0)
-            {
+            if (code >= 0) {
                 MouseEventArgs2 args = null;
-                if (ButtonDown != null)
-                {
+                if (ButtonDown != null) {
                     if (wParam == Win32.WM_LBUTTONDOWN)
                         args = new MouseEventArgs2(MouseButtons.Left, lParam);
                     if (wParam == Win32.WM_RBUTTONDOWN)
@@ -73,8 +67,7 @@ namespace Product
                     if (args != null)
                         ButtonDown(this, args);
                 }
-                if (args == null && ButtonUp != null)
-                {
+                if (args == null && ButtonUp != null) {
                     if (wParam == Win32.WM_LBUTTONUP)
                         args = new MouseEventArgs2(MouseButtons.Left, lParam);
                     if (wParam == Win32.WM_RBUTTONUP)
@@ -86,21 +79,18 @@ namespace Product
                         ButtonUp(this, args);
                 }
 
-                if (args == null && MouseMove != null)
-                {
-                    if (wParam == Win32.WM_MOUSEMOVE)
-                    {
+                if (args == null && MouseMove != null) {
+                    if (wParam == Win32.WM_MOUSEMOVE) {
                         args = new MouseEventArgs2(MouseButtons.None, lParam);
                         MouseMove(this, args);
                     }
                 }
                 if (args != null && args.Handled)
                     result = 1;
-                else
-                {
+                else {
 #if TRACE
                     if (wParam != Win32.WM_MOUSEMOVE)
-                        Trace.WriteLine("Not handled " + Win32.MessageToString(wParam));
+                        Trace.WriteLine(">> Not handled " + Win32.MessageToString(wParam));
 #endif
                 }
             }
@@ -116,18 +106,14 @@ namespace Product
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The mousehook event information</param>
         /// <returns></returns>
-        private int HookProcedure(int code, uint wParam, IntPtr lParam)
-        {
+        private int HookProcedure(int code, uint wParam, IntPtr lParam) {
             var result = (int?) null;
-            try
-            {
+            try {
                 if (HookProcedureWrapper != null)
                     result = HookProcedureWrapper(() => HookInternals(code, wParam, lParam));
                 else
                     result = HookInternals(code, wParam, lParam);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
 #if TRACE
                 Trace.TraceError(ex.ToString());
 #endif
@@ -137,16 +123,13 @@ namespace Product
             return result.Value;
         }
 
-#region IDisposable Support
+        #region IDisposable Support
 
         private bool disposedValue = false;
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
+        protected virtual void Dispose(bool disposing) {
+            if (!disposedValue) {
+                if (disposing) {
                     // TODO: dispose managed state (managed objects).
                 }
 
@@ -155,18 +138,16 @@ namespace Product
             }
         }
 
-        ~MouseHooker()
-        {
+        ~MouseHooker() {
             Dispose(false);
         }
 
         // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
+        public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-#endregion IDisposable Support
+        #endregion IDisposable Support
     }
 }

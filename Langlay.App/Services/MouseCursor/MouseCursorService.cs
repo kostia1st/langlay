@@ -3,38 +3,24 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Product.Common;
 
-namespace Product
-{
-    public class MouseCursorService : IDisposable
-    {
+namespace Product {
+
+    public class MouseCursorService : IMouseCursorService, IDisposable, ILifecycled {
+
         private MouseHooker Hooker { get; set; }
         private IntPtr LastFocusedWindowHandle { get; set; }
 
-        public IConfigService ConfigService { get; private set; }
-        public ILanguageService LanguageService { get; private set; }
-        public ITooltipService TooltipService { get; private set; }
-        public IEventService EventService { get; private set; }
-
         private bool IsLastDownHandled;
 
-        public MouseCursorService(
-            IConfigService configService, ILanguageService languageService,
-            ITooltipService tooltipService, IEventService eventService)
-        {
-            ConfigService = configService ?? throw new ArgumentNullException(nameof(configService));
-            LanguageService = languageService ?? throw new ArgumentNullException(nameof(languageService));
-            TooltipService = tooltipService ?? throw new ArgumentNullException(nameof(tooltipService));
-            EventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
+        public MouseCursorService() {
         }
 
         #region Start/Stop
 
-        private bool IsStarted { get; set; }
+        public bool IsStarted { get; private set; }
 
-        public void Start()
-        {
-            if (!IsStarted)
-            {
+        public void Start() {
+            if (!IsStarted) {
                 IsStarted = true;
                 Hooker = new MouseHooker(false, HookProcedureWrapper);
                 Hooker.ButtonDown = Hooker_ButtonDown;
@@ -44,13 +30,10 @@ namespace Product
             }
         }
 
-        public void Stop()
-        {
-            if (IsStarted)
-            {
+        public void Stop() {
+            if (IsStarted) {
                 IsStarted = false;
-                if (Hooker != null)
-                {
+                if (Hooker != null) {
                     Hooker.Dispose();
                     Hooker = null;
                 }
@@ -60,18 +43,17 @@ namespace Product
 
         #endregion Start/Stop
 
-        private string GetLanguageName(InputLayout layout)
-        {
-            return ConfigService.DoShowLanguageNameInNative
+        private string GetLanguageName(InputLayout layout) {
+            var configService = ServiceRegistry.Instance.Get<IConfigService>();
+            return configService.DoShowLanguageNameInNative
                 ? layout.LanguageNameThreeLetterNative.ToLower()
                 : layout.LanguageNameThreeLetter.ToLower();
         }
 
-        private bool GetDoShowTooltip()
-        {
-            var doShowTooltip = ConfigService.DoShowCursorTooltip_WhenFocusNotChanged;
-            if (!doShowTooltip)
-            {
+        private bool GetDoShowTooltip() {
+            var configService = ServiceRegistry.Instance.Get<IConfigService>();
+            var doShowTooltip = configService.DoShowCursorTooltip_WhenFocusNotChanged;
+            if (!doShowTooltip) {
                 var currentFocusedWindowHandle = Win32.GetForegroundWindow();
                 doShowTooltip = currentFocusedWindowHandle != LastFocusedWindowHandle;
 #if TRACE
@@ -83,75 +65,67 @@ namespace Product
             return doShowTooltip;
         }
 
-        private void ShowTooltip(MouseEventArgs2 e)
-        {
-            if (GetDoShowTooltip())
-            {
-                var currentLayout = LanguageService.GetCurrentLayout();
-                if (currentLayout != null)
-                {
+        private void ShowTooltip(MouseEventArgs2 e) {
+            if (GetDoShowTooltip()) {
+                var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
+                var currentLayout = languageService.GetCurrentLayout();
+                if (currentLayout != null) {
                     var text = GetLanguageName(currentLayout);
-                    TooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
+                    var tooltipService = ServiceRegistry.Instance.Get<ITooltipService>();
+                    tooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
                 }
             }
         }
 
-        private void UpdateTooltip(MouseEventArgs2 e)
-        {
-            if (TooltipService.GetIsVisible())
-            {
-                TooltipService.Push(
-                    TooltipService.GetDisplayString(),
+        private void UpdateTooltip(MouseEventArgs2 e) {
+            var tooltipService = ServiceRegistry.Instance.Get<ITooltipService>();
+            if (tooltipService.GetIsVisible()) {
+                tooltipService.Push(
+                    tooltipService.GetDisplayString(),
                     new System.Drawing.Point(e.Point.X, e.Point.Y), false);
             }
         }
 
         #region Hook handling
 
-        private int? HookProcedureWrapper(Func<int?> func)
-        {
+        private int? HookProcedureWrapper(Func<int?> func) {
             var result = (int?) null;
-            try
-            {
+            try {
                 result = func();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Trace.TraceError(ex.ToString());
             }
             return result;
         }
 
-        protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e)
-        {
+        protected void Hooker_ButtonDown(object sender, MouseEventArgs2 e) {
             if (e.Buttons == MouseButtons.Left
-                && CursorUtils.GetIsCurrentCursorBeam())
-            {
+                && CursorUtils.GetIsCurrentCursorBeam()) {
                 ShowTooltip(e);
                 IsLastDownHandled = true;
-            }
-            else
+            } else
                 IsLastDownHandled = false;
-            EventService.RaiseMouseInput();
+            var eventService = ServiceRegistry.Instance.Get<IEventService>();
+            eventService?.RaiseMouseInput();
         }
 
-        protected void Hooker_ButtonUp(object sender, MouseEventArgs2 e)
-        {
+        protected void Hooker_ButtonUp(object sender, MouseEventArgs2 e) {
+            var tooltipService = ServiceRegistry.Instance.Get<ITooltipService>();
             if (e.Buttons == MouseButtons.Left
                 && !IsLastDownHandled
-                && !TooltipService.GetIsVisible()
-                && CursorUtils.GetIsCurrentCursorBeam())
-            {
+                && !tooltipService.GetIsVisible()
+                && CursorUtils.GetIsCurrentCursorBeam()) {
                 ShowTooltip(e);
             }
             IsLastDownHandled = false;
-            EventService.RaiseMouseInput();
+            var eventService = ServiceRegistry.Instance.Get<IEventService>();
+            eventService?.RaiseMouseInput();
         }
 
-        protected void Hooker_MouseMove(object sender, MouseEventArgs2 e)
-        {
+        protected void Hooker_MouseMove(object sender, MouseEventArgs2 e) {
             UpdateTooltip(e);
-            EventService.RaiseMouseInput();
+            var eventService = ServiceRegistry.Instance.Get<IEventService>();
+            eventService?.RaiseMouseInput();
         }
 
         #endregion Hook handling
@@ -160,12 +134,9 @@ namespace Product
 
         private bool disposedValue = false; // To detect redundant calls
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
+        protected virtual void Dispose(bool disposing) {
+            if (!disposedValue) {
+                if (disposing) {
                 }
 
                 Stop();
@@ -174,13 +145,11 @@ namespace Product
             }
         }
 
-        ~MouseCursorService()
-        {
+        ~MouseCursorService() {
             Dispose(false);
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
         }

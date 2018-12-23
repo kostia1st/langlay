@@ -1,19 +1,15 @@
 ﻿using System;
 
-namespace Product
-{
-    public class EventService : IEventService
-    {
+namespace Product {
+    public class EventService : IEventService {
         public event Action MouseInput;
         public event Action KeyboardInput;
 
-        public void RaiseMouseInput()
-        {
+        public void RaiseMouseInput() {
             MouseInput?.Invoke();
         }
 
-        public void RaiseKeyboardInput()
-        {
+        public void RaiseKeyboardInput() {
             KeyboardInput?.Invoke();
         }
     }

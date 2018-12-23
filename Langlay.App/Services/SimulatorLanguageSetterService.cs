@@ -18,17 +18,10 @@ namespace Product
         private WindowsSequenceCode? CurrentLanguageSwitchSequence { get; set; }
         private WindowsSequenceCode? CurrentLayoutSwitchSequence { get; set; }
 
-        public IHotkeyService HotkeyService { get; set; }
-        public ILanguageService LanguageService { get; private set; }
-
         private KeyboardSimulator KeyboardSimulator { get; set; }
 
-        public SimulatorLanguageSetterService(
-            IHotkeyService hotkeyService, ILanguageService languageService)
+        public SimulatorLanguageSetterService()
         {
-            HotkeyService = hotkeyService ?? throw new ArgumentNullException(nameof(hotkeyService));
-            LanguageService = languageService ?? throw new ArgumentNullException(nameof(languageService));
-
             KeyboardSimulator = new KeyboardSimulator(new InputSimulator());
         }
 
@@ -91,10 +84,11 @@ namespace Product
         {
             var result = 0;
 
-            var currentLayout = LanguageService.GetCurrentLayout();
+            var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
+            var currentLayout = languageService.GetCurrentLayout();
             if (currentLayout != null)
             {
-                var inputLayouts = LanguageService.GetInputLayouts();
+                var inputLayouts = languageService.GetInputLayouts();
                 var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
 
                 var inputLanguageNames = inputLayouts
@@ -116,13 +110,14 @@ namespace Product
         {
             var result = 0;
 
+            var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
             // Re-read the current layout, to find out what layout the
             // system language manager has selected within the layout group
             // of the language.
-            var currentLayout = LanguageService.GetCurrentLayout();
+            var currentLayout = languageService.GetCurrentLayout();
             if (currentLayout != null)
             {
-                var inputLayouts = LanguageService.GetInputLayouts();
+                var inputLayouts = languageService.GetInputLayouts();
                 var targetLayout = inputLayouts.FirstOrDefault(x => x.Handle == targetHandle);
 
                 var inputLayoutNamesWithinLanguage = inputLayouts
@@ -144,7 +139,8 @@ namespace Product
         public bool SetCurrentLayout(IntPtr targetHandle)
         {
             var result = false;
-            HotkeyService.SetEnabled(false);
+            var hotkeyService = ServiceRegistry.Instance.Get<IHotkeyService>();
+            hotkeyService.SetEnabled(false);
             try
             {
                 // If those values are not set, we suppose we need to read
@@ -187,7 +183,7 @@ namespace Product
             }
             finally
             {
-                HotkeyService.SetEnabled(true);
+                hotkeyService.SetEnabled(true);
             }
             return result;
         }
