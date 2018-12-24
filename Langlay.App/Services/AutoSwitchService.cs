@@ -13,8 +13,9 @@ namespace Product {
         public void Start() {
             if (!IsStarted) {
                 IsStarted = true;
-                Timer = new LastInputTimer();
-                Timer.OnTimer = HandleTimer;
+                Timer = new LastInputTimer {
+                    OnTimer = HandleTimer
+                };
 
                 EventService = ServiceRegistry.Instance.Get<IEventService>();
                 EventService.KeyboardInput += Timer.SignalInput;

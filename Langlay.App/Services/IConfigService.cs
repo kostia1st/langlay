@@ -35,5 +35,9 @@ namespace Product {
         bool GetLayoutSwitchConfigured();
 
         void SaveToFile();
+
+        void ReadFromConfigFile(bool isUserLevel);
+        void ReadFromCommandLineArguments();
+
     }
 }
