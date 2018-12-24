@@ -5,12 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace Product.Common
-{
-    public class EnumValueConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+namespace Product.Common {
+    public class EnumValueConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value == null)
                 return null;
             else
@@ -19,17 +16,14 @@ namespace Product.Common
 
         private static readonly IDictionary<Type, object[]> Cache = new Dictionary<Type, object[]>();
 
-        private static object[] GetValues(Type type)
-        {
+        private static object[] GetValues(Type type) {
             if (!type.IsEnum)
                 throw new ArgumentException("Type '" + type.Name + "' is not an enum");
 
-            if (!Cache.TryGetValue(type, out var values))
-            {
+            if (!Cache.TryGetValue(type, out var values)) {
                 values = type.GetFields()
                     .Where(x => x.IsLiteral)
-                    .Select(x => new EnumItem
-                    {
+                    .Select(x => new EnumItem {
                         Key = x.GetValue(null),
                         Text = x
                             .GetCustomAttributes(true)
@@ -43,8 +37,7 @@ namespace Product.Common
             return values;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             throw new NotImplementedException();
         }
     }

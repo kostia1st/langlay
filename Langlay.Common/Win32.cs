@@ -2,10 +2,8 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Product.Common
-{
-    public class Win32
-    {
+namespace Product.Common {
+    public class Win32 {
         public const int WH_KEYBOARD_LL = 13;
         public const uint WM_KEYDOWN = 0x100;
         public const uint WM_KEYUP = 0x101;
@@ -39,10 +37,8 @@ namespace Product.Common
         public const int WM_QUIT = 0x0012;
         public const int WM_USER_QUIT = 0x0400 + 21;
 
-        public static string MessageToString(uint message)
-        {
-            switch (message)
-            {
+        public static string MessageToString(uint message) {
+            switch (message) {
                 case WM_KEYDOWN:
                     return "Key Down";
                 case WM_KEYUP:
@@ -66,8 +62,7 @@ namespace Product.Common
         }
 
         [Flags]
-        public enum SendMessageTimeoutFlags : uint
-        {
+        public enum SendMessageTimeoutFlags : uint {
             SMTO_NORMAL = 0x0,
             SMTO_BLOCK = 0x1,
             SMTO_ABORTIFHUNG = 0x2,
@@ -214,8 +209,7 @@ namespace Product.Common
 
         public delegate int MouseHookProc2(int nCode, uint wParam, ref MouseInfo lParam);
 
-        public struct KeyboardInfo
-        {
+        public struct KeyboardInfo {
             public int VirtualKeyCode;
             public int ScanCode;
             public int Flags;
@@ -225,8 +219,7 @@ namespace Product.Common
             public IntPtr ExtraInfo => _extraInfo;
         }
 
-        public struct MouseInfo
-        {
+        public struct MouseInfo {
             public Point Point;
             public int MouseData;
             public int Flags;
@@ -237,15 +230,13 @@ namespace Product.Common
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct Point
-        {
+        public struct Point {
             public int X;
             public int Y;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct CursorInfo
-        {
+        public struct CursorInfo {
             public int Size;
             public int Flags;
             private IntPtr _cursorHandle;

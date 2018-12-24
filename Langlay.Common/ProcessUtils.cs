@@ -3,31 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Product.Common
-{
-    public class ProcessInfo
-    {
+namespace Product.Common {
+    public class ProcessInfo {
         private Process _process;
 
         public int ProcessId { get; set; }
         public string ProcessName { get; set; }
-        public bool HasExited
-        {
-            get
-            {
-                try
-                {
+        public bool HasExited {
+            get {
+                try {
                     return _process.HasExited;
-                }
-                catch
-                {
+                } catch {
                     return true;
                 }
             }
         }
 
-        public ProcessInfo(Process process)
-        {
+        public ProcessInfo(Process process) {
             _process = process;
             ProcessId = process.Id;
             // This is an expensive operation
@@ -35,12 +27,10 @@ namespace Product.Common
         }
     }
 
-    public static class ProcessUtils
-    {
+    public static class ProcessUtils {
         public const string ProcessName_Idle = "Idle";
 
-        public static bool StopOtherMainApp()
-        {
+        public static bool StopOtherMainApp() {
             var result = false;
             var currentProcess = Process.GetCurrentProcess();
             var processes = Process
@@ -57,16 +47,14 @@ namespace Product.Common
             }
 #endif
 
-            foreach (var process in processes)
-            {
+            foreach (var process in processes) {
                 process.CloseMainWindow();
 
                 var thread = process.Threads
                     .Cast<ProcessThread>()
                     .FirstOrDefault();
 
-                if (thread != null)
-                {
+                if (thread != null) {
                     Win32.PostThreadMessage(thread.Id, Win32.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
                 }
 
@@ -81,13 +69,11 @@ namespace Product.Common
 
         public static void StartMainApp(
             string arguments,
-            bool runAsAdmin = false)
-        {
+            bool runAsAdmin = false) {
             var location = PathUtils.GetAppDirectory();
             var fullFilename =
                 System.IO.Path.Combine(location, AppSpecific.MainAppFilename);
-            var psi = new ProcessStartInfo
-            {
+            var psi = new ProcessStartInfo {
                 FileName = fullFilename,
                 WorkingDirectory = location,
                 UseShellExecute = runAsAdmin,
@@ -99,10 +85,8 @@ namespace Product.Common
         }
 
         private static IDictionary<int, ProcessInfo> _processCache = new Dictionary<int, ProcessInfo>();
-        public static ProcessInfo GetProcessById(int processId)
-        {
-            if (!_processCache.ContainsKey(processId))
-            {
+        public static ProcessInfo GetProcessById(int processId) {
+            if (!_processCache.ContainsKey(processId)) {
                 // This is very expensive, thus we attempt to cache it.
                 var process = Process.GetProcessById(processId);
                 if (process != null)

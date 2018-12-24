@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Product.Common
-{
+namespace Product.Common {
     [Flags]
-    public enum KeyCode : byte
-    {
+    public enum KeyCode : byte {
         // Summary: No key pressed.
         None = 0,
 

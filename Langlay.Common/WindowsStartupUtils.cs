@@ -1,24 +1,18 @@
 ﻿using Microsoft.Win32;
 
-namespace Product.Common
-{
-    public static class WindowsStartupUtils
-    {
+namespace Product.Common {
+    public static class WindowsStartupUtils {
         private const string RegistryPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 
-        public static bool CheckRunValue()
-        {
-            using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath, false))
-            {
+        public static bool CheckRunValue() {
+            using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath, false)) {
                 return key.GetValue(AppSpecific.MainAppTitle, null) != null;
             }
         }
 
         private static void WriteRunValue(
-            bool shouldRun, string pathToExecutable)
-        {
-            using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath, true))
-            {
+            bool shouldRun, string pathToExecutable) {
+            using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath, true)) {
                 if (shouldRun && !string.IsNullOrEmpty(pathToExecutable))
                     key.SetValue(AppSpecific.MainAppTitle, pathToExecutable);
                 else
@@ -26,8 +20,7 @@ namespace Product.Common
             }
         }
 
-        public static void WriteRunValue(bool shouldRun)
-        {
+        public static void WriteRunValue(bool shouldRun) {
             WriteRunValue(shouldRun, PathUtils.GetAppExecutable());
         }
     }

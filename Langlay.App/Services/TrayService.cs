@@ -3,40 +3,32 @@ using System.Drawing;
 using System.Windows.Forms;
 using Product.Common;
 
-namespace Product
-{
-    public class TrayService : ITrayService, ILifecycled
-    {
+namespace Product {
+    public class TrayService : ITrayService, ILifecycled {
         private ContextMenu ContextMenu { get; set; }
         private NotifyIcon Icon { get; set; }
 
-        private void OpenHomepage()
-        {
-            var psi = new ProcessStartInfo()
-            {
+        private void OpenHomepage() {
+            var psi = new ProcessStartInfo() {
                 UseShellExecute = true,
                 FileName = "https://github.com/estorski/langlay",
             };
             Process.Start(psi);
         }
 
-        private void OpenIssues()
-        {
-            var psi = new ProcessStartInfo()
-            {
+        private void OpenIssues() {
+            var psi = new ProcessStartInfo() {
                 UseShellExecute = true,
                 FileName = "https://github.com/estorski/langlay/issues",
             };
             Process.Start(psi);
         }
 
-        private void RestartAsAdmin()
-        {
+        private void RestartAsAdmin() {
             ProcessUtils.StartMainApp($"--{ArgumentNames.ForceThisInstance}:true", true);
         }
 
-        private void ExitApplication()
-        {
+        private void ExitApplication() {
             var appRunnerService = ServiceRegistry.Instance.Get<IAppRunnerService>();
             appRunnerService?.ExitApplication();
         }
@@ -44,13 +36,10 @@ namespace Product
         #region Start/Stop
         public bool IsStarted { get; private set; }
 
-        public void Start()
-        {
-            if (!IsStarted)
-            {
+        public void Start() {
+            if (!IsStarted) {
                 IsStarted = true;
-                void actionOpenSettings()
-                {
+                void actionOpenSettings() {
                     var settingsService = ServiceRegistry.Instance.Get<ISettingsService>();
                     settingsService.ShowSettings();
                 }
@@ -65,8 +54,7 @@ namespace Product
                     new MenuItem("Restart as admin", delegate { RestartAsAdmin(); }),
                     new MenuItem("Quit", delegate { ExitApplication(); })
                 });
-                Icon = new NotifyIcon()
-                {
+                Icon = new NotifyIcon() {
                     Text = Application.ProductName,
                     Icon = new Icon(typeof(Program), "Keyboard-Filled-2-16.ico"),
                     Visible = true,
@@ -76,18 +64,14 @@ namespace Product
             }
         }
 
-        public void Stop()
-        {
-            if (IsStarted)
-            {
+        public void Stop() {
+            if (IsStarted) {
                 IsStarted = false;
-                if (ContextMenu != null)
-                {
+                if (ContextMenu != null) {
                     ContextMenu.Dispose();
                     ContextMenu = null;
                 }
-                if (Icon != null)
-                {
+                if (Icon != null) {
                     Icon.Dispose();
                     Icon = null;
                 }

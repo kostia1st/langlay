@@ -50,6 +50,7 @@
     <Compile Include="EnumUtils.cs" />
     <Compile Include="ExpressionUtils.cs" />
     <Compile Include="KeyUtils.cs" />
+    <Compile Include="LastInputTimer.cs" />
     <Compile Include="PathUtils.cs" />
     <Compile Include="ProcessUtils.cs" />
     <Compile Include="SystemSettings.cs" />

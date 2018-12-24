@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Product.Common
-{
-    public static class ExpressionUtils
-    {
-        public static string GetMemberName(this LambdaExpression memberSelector)
-        {
+namespace Product.Common {
+    public static class ExpressionUtils {
+        public static string GetMemberName(this LambdaExpression memberSelector) {
             var currentExpression = memberSelector.Body;
 
-            while (true)
-            {
-                switch (currentExpression.NodeType)
-                {
+            while (true) {
+                switch (currentExpression.NodeType) {
                     case ExpressionType.Parameter:
                         return ((ParameterExpression) currentExpression).Name;
 

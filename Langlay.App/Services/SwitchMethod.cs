@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Product
-{
-    public enum SwitchMethod
-    {
+namespace Product {
+    public enum SwitchMethod {
         [Display(Name = "Messaging")]
         Message = 0,
 
