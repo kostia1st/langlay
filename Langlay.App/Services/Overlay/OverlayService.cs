@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using Product.Common;
 
 namespace Product {
     public class OverlayService : IOverlayService, ILifecycled {
@@ -10,6 +10,7 @@ namespace Product {
         private IConfigService ConfigService { get; set; }
 
         private IDictionary<string, OverlayForm> Overlays { get; set; }
+        private LastInputTimer Timer { get; set; }
 
         public OverlayService() {
             Overlays = new Dictionary<string, OverlayForm>();
@@ -41,11 +42,14 @@ namespace Product {
                     if (!ConfigService.DoShowOverlayOnMainDisplayOnly || screen.Primary)
                         Overlays[screen.DeviceName] = CreateOverlay(screen);
                 }
-                StartTimer();
+
+                Timer = new LastInputTimer();
+                Timer.OnTimer = HandleTimer;
+                Timer.Start();
 
                 EventService = ServiceRegistry.Instance.Get<IEventService>();
-                EventService.KeyboardInput += EventService_Input;
-                EventService.MouseInput += EventService_Input;
+                EventService.KeyboardInput += Timer.SignalInput;
+                EventService.MouseInput += Timer.SignalInput;
                 SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
             }
         }
@@ -56,14 +60,13 @@ namespace Product {
 
                 SystemEvents.DisplaySettingsChanged -= SystemEvents_DisplaySettingsChanged;
 
-                EventService.KeyboardInput -= EventService_Input;
-                EventService.MouseInput -= EventService_Input;
+                EventService.KeyboardInput -= Timer.SignalInput;
+                EventService.MouseInput -= Timer.SignalInput;
 
-                StopTimer();
+                Timer.Stop();
+                Timer = null;
 
-                if (_lastInputElapsed.IsRunning)
-                    _lastInputElapsed.Stop();
-                _previousLayoutHandle = null;
+                PreviousLayoutHandle = null;
 
                 foreach (var pair in Overlays) {
                     if (pair.Value != null) {
@@ -76,92 +79,21 @@ namespace Product {
 
         #endregion Start/Stop
 
-        #region Timer
+        private IntPtr? PreviousLayoutHandle { get; set; }
 
-        private Timer LanguageCheckTimer { get; set; }
-        private const uint PeriodToCheckForLayoutSwitch = 1000;
-        private Stopwatch _lastInputElapsed = new Stopwatch() { };
-
-        private void EventService_Input() {
-            _lastInputElapsed.Restart();
-            if (GetIsTimerPaused())
-                ResumeTimer();
-        }
-
-        private void StartTimer() {
-            LanguageCheckTimer = new Timer { Interval = 50 };
-            LanguageCheckTimer.Tick += LanguageCheckTimer_Tick;
-            LanguageCheckTimer.Start();
-        }
-
-        private void StopTimer() {
-            if (LanguageCheckTimer != null) {
-                LanguageCheckTimer.Stop();
-                LanguageCheckTimer.Tick -= LanguageCheckTimer_Tick;
-                LanguageCheckTimer.Dispose();
-                LanguageCheckTimer = null;
-            }
-        }
-
-        private void PauseTimer() {
-            if (LanguageCheckTimer != null) {
-                LanguageCheckTimer.Stop();
-                LanguageCheckTimer_Tick(LanguageCheckTimer, EventArgs.Empty);
-            }
-        }
-
-        private void ResumeTimer() {
-            if (LanguageCheckTimer != null) {
-                LanguageCheckTimer.Start();
-            }
-        }
-
-        private bool GetIsTimerPaused() {
-            return LanguageCheckTimer != null && !LanguageCheckTimer.Enabled;
-        }
-
-        private IntPtr? _previousLayoutHandle;
-
-        private void DoOnTimer() {
+        private void HandleTimer() {
             var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
             var currentLayoutHandle = languageService.GetCurrentLayoutHandle();
             if (currentLayoutHandle != IntPtr.Zero) {
-                if (_previousLayoutHandle != null
-                    && _previousLayoutHandle != currentLayoutHandle) {
+                if (PreviousLayoutHandle != null
+                    && PreviousLayoutHandle != currentLayoutHandle) {
                     var currentLayout = languageService.GetCurrentLayout();
                     if (currentLayout != null)
                         PushMessage(GetLanguageName(currentLayout), currentLayout.Name);
                 }
-                _previousLayoutHandle = currentLayoutHandle;
+                PreviousLayoutHandle = currentLayoutHandle;
             }
         }
-
-        private void OnTimer() {
-            if (_lastInputElapsed.IsRunning
-                && _lastInputElapsed.ElapsedMilliseconds < PeriodToCheckForLayoutSwitch) {
-                DoOnTimer();
-            } else {
-                _lastInputElapsed.Stop();
-                if (!GetIsTimerPaused())
-                    PauseTimer();
-            }
-        }
-
-        private void LanguageCheckTimer_Tick(object sender, System.EventArgs e) {
-            // Use the condition to make sure we don't get any "old" timer
-            // influencing our overlay.
-            if (sender == this.LanguageCheckTimer) {
-                try {
-                    OnTimer();
-                } catch (Exception ex) {
-#if TRACE
-                    Trace.TraceError(ex.ToString());
-#endif
-                }
-            }
-        }
-
-        #endregion Timer
 
         private string GetLanguageName(InputLayout layout) {
             return ConfigService.DoShowLanguageNameInNative

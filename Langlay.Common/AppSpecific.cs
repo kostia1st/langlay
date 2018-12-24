@@ -1,7 +1,6 @@
-﻿namespace Product.Common
-{
-    public static class AppSpecific
-    {
+﻿namespace Product.Common {
+
+    public static class AppSpecific {
         public const string MainAppTitle = "Langlay";
         public const string MainAppProcessName = "Langlay";
         public const string MainAppProcessNameDebug = MainAppProcessName + ".vshost";
