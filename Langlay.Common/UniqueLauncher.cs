@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 
-namespace Product {
-    public class UniquenessService {
+namespace Product.Common {
+    public class UniqueLauncher {
         private string UniqueId { get; set; }
         private bool DoForceThisInstance { get; set; }
         private Action CloseConcurrentMutexHandler { get; set; }
 
-        public UniquenessService(
+        public UniqueLauncher(
             string uniqueId, bool forceThisInstance = false,
             Action closeConcurrentMutexHandler = null) {
             UniqueId = uniqueId;
