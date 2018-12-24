@@ -81,6 +81,7 @@
     <Compile Include="Services\AppMessageFilter.cs" />
     <Compile Include="Services\AppRunnerService.cs" />
     <Compile Include="Services\AutoSwitchService.cs" />
+    <Compile Include="Services\ConfigPersister.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\IAppRunnerService.cs" />
     <Compile Include="Services\IAutoSwitchService.cs" />

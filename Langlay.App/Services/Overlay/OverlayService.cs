@@ -43,8 +43,9 @@ namespace Product {
                         Overlays[screen.DeviceName] = CreateOverlay(screen);
                 }
 
-                Timer = new LastInputTimer();
-                Timer.OnTimer = HandleTimer;
+                Timer = new LastInputTimer {
+                    OnTimer = HandleTimer
+                };
                 Timer.Start();
 
                 EventService = ServiceRegistry.Instance.Get<IEventService>();
@@ -101,7 +102,7 @@ namespace Product {
                 : layout.LanguageNameThreeLetter.ToUpper();
         }
 
-        private void SystemEvents_DisplaySettingsChanged(object sender, System.EventArgs e) {
+        private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e) {
             if (IsStarted) {
                 Stop();
                 Start();
