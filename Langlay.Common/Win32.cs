@@ -214,9 +214,7 @@ namespace Product.Common {
             public int ScanCode;
             public int Flags;
             public int Time;
-            private IntPtr _extraInfo;
-
-            public IntPtr ExtraInfo => _extraInfo;
+            public IntPtr ExtraInfo;
         }
 
         public struct MouseInfo {
@@ -224,25 +222,19 @@ namespace Product.Common {
             public int MouseData;
             public int Flags;
             public int Time;
-            private IntPtr _extraInfo;
-
-            public IntPtr ExtraInfo => _extraInfo;
+            public IntPtr ExtraInfo;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
         public struct Point {
             public int X;
             public int Y;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
         public struct CursorInfo {
             public int Size;
             public int Flags;
-            private IntPtr _cursorHandle;
+            public IntPtr Handle;
             public Point ScreenPosition;
-
-            public IntPtr Handle => _cursorHandle;
         }
 
         [DllImport("user32.dll")]
