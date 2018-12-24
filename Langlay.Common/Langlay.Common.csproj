@@ -54,6 +54,7 @@
     <Compile Include="PathUtils.cs" />
     <Compile Include="ProcessUtils.cs" />
     <Compile Include="SystemSettings.cs" />
+    <Compile Include="UniqueLauncher.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="EnumItem.cs" />
     <Compile Include="EnumValueConverter.cs" />

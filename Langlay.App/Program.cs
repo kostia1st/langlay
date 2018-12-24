@@ -34,10 +34,12 @@ namespace Product
                 var appRunnerService = ServiceRegistry.Instance.Register(new AppRunnerService());
                 var configService = ServiceRegistry.Instance.Register(appRunnerService.ReadConfig());
 
-                var uniquenessService = new UniquenessService(
-                    Application.ProductName, configService.DoForceThisInstance,
-                    delegate { ProcessUtils.StopOtherMainApp(); });
-                uniquenessService.Run(delegate
+                var uniqueLauncher = new UniqueLauncher(
+                    Application.ProductName, 
+                    configService.DoForceThisInstance,
+                    () => { ProcessUtils.StopOtherMainApp(); }
+                );
+                uniqueLauncher.Run(delegate
                 {
                     InitializeApp();
                     var restartRequested = appRunnerService.RunTheConfig();

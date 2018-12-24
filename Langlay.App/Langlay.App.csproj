@@ -77,17 +77,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\AppAttachment.cs" />
-    <Compile Include="Services\AppMessageFilter.cs" />
-    <Compile Include="Services\AppRunnerService.cs" />
-    <Compile Include="Services\AutoSwitchService.cs" />
-    <Compile Include="Services\ConfigPersister.cs" />
-    <Compile Include="Services\EventService.cs" />
-    <Compile Include="Services\IAppRunnerService.cs" />
-    <Compile Include="Services\IAutoSwitchService.cs" />
-    <Compile Include="Services\IEventService.cs" />
+    <Compile Include="Services\Config\AppAttachment.cs" />
+    <Compile Include="AppMessageFilter.cs" />
+    <Compile Include="Services\AppRunner\AppRunnerService.cs" />
+    <Compile Include="Services\AutoSwitch\AutoSwitchService.cs" />
+    <Compile Include="Services\Config\ConfigPersister.cs" />
+    <Compile Include="Services\Event\EventService.cs" />
+    <Compile Include="Services\AppRunner\IAppRunnerService.cs" />
+    <Compile Include="Services\AutoSwitch\IAutoSwitchService.cs" />
+    <Compile Include="Services\Event\IEventService.cs" />
     <Compile Include="Services\ILifecycled.cs" />
-    <Compile Include="Services\ITrayService.cs" />
+    <Compile Include="Services\Tray\ITrayService.cs" />
     <Compile Include="Services\Language\InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
     <Compile Include="Services\Hotkey\KeyEventArgs2.cs" />
@@ -106,14 +106,14 @@
       <DependentUpon>OverlayForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Hotkey\KeyboardHooker.cs" />
-    <Compile Include="Services\ConfigService.cs" />
+    <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Hotkey\HookedHotkeyService.cs" />
-    <Compile Include="Services\IConfigService.cs" />
+    <Compile Include="Services\Config\IConfigService.cs" />
     <Compile Include="Services\Language\ILanguageService.cs" />
-    <Compile Include="Services\ILanguageSetterService.cs" />
+    <Compile Include="Services\LanguageSetter\ILanguageSetterService.cs" />
     <Compile Include="Services\Overlay\IOverlayService.cs" />
     <Compile Include="Services\Language\LanguageService.cs" />
-    <Compile Include="Services\MessageLanguageSetterService.cs" />
+    <Compile Include="Services\LanguageSetter\MessageLanguageSetterService.cs" />
     <Compile Include="Services\Overlay\OverlayLocation.cs" />
     <Compile Include="Services\Overlay\OverlayService.cs" />
     <Compile Include="Program.cs" />
@@ -151,8 +151,8 @@
     <Compile Include="Services\Settings\Ui\SettingPanel.xaml.cs">
       <DependentUpon>SettingPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\SimulatorLanguageSetterService.cs" />
-    <Compile Include="Services\SwitchMethod.cs" />
+    <Compile Include="Services\LanguageSetter\SimulatorLanguageSetterService.cs" />
+    <Compile Include="Services\Config\SwitchMethod.cs" />
     <Compile Include="Services\Tooltip\ITooltipService.cs" />
     <Compile Include="Services\Tooltip\TooltipForm.cs">
       <SubType>Form</SubType>
@@ -161,7 +161,7 @@
       <DependentUpon>TooltipForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Tooltip\TooltipService.cs" />
-    <Compile Include="Services\TrayService.cs" />
+    <Compile Include="Services\Tray\TrayService.cs" />
     <Compile Include="Services\Settings\ConfigViewModel.cs" />
     <Compile Include="Services\Settings\KeyCodeViewModel.cs" />
     <Compile Include="Services\Settings\Ui\Hotkey\HotkeyComposer.xaml.cs">
@@ -179,7 +179,6 @@
     <Compile Include="Services\Settings\Ui\OverlayLocation\OverlayLocationHolder.xaml.cs">
       <DependentUpon>OverlayLocationHolder.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\UniquenessService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
