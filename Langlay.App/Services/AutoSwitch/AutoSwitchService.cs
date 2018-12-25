@@ -2,6 +2,10 @@
 using System.Linq;
 using Product.Common;
 
+#if TRACE
+using System.Diagnostics;
+#endif
+
 namespace Product {
     public class AutoSwitchService : IAutoSwitchService, ILifecycled {
         private IEventService EventService { get; set; }

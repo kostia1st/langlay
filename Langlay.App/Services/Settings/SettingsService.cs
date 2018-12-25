@@ -37,6 +37,11 @@ namespace Product {
                         configService.SaveToFile();
                     },
                     OnApply = delegate {
+                        // We need to make sure the settings window is not going to show up
+                        // multiple times in a row.
+                        configService.DoShowSettingsOnce = false;
+                        configService.SaveToFile();
+
                         var appRunnerService = ServiceRegistry.Instance.Get<IAppRunnerService>();
                         if (!appRunnerService.IsExiting)
                             appRunnerService.ReReadAndRunTheConfig();
