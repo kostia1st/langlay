@@ -19,7 +19,6 @@ namespace Product.SettingsUi {
         public MainWindow(IConfigService configService) {
             ViewModel = new ConfigViewModel(configService);
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
-            ViewModel.ShowSettingsOnce = false;
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             Unloaded += MainWindow_Unloaded;
