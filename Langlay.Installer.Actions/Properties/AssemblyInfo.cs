@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using Product.Common;
 
 [assembly: AssemblyTitle("Langlay.Installer.Actions")]
 [assembly: AssemblyDescription("")]
@@ -11,5 +12,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("f7c560ab-7308-4579-b5a9-1a69ba7feea2")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion(AppSpecific.AppVersion + ".0.0")]
+[assembly: AssemblyFileVersion(AppSpecific.AppVersion + ".0.0")]
