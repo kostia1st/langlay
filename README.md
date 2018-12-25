@@ -1,4 +1,4 @@
-### [:arrow_double_down: Download the latest version](https://github.com/estorski/langlay/releases/download/v1.15/Langlay.1.15.msi)
+### [:arrow_double_down: Download the latest version](https://github.com/estorski/langlay/releases/download/v1.16/Langlay.1.16.msi)
 
 # Langlay
 A small & simple tool for switching current input language with a custom hotkey, for Windows.
