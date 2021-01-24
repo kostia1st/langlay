@@ -18,6 +18,10 @@ namespace Product.SettingsUi {
             Unloaded += AttachmentEditor_Unloaded;
         }
 
+        public void SetFocus() {
+            this.tbAppTitleMask.Focus();
+        }
+
         private void AttachmentEditor_Unloaded(object sender, RoutedEventArgs e) {
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
         }

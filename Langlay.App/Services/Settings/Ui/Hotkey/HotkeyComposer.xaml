@@ -7,8 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="80" d:DesignWidth="300">
     <StackPanel>
-        <StackPanel x:Name="StackPanel_Editors" />
-        <ItemsControl ItemsSource="{Binding}">
+        <ItemsControl x:Name="ItemsControl_Editors" ItemsSource="{Binding}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <local:HotkeyEditor DataContext="{Binding}" RemoveClick="HotkeyEditor_RemoveClick"
