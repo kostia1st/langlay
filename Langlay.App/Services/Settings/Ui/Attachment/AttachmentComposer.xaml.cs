@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,7 +16,17 @@ namespace Product.SettingsUi {
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e) {
-            AttachmentList.Add(new AttachmentViewModel("", null));
+            var attachmentNew = new AttachmentViewModel("", null);
+            AttachmentList.Add(attachmentNew);
+            SynchronizationContext.Current.Post(state => {
+                var contentPresenter = this.ItemsControl_Editors.ItemContainerGenerator.ContainerFromItem(attachmentNew) as ContentPresenter;
+                if (contentPresenter != null) {
+                    contentPresenter.ApplyTemplate();
+                    var editor = contentPresenter.ContentTemplate.LoadContent() as AttachmentEditor;
+
+                    editor?.SetFocus();
+                }
+            }, null);
         }
 
         private void AttachmentEditor_RemoveClick(object sender, RoutedEventArgs e) {

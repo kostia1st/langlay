@@ -45,8 +45,8 @@ namespace Product {
         }
 
         public bool GetIsVisible() {
-            if (IsStarted)
-                return TooltipForm?.GetIsVisible() ?? false;
+            if (IsStarted && TooltipForm != null)
+                return TooltipForm.GetIsVisible();
             return false;
         }
     }

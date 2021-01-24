@@ -7,8 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="500">
     <StackPanel>
-        <StackPanel x:Name="StackPanel_Editors" />
-        <ItemsControl ItemsSource="{Binding}">
+        <ItemsControl  x:Name="ItemsControl_Editors" ItemsSource="{Binding}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <local:AttachmentEditor 
