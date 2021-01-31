@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
 
-namespace Product
-{
-	public class InputLanguage
-	{
+namespace Product {
+    public class InputLanguage {
         public CultureInfo Culture { get; private set; }
         public string LanguageId { get => LanguageName; }
         public string LanguageName { get; private set; }
@@ -13,8 +11,7 @@ namespace Product
         public string LanguageNameThreeLetter { get; private set; }
         public string LanguageNameThreeLetterNative { get; private set; }
 
-        public InputLanguage(CultureInfo culture)
-		{
+        public InputLanguage(CultureInfo culture) {
             Culture = culture;
             LanguageName = culture.EnglishName;
             LanguageNameNative = culture.NativeName;
@@ -25,8 +22,7 @@ namespace Product
             LanguageNameThreeLetterNative = culture.NativeName.Substring(0, 3);
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"{LanguageName}";
         }
     }
