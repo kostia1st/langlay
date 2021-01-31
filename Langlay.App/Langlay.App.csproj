@@ -87,6 +87,7 @@
     <Compile Include="Services\AutoSwitch\IAutoSwitchService.cs" />
     <Compile Include="Services\Event\IEventService.cs" />
     <Compile Include="Services\ILifecycled.cs" />
+    <Compile Include="Services\Language\InputLanguage.cs" />
     <Compile Include="Services\Tray\ITrayService.cs" />
     <Compile Include="Services\Language\InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="Services\Settings\ArgumentNames.cs" />
     <Compile Include="Services\Settings\AttachmentViewModel.cs" />
     <Compile Include="Services\Settings\ISettingsService.cs" />
-    <Compile Include="Services\Settings\LayoutViewModel.cs" />
+    <Compile Include="Services\Settings\LanguageOrLayoutViewModel.cs" />
     <Compile Include="Services\Settings\SettingsService.cs" />
     <Compile Include="Services\Settings\Ui\Attachment\AttachmentComposer.xaml.cs">
       <DependentUpon>AttachmentComposer.xaml</DependentUpon>
