@@ -1,12 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Product.Common;
-
-#if TRACE
-using System.Diagnostics;
-#endif
 
 namespace Product {
     /// <summary>
@@ -59,10 +56,9 @@ namespace Product {
         private int? HookInternals(int code, uint wParam, IntPtr lParam) {
             var result = (int?) null;
             var doAttemptToHandle = code >= 0;
-#if !TRACE
             doAttemptToHandle &=
                 IsEnabledHandler == null || IsEnabledHandler();
-#endif
+
             if (doAttemptToHandle) {
                 var keyInfo = (Win32.KeyboardInfo) Marshal.PtrToStructure(lParam, typeof(Win32.KeyboardInfo));
                 var key = (Keys) keyInfo.VirtualKeyCode;
@@ -76,23 +72,17 @@ namespace Product {
                 };
 
                 if (wParam.In(Win32.WM_KEYDOWN, Win32.WM_SYSKEYDOWN) && KeyDown != null) {
-#if TRACE
-                    Trace.WriteLine($"Hooked { getEventString() }");
-#endif
+                    Debug.WriteLine($"Hooked { getEventString() }");
                     KeyDown(this, kea);
                 } else if (wParam.In(Win32.WM_KEYUP, Win32.WM_SYSKEYUP) && KeyUp != null) {
-#if TRACE
-                    Trace.WriteLine($"Hooked { getEventString() }");
-#endif
+                    Debug.WriteLine($"Hooked { getEventString() }");
                     KeyUp(this, kea);
                 }
 
                 if (kea.Handled)
                     result = 1;
-#if TRACE
                 else
-                    Trace.WriteLine($">> Not handled {getEventString()}");
-#endif
+                    Debug.WriteLine($">> Not handled {getEventString()}");
             }
             return result;
         }
@@ -105,9 +95,7 @@ namespace Product {
                 else
                     result = HookInternals(code, wParam, lParam);
             } catch (Exception ex) {
-#if TRACE
                 Trace.TraceError(ex.ToString());
-#endif
             }
             if (result == null)
                 result = Win32.CallNextHookEx(HookHandle, code, wParam, lParam);

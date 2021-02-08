@@ -1,13 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
 using WindowsInput;
 using WindowsInput.Native;
-
-#if TRACE
-using System.Diagnostics;
-#endif
 
 namespace Product {
 
@@ -37,17 +34,13 @@ namespace Product {
                     var keysToSimulate = savedKeyDown.KeyStroke.KeysPressedBefore;
                     if (keysToSimulate.Count > 0) {
                         if (!value) {
-#if TRACE
-                            Trace.WriteLine("-- START Simulating full keystroke up");
-                            Trace.Indent();
-#endif
+                            Debug.WriteLine("-- START Simulating full keystroke up");
+                            Debug.Indent();
                             foreach (var key in keysToSimulate) {
                                 KeyboardSimulator.KeyUp((VirtualKeyCode) key);
                             }
-#if TRACE
-                            Trace.Unindent();
-                            Trace.WriteLine("-- END Simulating full keystroke up");
-#endif
+                            Debug.Unindent();
+                            Debug.WriteLine("-- END Simulating full keystroke up");
 
                             // This line (or equivalent) is necessary to
                             // avoid phantom KEY UP messages afterwards.
@@ -57,18 +50,14 @@ namespace Product {
                             // avoid phantom KEY UP messages afterwards.
                             Application.DoEvents();
 
-#if TRACE
-                            Trace.WriteLine("-- START Simulating full keystroke down");
-                            Trace.Indent();
-#endif
+                            Debug.WriteLine("-- START Simulating full keystroke down");
+                            Debug.Indent();
 
                             foreach (var key in keysToSimulate.Reverse()) {
                                 KeyboardSimulator.KeyDown((VirtualKeyCode) key);
                             }
-#if TRACE
-                            Trace.Unindent();
-                            Trace.WriteLine("-- END Simulating full keystroke down");
-#endif
+                            Debug.Unindent();
+                            Debug.WriteLine("-- END Simulating full keystroke down");
                         }
                     }
                 }
@@ -168,11 +157,7 @@ namespace Product {
             try {
                 result = func();
             } catch (Exception ex) {
-#if TRACE
                 Trace.TraceError(ex.ToString());
-#elif DEBUG
-                MessageBox.Show(ex.ToString());
-#endif
             }
             return result;
         }
@@ -225,9 +210,7 @@ namespace Product {
                         IsEnabled = false;
 
                         try {
-#if TRACE
-                            Trace.WriteLine("Pass the key-up thru");
-#endif
+                            Debug.WriteLine("Pass the key-up thru");
                             KeyboardSimulator.KeyUp((VirtualKeyCode) e.KeyStroke.KeyTriggeredEvent);
 
                             // Here we disable the Caps by fake-pressing Shift
@@ -237,15 +220,13 @@ namespace Product {
                                 // - the hotkey is Caps Lock
                                 // - the Shift is set up to turn Caps off
                                 //   See issue #65 on GitHub for details.
-#if TRACE
-                                Trace.WriteLine("-- START #65 case");
-                                Trace.Indent();
-#endif
+                                Debug.WriteLine("-- START #65 case");
+                                Debug.Indent();
+                                
                                 KeyboardSimulator.KeyPress(VirtualKeyCode.LSHIFT);
-#if TRACE
-                                Trace.Unindent();
-                                Trace.WriteLine("-- END #65 case");
-#endif
+                                
+                                Debug.Unindent();
+                                Debug.WriteLine("-- END #65 case");
 
                                 // -- end of workaround
                             }

@@ -1,10 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Product.Common;
-
-#if TRACE
-using System.Diagnostics;
-#endif
 
 namespace Product {
     public class AutoSwitchService : IAutoSwitchService, ILifecycled {
@@ -56,22 +53,16 @@ namespace Product {
                         && LastFocusedWindowHandle != currentFocusedWindowHandle
                     ) {
                         var text = Win32.GetWindowText(currentFocusedWindowHandle);
-#if TRACE
-                        Trace.WriteLine("Active window title: " + text);
-#endif
+                        Debug.WriteLine("Active window title: " + text);
                         var attachment = configService.AppAttachmentArray.FirstOrDefault(x => text.Contains(x.AppMask));
                         if (attachment != null) {
                             var inputLayouts = languageService.GetInputLayouts();
                             var layout = inputLayouts.FirstOrDefault(x => x.LayoutId == attachment.LanguageOrLayoutId);
                             if (layout != null) {
-#if TRACE
-                                Trace.WriteLine($"Attempting to restore layout {layout.LanguageName} - {layout.Name}");
-#endif
+                                Debug.WriteLine($"Attempting to restore layout {layout.LanguageName} - {layout.Name}");
                                 languageService.SetCurrentLayout(layout);
                             } else {
-#if TRACE
-                                Trace.WriteLine($"Attempting to restore language {attachment.LanguageOrLayoutId}");
-#endif
+                                Debug.WriteLine($"Attempting to restore language {attachment.LanguageOrLayoutId}");
                                 languageService.SetCurrentLanguage(attachment.LanguageOrLayoutId, true);
                             }
                         }

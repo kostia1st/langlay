@@ -1,13 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Product.Common;
 using WindowsInput;
 using WindowsInput.Native;
-
-#if TRACE
-using System.Diagnostics;
-#endif
 
 namespace Product {
     public class SimulatorLanguageSetterService : ILanguageSetterService {
@@ -46,10 +43,8 @@ namespace Product {
         }
 
         private void SendSequence(WindowsSequenceCode sequenceCode, int amount) {
-#if TRACE
-            Trace.WriteLine("-- START Simulating switch sequence");
-            Trace.Indent();
-#endif
+            Debug.WriteLine("-- START Simulating switch sequence");
+            Debug.Indent();
             switch (sequenceCode) {
                 case WindowsSequenceCode.CtrlShift:
                     SendCtrlShift(amount);
@@ -63,10 +58,8 @@ namespace Product {
                     SendGraveAccent(amount);
                     break;
             }
-#if TRACE
-            Trace.Unindent();
-            Trace.WriteLine("-- END Simulating switch sequence");
-#endif
+            Debug.Unindent();
+            Debug.WriteLine("-- END Simulating switch sequence");
         }
 
         private int GetAmountOfLanguageSwitchesRequired(IntPtr targetHandle) {

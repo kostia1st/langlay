@@ -1,10 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Product.Common;
-
-#if TRACE
-using System.Diagnostics;
-#endif
 
 namespace Product {
 
@@ -59,10 +56,8 @@ namespace Product {
             if (!doShowTooltip) {
                 var currentFocusedWindowHandle = Win32.GetForegroundWindow();
                 doShowTooltip = currentFocusedWindowHandle != LastFocusedWindowHandle;
-#if TRACE
-                Trace.WriteLine($"Last focused handle was {LastFocusedWindowHandle}");
-                Trace.WriteLine($"New focused handle is {currentFocusedWindowHandle}");
-#endif
+                Debug.WriteLine($"Last focused handle was {LastFocusedWindowHandle}");
+                Debug.WriteLine($"New focused handle is {currentFocusedWindowHandle}");
                 LastFocusedWindowHandle = currentFocusedWindowHandle;
             }
             return doShowTooltip;
@@ -96,9 +91,7 @@ namespace Product {
             try {
                 result = func();
             } catch (Exception ex) {
-#if TRACE
                 Trace.TraceError(ex.ToString());
-#endif
             }
             return result;
         }

@@ -199,9 +199,7 @@ namespace Product {
             try {
                 OnTimer();
             } catch (Exception ex) {
-#if TRACE
                 Trace.TraceError(ex.ToString());
-#endif
             }
         }
 
