@@ -1,15 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Product.Common;
-
-#if TRACE
-using System.Diagnostics;
-#endif
 
 namespace Product {
 
     public class MouseHooker : IDisposable {
-
         private IntPtr HookHandle = IntPtr.Zero;
 
         #region Events
@@ -87,10 +83,8 @@ namespace Product {
                 if (args != null && args.Handled)
                     result = 1;
                 else {
-#if TRACE
                     if (wParam != Win32.WM_MOUSEMOVE)
-                        Trace.WriteLine(">> Not handled " + Win32.MessageToString(wParam));
-#endif
+                        Debug.WriteLine(">> Not handled " + Win32.MessageToString(wParam));
                 }
             }
             return result;
@@ -113,9 +107,7 @@ namespace Product {
                 else
                     result = HookInternals(code, wParam, lParam);
             } catch (Exception ex) {
-#if TRACE
                 Trace.TraceError(ex.ToString());
-#endif
             }
             if (result == null)
                 result = Win32.CallNextHookEx(HookHandle, code, wParam, lParam);
