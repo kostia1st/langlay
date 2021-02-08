@@ -62,7 +62,7 @@ namespace Product {
                         var attachment = configService.AppAttachmentArray.FirstOrDefault(x => text.Contains(x.AppMask));
                         if (attachment != null) {
                             var inputLayouts = languageService.GetInputLayouts();
-                            var layout = inputLayouts.FirstOrDefault(x => x.Id.ToString() == attachment.LanguageOrLayoutId);
+                            var layout = inputLayouts.FirstOrDefault(x => x.LayoutId == attachment.LanguageOrLayoutId);
                             if (layout != null) {
 #if TRACE
                                 Trace.WriteLine($"Attempting to restore layout {layout.LanguageName} - {layout.Name}");

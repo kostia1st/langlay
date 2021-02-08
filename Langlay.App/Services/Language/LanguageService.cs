@@ -6,7 +6,7 @@ using Product.Common;
 
 namespace Product {
     public class LanguageService : ILanguageService {
-        private IDictionary<string, IntPtr> CultureToLastUsedLayout
+        private IDictionary<string, IntPtr> LanguageToLastUsedLayout
             = new Dictionary<string, IntPtr>();
 
         private IDictionary<IntPtr, InputLayout> _inputLayouts
@@ -132,21 +132,21 @@ namespace Product {
             if (formerLayout != null) {
                 // Here we save the layout last used within the language, so
                 // that it could be restored later.
-                CultureToLastUsedLayout[formerLayout.LanguageName] = formerLayout.Handle;
+                LanguageToLastUsedLayout[formerLayout.LanguageName] = formerLayout.Handle;
             }
             if (layoutToSet != null) {
                 var languageSetterService = ServiceRegistry.Instance.Get<ILanguageSetterService>();
                 languageSetterService.SetCurrentLayout(layoutToSet.Handle);
                 // Here we save the layout last used within the language, so
                 // that it could be restored later.
-                CultureToLastUsedLayout[layoutToSet.LanguageName] = layoutToSet.Handle;
+                LanguageToLastUsedLayout[layoutToSet.LanguageName] = layoutToSet.Handle;
             }
         }
 
         public void SetCurrentLanguage(string languageName, bool restoreLastUsedLayout) {
             InputLayout layoutToSet;
-            if (restoreLastUsedLayout && CultureToLastUsedLayout.ContainsKey(languageName))
-                layoutToSet = GetLayoutByPtr(CultureToLastUsedLayout[languageName]);
+            if (restoreLastUsedLayout && LanguageToLastUsedLayout.ContainsKey(languageName))
+                layoutToSet = GetLayoutByPtr(LanguageToLastUsedLayout[languageName]);
             else
                 layoutToSet = GetDefaultLayoutForLanguage(languageName);
             SetCurrentLayout(layoutToSet);
@@ -159,8 +159,8 @@ namespace Product {
                 var nextLanguageName = GetNextInputLanguageName(
                     currentLayout.LanguageName);
                 InputLayout layoutToSet;
-                if (restoreLastUsedLayout && CultureToLastUsedLayout.ContainsKey(nextLanguageName))
-                    layoutToSet = GetLayoutByPtr(CultureToLastUsedLayout[nextLanguageName]);
+                if (restoreLastUsedLayout && LanguageToLastUsedLayout.ContainsKey(nextLanguageName))
+                    layoutToSet = GetLayoutByPtr(LanguageToLastUsedLayout[nextLanguageName]);
                 else
                     layoutToSet = GetDefaultLayoutForLanguage(nextLanguageName);
                 SetCurrentLayout(layoutToSet);

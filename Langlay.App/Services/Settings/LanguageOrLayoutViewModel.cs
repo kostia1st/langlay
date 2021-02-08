@@ -5,7 +5,7 @@
 
         public string LanguageOrLayoutId {
             get {
-                if (Layout != null) return Layout.Id.ToString();
+                if (Layout != null) return Layout.LayoutId;
                 if (Language != null) return Language.LanguageId;
                 return null;
             }
