@@ -72,26 +72,27 @@ namespace Product {
             // without a crash.
         }
 
-#if TRACE
-        private uint _processId_old;
-#endif
+        private int _processId_old;
+
+        [Conditional("DEBUG")]
+        private void DebugProcessId(ProcessInfo process) {
+            if (process.ProcessId != _processId_old)
+                Debug.WriteLine($"Process name: {process.ProcessName}");
+            _processId_old = process.ProcessId;
+        }
 
         public IntPtr GetCurrentLayoutHandle() {
             var currentLayoutHandle = IntPtr.Zero;
-            var processId = 0U;
             var threadId = Win32.GetWindowThreadProcessId(
-                Win32.GetForegroundWindow(), out processId);
+                Win32.GetForegroundWindow(), out var processId);
 
             if (processId != 0) {
-                var process = ProcessUtils.GetProcessById((int) processId);
+                var process = ProcessUtils.GetProcessById(processId);
                 if (process != null
                     && !process.HasExited
                     && process.ProcessName != ProcessUtils.ProcessName_Idle) {
-#if TRACE
-                    if (processId != _processId_old)
-                        Trace.WriteLine($"Process name: {process.ProcessName}");
-                    _processId_old = processId;
-#endif
+
+                    DebugProcessId(process);
                     currentLayoutHandle = Win32.GetKeyboardLayout(threadId);
                 }
             }

@@ -69,9 +69,7 @@ namespace Product.Common {
                 try {
                     HandleTimer();
                 } catch (Exception ex) {
-#if TRACE
                     Trace.TraceError(ex.ToString());
-#endif
                 }
             }
         }

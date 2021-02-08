@@ -82,7 +82,7 @@ namespace Product.Common {
         public static extern int GetWindowThreadProcessId(IntPtr windowHandle, IntPtr processId);
 
         [DllImport("user32.dll")]
-        public static extern int GetWindowThreadProcessId(IntPtr windowHandle, out uint processId);
+        public static extern int GetWindowThreadProcessId(IntPtr windowHandle, out int processId);
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
