@@ -46,8 +46,8 @@ namespace Product {
                 new MouseCursorService(),
                 new TrayService(),
                 new AutoSwitchService(),
-                configService.SwitchMethod == SwitchMethod.InputSimulation 
-                    ? (ILanguageSetterService) new SimulatorLanguageSetterService() 
+                configService.SwitchMethod == SwitchMethod.InputSimulation
+                    ? (ILanguageSetterService) new SimulatorLanguageSetterService()
                     : (ILanguageSetterService) new MessageLanguageSetterService()
             };
         }

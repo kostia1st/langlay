@@ -21,10 +21,10 @@
         <ComboBox 
             x:Name="cbLanguageSwitchKeys"
             Grid.Column="1"
-            ItemsSource="{Binding LayoutList, Mode=OneTime}"
-            SelectedValue="{Binding LayoutId}"
+            ItemsSource="{Binding LanguageOrLayoutList, Mode=OneTime}"
+            SelectedValue="{Binding LanguageOrLayoutId}"
             DisplayMemberPath="DisplayName"
-            SelectedValuePath="Id"
+            SelectedValuePath="LanguageOrLayoutId"
             Margin="10 0 0 0"
         />
         <Button 

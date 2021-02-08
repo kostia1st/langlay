@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using Product.Common;
 
 namespace Product.SettingsUi {
-
     public class AttachmentViewModel : INotifyPropertyChanged {
 
         private Regex acceptableMask = new Regex(@"[0-9+\-\(\)A-Za-z\s]");
@@ -25,35 +24,41 @@ namespace Product.SettingsUi {
             }
         }
 
-        private int? _layoutId;
-        public int? LayoutId {
-            get => _layoutId;
+        private string _languageOrLayoutId;
+        public string LanguageOrLayoutId {
+            get => _languageOrLayoutId;
             set {
-                if (value != _layoutId) {
-                    _layoutId = value;
-                    RaisePropertyChanged(x => x.LayoutId);
+                if (value != _languageOrLayoutId) {
+                    _languageOrLayoutId = value;
+                    RaisePropertyChanged(x => x.LanguageOrLayoutId);
                 }
             }
         }
 
-        private IList<LayoutViewModel> _layoutList;
-        public IList<LayoutViewModel> LayoutList {
-            get => _layoutList;
+        private IList<LanguageOrLayoutViewModel> _languageOrLayoutList;
+        public IList<LanguageOrLayoutViewModel> LanguageOrLayoutList {
+            get => _languageOrLayoutList;
             set {
-                if (value != _layoutList) {
-                    _layoutList = value;
-                    RaisePropertyChanged(x => x.LayoutList);
+                if (value != _languageOrLayoutList) {
+                    _languageOrLayoutList = value;
+                    RaisePropertyChanged(x => x.LanguageOrLayoutList);
                 }
             }
         }
 
-        public AttachmentViewModel(string mask, int? layoutId) {
+        public AttachmentViewModel(string mask, string languageOrLayoutId) {
             _appTitleMask = mask;
-            _layoutId = layoutId;
+            _languageOrLayoutId = languageOrLayoutId;
             var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
-            _layoutList = languageService
+            _languageOrLayoutList = languageService
                 .GetInputLayouts()
-                .Select(x => new LayoutViewModel(x))
+                .Aggregate(new List<LanguageOrLayoutViewModel>(), (List<LanguageOrLayoutViewModel> acc, InputLayout layout) => {
+                    if (acc.FirstOrDefault(x => x.LanguageOrLayoutId == layout.LanguageId) == null) {
+                        acc.Add(new LanguageOrLayoutViewModel((InputLanguage) layout));
+                    }
+                    acc.Add(new LanguageOrLayoutViewModel(layout));
+                    return acc;
+                })
                 .ToList();
         }
 
