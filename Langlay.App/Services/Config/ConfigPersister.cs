@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Product.Common;
 
 namespace Product {
@@ -120,7 +119,7 @@ namespace Product {
         }
 
         private string AppAttachmentToString(AppAttachment attachment) {
-            return attachment.AppMask + "," + attachment.LayoutId.ToString();
+            return attachment.AppMask + "," + attachment.LanguageOrLayoutId;
         }
 
         private string AppAttachmentsToString(IList<AppAttachment> attachments) {
@@ -130,7 +129,7 @@ namespace Product {
         private AppAttachment StringToAppAttachment(string str) {
             var parts = str.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length == 2)
-                return new AppAttachment { AppMask = parts[0], LayoutId = Utils.ParseInt(parts[1]) };
+                return new AppAttachment { AppMask = parts[0], LanguageOrLayoutId = parts[1] };
             return null;
         }
 

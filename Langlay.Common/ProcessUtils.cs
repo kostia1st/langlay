@@ -38,8 +38,7 @@ namespace Product.Common {
                 .Where(x => x.Id != currentProcess.Id)
                 .ToList();
 #if DEBUG
-            if (!processes.Any())
-            {
+            if (!processes.Any()) {
                 processes = Process
                     .GetProcessesByName(AppSpecific.MainAppProcessNameDebug)
                     .Where(x => x.Id != currentProcess.Id)

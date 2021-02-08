@@ -33,7 +33,7 @@ namespace Product.SettingsUi {
             PasteSequence.CollectionChanged += PasteSequence_CollectionChanged;
 
             AttachmentList = new ObservableCollection<AttachmentViewModel>(
-                ConfigService.AppAttachmentArray.Select(x => new AttachmentViewModel(x.AppMask, x.LayoutId)));
+                ConfigService.AppAttachmentArray.Select(x => new AttachmentViewModel(x.AppMask, x.LanguageOrLayoutId)));
             AttachmentList.CollectionChanged += AttachmentList_CollectionChanged;
         }
 
@@ -64,7 +64,7 @@ namespace Product.SettingsUi {
             ConfigService.AppAttachmentArray = AttachmentList
                 .Select(x => new AppAttachment {
                     AppMask = x.AppTitleMask,
-                    LayoutId = x.LayoutId,
+                    LanguageOrLayoutId = x.LanguageOrLayoutId,
                 }).ToList();
             RaisePropertyChanged(x => x.AttachmentList);
         }

@@ -144,17 +144,17 @@ namespace Product {
             var keyCodes = e.KeyStroke.Keys.Select(x => (KeyCode) x).ToList();
 
             var configService = ServiceRegistry.Instance.Get<IConfigService>();
-            var triggeredLanguageSwitch = configService.GetLanguageSwitchConfigured()
+            var hasTriggeredLanguageSwitch = configService.GetLanguageSwitchConfigured()
                 && configService.LanguageSwitchKeyArray.AreEqual(keyCodes);
-            var triggeredLayoutSwitch = configService.GetLayoutSwitchConfigured()
+            var hasTriggeredLayoutSwitch = configService.GetLayoutSwitchConfigured()
                 && configService.LayoutSwitchKeyArray.AreEqual(keyCodes);
 
-            if (triggeredLanguageSwitch) {
-                if (triggeredLayoutSwitch)
+            if (hasTriggeredLanguageSwitch) {
+                if (hasTriggeredLayoutSwitch)
                     switchToApply = KeyboardSwitch.LanguageAndLayout;
                 else
                     switchToApply = KeyboardSwitch.LanguageRestoreLayout;
-            } else if (triggeredLayoutSwitch) {
+            } else if (hasTriggeredLayoutSwitch) {
                 switchToApply = KeyboardSwitch.Layout;
             }
 

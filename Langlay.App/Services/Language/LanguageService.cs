@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using Product.Common;
 
 namespace Product {
     public class LanguageService : ILanguageService {
-        private IDictionary<string, IntPtr> CultureToLastUsedLayout
+        private IDictionary<string, IntPtr> LanguageToLastUsedLayout
             = new Dictionary<string, IntPtr>();
 
         private IDictionary<IntPtr, InputLayout> _inputLayouts
             = new Dictionary<IntPtr, InputLayout>();
 
         public IList<InputLayout> GetInputLayouts() {
-            return InputLanguage.InstalledInputLanguages
-              .Cast<InputLanguage>()
+            return System.Windows.Forms.InputLanguage.InstalledInputLanguages
+              .Cast<System.Windows.Forms.InputLanguage>()
               .Select(x => {
                   if (!_inputLayouts.ContainsKey(x.Handle)) {
                       // Surprisingly, this is quite expensive. According to
@@ -51,6 +50,11 @@ namespace Product {
             return layoutNames[indexOfNext];
         }
 
+        private InputLayout GetLayoutByPtr(IntPtr layoutHandle) {
+            return GetInputLayouts()
+                .FirstOrDefault(x => x.Handle == layoutHandle);
+        }
+
         /// <summary>
         /// Returns the currently active input layout.
         /// </summary>
@@ -59,11 +63,7 @@ namespace Product {
         /// layout from the OS.
         /// </returns>
         public InputLayout GetCurrentLayout() {
-            var currentLayoutHandle = GetCurrentLayoutHandle();
-
-            var currentLayout = GetInputLayouts()
-                .FirstOrDefault(x => x.Handle == currentLayoutHandle);
-            return currentLayout;
+            return GetLayoutByPtr(GetCurrentLayoutHandle());
 
             // There are (for now) cases when we cannot determine the
             // currently used layout (in a command line prompt for example,
@@ -108,7 +108,7 @@ namespace Product {
             return languageNames[indexOfNext];
         }
 
-        private IntPtr GetDefaultLayoutForLanguage(
+        private InputLayout GetDefaultLayoutForLanguage(
             string languageName) {
             // Avoid re-evaluating properties
             var inputLayouts = GetInputLayouts();
@@ -118,7 +118,7 @@ namespace Product {
             if (firstLanguageLayout == null)
                 throw new NullReferenceException("Not a single language/layout installed in the system");
 
-            return firstLanguageLayout.Handle;
+            return firstLanguageLayout;
         }
 
         private InputLayout GetLayoutByLanguageAndLayoutName(
@@ -127,47 +127,62 @@ namespace Product {
             return inputLayouts.FirstOrDefault(x => x.LanguageName == languageName && x.Name == layoutName);
         }
 
-        protected void SwitchLanguage(bool restoreSavedLayout) {
-            var currentLayout = GetCurrentLayout();
-            if (currentLayout != null) {
-                var inputLayouts = GetInputLayouts();
-
+        public void SetCurrentLayout(InputLayout layoutToSet) {
+            var formerLayout = GetCurrentLayout();
+            if (formerLayout != null) {
                 // Here we save the layout last used within the language, so
                 // that it could be restored later.
-                CultureToLastUsedLayout[currentLayout.LanguageName] = currentLayout.Handle;
-
-                var nextLanguageName = GetNextInputLanguageName(
-                    currentLayout.LanguageName);
-                IntPtr layoutToSet;
-                if (restoreSavedLayout && CultureToLastUsedLayout.ContainsKey(nextLanguageName))
-                    layoutToSet = CultureToLastUsedLayout[nextLanguageName];
-                else
-                    layoutToSet = GetDefaultLayoutForLanguage(nextLanguageName);
+                LanguageToLastUsedLayout[formerLayout.LanguageName] = formerLayout.Handle;
+            }
+            if (layoutToSet != null) {
                 var languageSetterService = ServiceRegistry.Instance.Get<ILanguageSetterService>();
-                languageSetterService.SetCurrentLayout(layoutToSet);
+                languageSetterService.SetCurrentLayout(layoutToSet.Handle);
+                // Here we save the layout last used within the language, so
+                // that it could be restored later.
+                LanguageToLastUsedLayout[layoutToSet.LanguageName] = layoutToSet.Handle;
             }
         }
 
-        protected bool SwitchLayout(bool doWrap) {
-            var result = false;
+        public void SetCurrentLanguage(string languageName, bool restoreLastUsedLayout) {
+            InputLayout layoutToSet;
+            if (restoreLastUsedLayout && LanguageToLastUsedLayout.ContainsKey(languageName))
+                layoutToSet = GetLayoutByPtr(LanguageToLastUsedLayout[languageName]);
+            else
+                layoutToSet = GetDefaultLayoutForLanguage(languageName);
+            SetCurrentLayout(layoutToSet);
+
+        }
+
+        protected bool SwitchLanguage(bool restoreLastUsedLayout) {
             var currentLayout = GetCurrentLayout();
             if (currentLayout != null) {
-                var inputLayouts = GetInputLayouts();
+                var nextLanguageName = GetNextInputLanguageName(
+                    currentLayout.LanguageName);
+                InputLayout layoutToSet;
+                if (restoreLastUsedLayout && LanguageToLastUsedLayout.ContainsKey(nextLanguageName))
+                    layoutToSet = GetLayoutByPtr(LanguageToLastUsedLayout[nextLanguageName]);
+                else
+                    layoutToSet = GetDefaultLayoutForLanguage(nextLanguageName);
+                SetCurrentLayout(layoutToSet);
+                return true;
+            }
+            return false;
+        }
+
+        protected bool SwitchLayout(bool doWrap) {
+            var currentLayout = GetCurrentLayout();
+            if (currentLayout != null) {
                 var nextLayoutName = GetNextInputLayoutName(
                     currentLayout.LanguageName, currentLayout.Name, doWrap);
 
                 if (!string.IsNullOrEmpty(nextLayoutName)) {
                     var layoutToSet = GetLayoutByLanguageAndLayoutName(
-                        currentLayout.LanguageName, nextLayoutName).Handle;
-                    var languageSetterService = ServiceRegistry.Instance.Get<ILanguageSetterService>();
-                    languageSetterService.SetCurrentLayout(layoutToSet);
-
-                    CultureToLastUsedLayout[currentLayout.LanguageName] = layoutToSet;
-
-                    result = true;
+                        currentLayout.LanguageName, nextLayoutName);
+                    SetCurrentLayout(layoutToSet);
+                    return true;
                 }
             }
-            return result;
+            return false;
         }
 
         protected void SwitchLanguageAndLayout() {

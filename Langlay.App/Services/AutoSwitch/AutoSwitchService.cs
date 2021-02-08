@@ -61,11 +61,18 @@ namespace Product {
 #endif
                         var attachment = configService.AppAttachmentArray.FirstOrDefault(x => text.Contains(x.AppMask));
                         if (attachment != null) {
-                            var languageSetterService = ServiceRegistry.Instance.Get<ILanguageSetterService>();
                             var inputLayouts = languageService.GetInputLayouts();
-                            var layout = inputLayouts.FirstOrDefault(x => x.Id == attachment.LayoutId);
+                            var layout = inputLayouts.FirstOrDefault(x => x.LayoutId == attachment.LanguageOrLayoutId);
                             if (layout != null) {
-                                languageSetterService.SetCurrentLayout(layout.Handle);
+#if TRACE
+                                Trace.WriteLine($"Attempting to restore layout {layout.LanguageName} - {layout.Name}");
+#endif
+                                languageService.SetCurrentLayout(layout);
+                            } else {
+#if TRACE
+                                Trace.WriteLine($"Attempting to restore language {attachment.LanguageOrLayoutId}");
+#endif
+                                languageService.SetCurrentLanguage(attachment.LanguageOrLayoutId, true);
                             }
                         }
                     }
