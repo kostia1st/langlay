@@ -21,9 +21,9 @@ namespace Product {
         public string LayoutName { get; set; }
 
         private Font LanguageFont { get; set; }
-        private Brush LanguageBrush { get; set; }
+        public SolidBrush LanguageBrush { get; set; }
         private Font LayoutFont { get; set; }
-        private Brush LayoutBrush { get; set; }
+        public SolidBrush LayoutBrush { get; set; }
 
         private float RenderingCoefficient { get; set; }
 

@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Product.SettingsUi.AppBindingComposer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Product.SettingsUi"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="500">
+    <StackPanel>
+        <ItemsControl  x:Name="ItemsControl_Editors" ItemsSource="{Binding}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:AppBindingEditor 
+                        DataContext="{Binding}" 
+                        RemoveClick="AppBindingEditor_RemoveClick"
+                        Changed="AppBindingEditor_Changed"
+                        Margin="0 0 0 4" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button Content="Add an application layout binding"
+                x:Name="btnAdd"
+                Padding="4 2"
+                Click="btnAdd_Click"
+                Width="230" HorizontalAlignment="Left" />
+    </StackPanel>
+</UserControl>

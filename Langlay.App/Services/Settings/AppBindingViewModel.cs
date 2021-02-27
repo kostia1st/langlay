@@ -7,9 +7,9 @@ using System.Text.RegularExpressions;
 using Product.Common;
 
 namespace Product.SettingsUi {
-    public class AttachmentViewModel : INotifyPropertyChanged {
+    public class AppBindingViewModel : INotifyPropertyChanged {
 
-        private Regex acceptableMask = new Regex(@"[0-9+\-\(\)A-Za-z\s]");
+        private Regex acceptableMask = new Regex(@"[0-9+\-\(\)\\\/A-Za-z\s]");
 
         private string _appTitleMask;
         public string AppTitleMask {
@@ -46,7 +46,7 @@ namespace Product.SettingsUi {
             }
         }
 
-        public AttachmentViewModel(string mask, string languageOrLayoutId) {
+        public AppBindingViewModel(string mask, string languageOrLayoutId) {
             _appTitleMask = mask;
             _languageOrLayoutId = languageOrLayoutId;
             var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
@@ -62,7 +62,7 @@ namespace Product.SettingsUi {
                 .ToList();
         }
 
-        private void RaisePropertyChanged<T1>(Expression<Func<AttachmentViewModel, T1>> expression) {
+        private void RaisePropertyChanged<T1>(Expression<Func<AppBindingViewModel, T1>> expression) {
             RaisePropertyChanged(ExpressionUtils.GetMemberName(expression));
         }
 

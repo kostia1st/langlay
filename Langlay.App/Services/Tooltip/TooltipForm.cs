@@ -12,7 +12,7 @@ namespace Product {
         public string DisplayString { get; set; }
         private const int OpacityWhenVisible = 80;
         private Font TextFont { get; set; }
-        private Brush TextBrush { get; set; }
+        public SolidBrush TextBrush { get; set; }
         private Point PivotPosition { get; set; }
 
         private const int MinWidth = 10;

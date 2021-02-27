@@ -26,7 +26,8 @@ namespace Product {
                 { ArgumentNames.LanguageSwitchKeys, x => config.LanguageSwitchKeyArray = KeyStringToArray(x) },
                 { ArgumentNames.LayoutSwitchKeys, x => config.LayoutSwitchKeyArray = KeyStringToArray(x) },
                 { ArgumentNames.PasteKeys, x => config.PasteKeyArray = KeyStringToArray(x) },
-                { ArgumentNames.AppAttachments, x => config.AppAttachmentArray = StringToAppAttachments(x) },
+                { ArgumentNames.AppBindings, x => config.AppBindingArray = StringToAppBindings(x) },
+                { ArgumentNames.LayoutColorSets, x => config.LayoutColorSetArray = StringToLayoutColorSets(x) },
 
                 { ArgumentNames.DisableCapsLockToggle, x => config.DoDisableCapsLockToggle = Utils.ParseBool(x, config.DoDisableCapsLockToggle) },
                 { ArgumentNames.ShowOverlay, x => config.DoShowOverlay = Utils.ParseBool(x, config.DoShowOverlay) },
@@ -66,7 +67,8 @@ namespace Product {
                 { ArgumentNames.PasteWithoutFormatting, () => config.DoPasteWithoutFormatting.ToString() },
                 { ArgumentNames.PasteKeys, () => ArrayToKeyString(config.PasteKeyArray) },
 
-                { ArgumentNames.AppAttachments, () => AppAttachmentsToString(config.AppAttachmentArray) },
+                { ArgumentNames.AppBindings, () => AppBindingsToString(config.AppBindingArray) },
+                { ArgumentNames.LayoutColorSets, () => LayoutColorSetsToString(config.LayoutColorSetArray) },
 
                 { ArgumentNames.DisableCapsLockToggle, () => config.DoDisableCapsLockToggle.ToString() },
                 { ArgumentNames.ShowSettingsOnce, () => config.DoShowSettingsOnce.ToString() },
@@ -118,25 +120,56 @@ namespace Product {
                 .ToList();
         }
 
-        private string AppAttachmentToString(AppAttachment attachment) {
-            return attachment.AppMask + "," + attachment.LanguageOrLayoutId;
+        private string AppBindingToString(AppBinding binding) {
+            return binding.AppMask + "," + binding.LanguageOrLayoutId;
         }
 
-        private string AppAttachmentsToString(IList<AppAttachment> attachments) {
-            return string.Join("|", attachments.Select(x => AppAttachmentToString(x)).ToList());
+        private string AppBindingsToString(IList<AppBinding> bindings) {
+            return string.Join("|", bindings.Select(x => AppBindingToString(x)).ToList());
         }
 
-        private AppAttachment StringToAppAttachment(string str) {
-            var parts = str.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        private string LayoutColorSetToString(LayoutColorSet colorSet) {
+            return string.Join(",", new[] {
+                colorSet.LayoutId,
+                colorSet.BackgroundColor.ToHtml(),
+                colorSet.ForegroundColor.ToHtml(),
+            });
+        }
+
+        private string LayoutColorSetsToString(IList<LayoutColorSet> colorSets) {
+            return string.Join("|", colorSets.Select(x => LayoutColorSetToString(x)).ToList());
+        }
+
+        private AppBinding StringToAppBinding(string str) {
+            var parts = str.Split(new char[] { ',' }, StringSplitOptions.None);
             if (parts.Length == 2)
-                return new AppAttachment { AppMask = parts[0], LanguageOrLayoutId = parts[1] };
+                return new AppBinding { AppMask = parts[0], LanguageOrLayoutId = parts[1] };
             return null;
         }
 
-        private IList<AppAttachment> StringToAppAttachments(string str) {
+        private IList<AppBinding> StringToAppBindings(string str) {
             var itemStrings = str.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             return itemStrings
-                .Select(x => StringToAppAttachment(x))
+                .Select(x => StringToAppBinding(x))
+                .Where(x => x != null)
+                .ToList();
+        }
+
+        private LayoutColorSet StringToLayoutColorSet(string str) {
+            var parts = str.Split(new char[] { ',' }, StringSplitOptions.None);
+            if (parts.Length == 3)
+                return new LayoutColorSet {
+                    LayoutId = parts[0],
+                    BackgroundColor = parts[1].FromHtml(),
+                    ForegroundColor = parts[2].FromHtml()
+                };
+            return null;
+        }
+
+        private IList<LayoutColorSet> StringToLayoutColorSets(string str) {
+            var itemStrings = str.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            return itemStrings
+                .Select(x => StringToLayoutColorSet(x))
                 .Where(x => x != null)
                 .ToList();
         }

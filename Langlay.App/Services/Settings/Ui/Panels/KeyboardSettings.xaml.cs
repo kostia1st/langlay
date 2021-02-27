@@ -10,13 +10,13 @@ namespace Product.SettingsUi {
     /// <summary>
     /// Interaction logic for LanguageSwitchSettings.xaml
     /// </summary>
-    public partial class LanguageSwitchSettings : UserControl {
+    public partial class KeyboardSettings : UserControl {
         internal ConfigViewModel ViewModel {
             get => (ConfigViewModel) DataContext;
             set => DataContext = value;
         }
 
-        public LanguageSwitchSettings() {
+        public KeyboardSettings() {
             InitializeComponent();
         }
 

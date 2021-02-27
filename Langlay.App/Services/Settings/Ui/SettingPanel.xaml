@@ -20,7 +20,8 @@
         <ListBox x:Name="lbCategory" SelectionChanged="ListBox_SelectionChanged">
             <ListBoxItem x:Name="lbiGeneral">General</ListBoxItem>
             <ListBoxItem x:Name="lbiOverlay">Overlay</ListBoxItem>
-            <ListBoxItem x:Name="lbiLanguage">Language/layout</ListBoxItem>
+            <ListBoxItem x:Name="lbiColors">Colors</ListBoxItem>
+            <ListBoxItem x:Name="lbiKeyboard">Keyboard</ListBoxItem>
             <ListBoxItem x:Name="lbiAutoSwitch">Auto-switch</ListBoxItem>
             <ListBoxItem x:Name="lbiPlainPaste" Visibility="Collapsed">Plain paste</ListBoxItem>
         </ListBox>

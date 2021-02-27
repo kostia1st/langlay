@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using Product.Common;
 
 namespace Product {
 
     public class MouseCursorService : IMouseCursorService, IDisposable, ILifecycled {
-
+        private IConfigService ConfigService { get; set; }
         private MouseHooker Hooker { get; set; }
         private IntPtr LastFocusedWindowHandle { get; set; }
 
@@ -20,6 +21,7 @@ namespace Product {
         public bool IsStarted { get; private set; }
 
         public void Start() {
+            ConfigService = ServiceRegistry.Instance.Get<IConfigService>();
             if (!IsStarted) {
                 IsStarted = true;
                 Hooker = new MouseHooker(false, HookProcedureWrapper);
@@ -44,15 +46,13 @@ namespace Product {
         #endregion Start/Stop
 
         private string GetLanguageName(InputLayout layout) {
-            var configService = ServiceRegistry.Instance.Get<IConfigService>();
-            return configService.DoShowLanguageNameInNative
+            return ConfigService.DoShowLanguageNameInNative
                 ? layout.LanguageNameThreeLetterNative.ToLower()
                 : layout.LanguageNameThreeLetter.ToLower();
         }
 
         private bool GetDoShowTooltip() {
-            var configService = ServiceRegistry.Instance.Get<IConfigService>();
-            var doShowTooltip = configService.DoShowCursorTooltip_WhenFocusNotChanged;
+            var doShowTooltip = ConfigService.DoShowCursorTooltip_WhenFocusNotChanged;
             if (!doShowTooltip) {
                 var currentFocusedWindowHandle = Win32.GetForegroundWindow();
                 doShowTooltip = currentFocusedWindowHandle != LastFocusedWindowHandle;
@@ -70,7 +70,8 @@ namespace Product {
                 if (currentLayout != null) {
                     var text = GetLanguageName(currentLayout);
                     var tooltipService = ServiceRegistry.Instance.Get<ITooltipService>();
-                    tooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true);
+                    var colorSet = ConfigService.LayoutColorSetArray.FirstOrDefault(x => x.LayoutId == currentLayout.LayoutId);
+                    tooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), true, colorSet);
                 }
             }
         }
@@ -78,9 +79,13 @@ namespace Product {
         private void UpdateTooltip(MouseEventArgs2 e) {
             var tooltipService = ServiceRegistry.Instance.Get<ITooltipService>();
             if (tooltipService.GetIsVisible()) {
-                tooltipService.Push(
-                    tooltipService.GetDisplayString(),
-                    new System.Drawing.Point(e.Point.X, e.Point.Y), false);
+                var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
+                var currentLayout = languageService.GetCurrentLayout();
+                if (currentLayout != null) {
+                    var text = GetLanguageName(currentLayout);
+                    var colorSet = ConfigService.LayoutColorSetArray.FirstOrDefault(x => x.LayoutId == currentLayout.LayoutId);
+                    tooltipService.Push(text, new System.Drawing.Point(e.Point.X, e.Point.Y), false, colorSet);
+                }
             }
         }
 
