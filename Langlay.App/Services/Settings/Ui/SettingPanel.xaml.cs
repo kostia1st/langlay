@@ -34,8 +34,11 @@ namespace Product.SettingsUi
                     case "lbiOverlay":
                         control = new OverlaySettings();
                         break;
-                    case "lbiLanguage":
-                        control = new LanguageSwitchSettings();
+                    case "lbiColors":
+                        control = new ColorSettings();
+                        break;
+                    case "lbiKeyboard":
+                        control = new KeyboardSettings();
                         break;
                     case "lbiAutoSwitch":
                         control = new AutoSwitchSettings();

@@ -5,18 +5,18 @@ namespace Product.SettingsUi {
     /// <summary>
     /// Interaction logic for AutoSwitchSettings.xaml
     /// </summary>
-    public partial class AutoSwitchSettings : UserControl {
+    public partial class ColorSettings : UserControl {
         internal ConfigViewModel ViewModel {
             get => (ConfigViewModel) DataContext;
             set => DataContext = value;
         }
 
-        public AutoSwitchSettings() {
+        public ColorSettings() {
             InitializeComponent();
         }
 
-        private void AppBindingComposer_Changed(object sender, RoutedEventArgs e) {
-            ViewModel.RaiseAppBindingListChanged();
+        private void LayoutColorSetComposer_Changed(object sender, RoutedEventArgs e) {
+            ViewModel.RaiseLayoutColorSetListChanged();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e) {

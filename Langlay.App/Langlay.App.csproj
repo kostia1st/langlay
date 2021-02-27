@@ -77,17 +77,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\Config\AppAttachment.cs" />
+    <Compile Include="Services\Config\AppBinding.cs" />
     <Compile Include="AppMessageFilter.cs" />
     <Compile Include="Services\AppRunner\AppRunnerService.cs" />
     <Compile Include="Services\AutoSwitch\AutoSwitchService.cs" />
+    <Compile Include="Services\Config\ColorSet.cs" />
     <Compile Include="Services\Config\ConfigPersister.cs" />
+    <Compile Include="Services\Config\LayoutColorSet.cs" />
     <Compile Include="Services\Event\EventService.cs" />
     <Compile Include="Services\AppRunner\IAppRunnerService.cs" />
     <Compile Include="Services\AutoSwitch\IAutoSwitchService.cs" />
     <Compile Include="Services\Event\IEventService.cs" />
     <Compile Include="Services\ILifecycled.cs" />
     <Compile Include="Services\Language\InputLanguage.cs" />
+    <Compile Include="Services\Settings\LayoutColorSetViewModel.cs" />
+    <Compile Include="Services\Settings\Ui\LayoutColorSet\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\LayoutColorSet\LayoutColorSetComposer.xaml.cs">
+      <DependentUpon>LayoutColorSetComposer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\LayoutColorSet\LayoutColorSetEditor.xaml.cs">
+      <DependentUpon>LayoutColorSetEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\Panels\ColorSettings.xaml.cs">
+      <DependentUpon>ColorSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\Tray\ITrayService.cs" />
     <Compile Include="Services\Language\InputLayout.cs" />
     <Compile Include="Services\Hotkey\IHotkeyService.cs" />
@@ -121,15 +136,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ServiceRegistry.cs" />
     <Compile Include="Services\Settings\ArgumentNames.cs" />
-    <Compile Include="Services\Settings\AttachmentViewModel.cs" />
+    <Compile Include="Services\Settings\AppBindingViewModel.cs" />
     <Compile Include="Services\Settings\ISettingsService.cs" />
     <Compile Include="Services\Settings\LanguageOrLayoutViewModel.cs" />
     <Compile Include="Services\Settings\SettingsService.cs" />
-    <Compile Include="Services\Settings\Ui\Attachment\AttachmentComposer.xaml.cs">
-      <DependentUpon>AttachmentComposer.xaml</DependentUpon>
+    <Compile Include="Services\Settings\Ui\AppBinding\AppBindingComposer.xaml.cs">
+      <DependentUpon>AppBindingComposer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\Settings\Ui\Attachment\AttachmentEditor.xaml.cs">
-      <DependentUpon>AttachmentEditor.xaml</DependentUpon>
+    <Compile Include="Services\Settings\Ui\AppBinding\AppBindingEditor.xaml.cs">
+      <DependentUpon>AppBindingEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\Settings\Ui\Panels\AutoSwitchSettings.xaml.cs">
       <DependentUpon>AutoSwitchSettings.xaml</DependentUpon>
@@ -137,8 +152,8 @@
     <Compile Include="Services\Settings\Ui\Panels\GeneralSettings.xaml.cs">
       <DependentUpon>GeneralSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\Settings\Ui\Panels\LanguageSwitchSettings.xaml.cs">
-      <DependentUpon>LanguageSwitchSettings.xaml</DependentUpon>
+    <Compile Include="Services\Settings\Ui\Panels\KeyboardSettings.xaml.cs">
+      <DependentUpon>KeyboardSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\Settings\Ui\Panels\OverlaySettings.xaml.cs">
       <DependentUpon>OverlaySettings.xaml</DependentUpon>
@@ -221,13 +236,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Services\Settings\Ui\Attachment\AttachmentComposer.xaml">
+    <Page Include="Services\Settings\Ui\AppBinding\AppBindingComposer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Services\Settings\Ui\Attachment\AttachmentEditor.xaml">
+    <Page Include="Services\Settings\Ui\AppBinding\AppBindingEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\LayoutColorSet\ColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\LayoutColorSet\LayoutColorSetComposer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Settings\Ui\LayoutColorSet\LayoutColorSetEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Services\Settings\Ui\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -245,11 +272,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Services\Settings\Ui\Panels\ColorSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Services\Settings\Ui\Panels\GeneralSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Services\Settings\Ui\Panels\LanguageSwitchSettings.xaml">
+    <Page Include="Services\Settings\Ui\Panels\KeyboardSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

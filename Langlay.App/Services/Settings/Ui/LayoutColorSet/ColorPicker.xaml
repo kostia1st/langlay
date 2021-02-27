@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Product.SettingsUi.ColorPicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Product.SettingsUi"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="100">
+    <Button HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Click="Button_Click">
+        <Rectangle x:Name="rFilling" Margin="10 2" StrokeThickness="2" Stroke="#3000">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{Binding Value, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type local:ColorPicker}}}" />
+            </Rectangle.Fill>
+        </Rectangle>
+    </Button>
+</UserControl>

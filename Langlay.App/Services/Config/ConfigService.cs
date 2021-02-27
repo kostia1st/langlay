@@ -14,7 +14,8 @@ namespace Product {
         public bool DoPasteWithoutFormatting { get; set; }
         public IList<KeyCode> PasteKeyArray { get; set; }
 
-        public IList<AppAttachment> AppAttachmentArray { get; set; }
+        public IList<AppBinding> AppBindingArray { get; set; }
+        public IList<LayoutColorSet> LayoutColorSetArray { get; set; }
 
         public bool DoDisableCapsLockToggle { get; set; }
 
@@ -54,7 +55,8 @@ namespace Product {
             DoPasteWithoutFormatting = false;
             PasteKeyArray = new KeyCode[] { KeyCode.LControlKey, KeyCode.LShiftKey, KeyCode.V };
 
-            AppAttachmentArray = new AppAttachment[] { };
+            AppBindingArray = new AppBinding[] { };
+            LayoutColorSetArray = new LayoutColorSet[] { };
 
             DoDisableCapsLockToggle = false;
             SwitchMethod = SwitchMethod.InputSimulation;

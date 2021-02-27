@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using System.Linq;
+using Product.Common;
 
 namespace Product {
     public class TooltipService : ITooltipService, ILifecycled {
@@ -39,9 +41,17 @@ namespace Product {
             return TooltipForm?.DisplayString;
         }
 
-        public void Push(string displayString, Point position, bool resetTimer) {
-            if (IsStarted)
+        public void Push(string displayString, Point position, bool resetTimer, ColorSet colorSet) {
+            if (IsStarted) {
+                if (colorSet != null) {
+                    TooltipForm.BackColor = colorSet.BackgroundColor.ToWinForms();
+                    TooltipForm.TextBrush.Color = colorSet.ForegroundColor.ToWinForms();
+                } else {
+                    TooltipForm.BackColor = Color.FromKnownColor(KnownColor.Black);
+                    TooltipForm.TextBrush.Color = Color.FromKnownColor(KnownColor.White);
+                }
                 TooltipForm.Push(displayString, position, resetTimer);
+            }
         }
 
         public bool GetIsVisible() {

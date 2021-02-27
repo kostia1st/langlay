@@ -4,29 +4,29 @@ using System.Windows.Controls;
 
 namespace Product.SettingsUi {
     /// <summary>
-    /// Interaction logic for AttachmentEditor.xaml
+    /// Interaction logic for AppBindingEditor.xaml
     /// </summary>
-    public partial class AttachmentEditor : UserControl {
+    public partial class AppBindingEditor : UserControl {
         public event RoutedEventHandler RemoveClick;
         public event RoutedEventHandler Changed;
 
-        public AttachmentViewModel ViewModel => (AttachmentViewModel) DataContext;
+        public AppBindingViewModel ViewModel => (AppBindingViewModel) DataContext;
 
-        public AttachmentEditor() {
+        public AppBindingEditor() {
             InitializeComponent();
-            Loaded += AttachmentEditor_Loaded;
-            Unloaded += AttachmentEditor_Unloaded;
+            Loaded += AppBindingEditor_Loaded;
+            Unloaded += AppBindingEditor_Unloaded;
         }
 
         public void SetFocus() {
             this.tbAppTitleMask.Focus();
         }
 
-        private void AttachmentEditor_Unloaded(object sender, RoutedEventArgs e) {
+        private void AppBindingEditor_Unloaded(object sender, RoutedEventArgs e) {
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
         }
 
-        private void AttachmentEditor_Loaded(object sender, RoutedEventArgs e) {
+        private void AppBindingEditor_Loaded(object sender, RoutedEventArgs e) {
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
