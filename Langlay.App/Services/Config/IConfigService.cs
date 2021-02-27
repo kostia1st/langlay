@@ -21,7 +21,8 @@ namespace Product {
         bool DoPasteWithoutFormatting { get; set; }
         IList<KeyCode> PasteKeyArray { get; set; }
 
-        IList<AppAttachment> AppAttachmentArray { get; set; }
+        IList<AppBinding> AppBindingArray { get; set; }
+        IList<LayoutColorSet> LayoutColorSetArray { get; set; }
 
         bool DoDisableCapsLockToggle { get; set; }
         bool DoShowSettingsOnce { get; set; }

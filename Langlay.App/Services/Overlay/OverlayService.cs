@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using Product.Common;
@@ -109,9 +111,19 @@ namespace Product {
             }
         }
 
-        public void PushMessage(string languageName, string layoutName) {
+        private void PushMessage(string languageName, string layoutName) {
             if (IsStarted) {
                 foreach (var overlay in Overlays.Values) {
+                    var colorSet = ConfigService.LayoutColorSetArray.FirstOrDefault(x => x.LayoutId == layoutName);
+                    if (colorSet != null) {
+                        overlay.BackColor = colorSet.BackgroundColor.ToWinForms();
+                        overlay.LanguageBrush.Color = colorSet.ForegroundColor.ToWinForms();
+                        overlay.LayoutBrush.Color = colorSet.ForegroundColor.ToWinForms().ApplyAlpha(127);
+                    } else {
+                        overlay.BackColor = Color.FromKnownColor(KnownColor.Black);
+                        overlay.LanguageBrush.Color = Color.FromKnownColor(KnownColor.White);
+                        overlay.LayoutBrush.Color = Color.FromKnownColor(KnownColor.White).ApplyAlpha(127);
+                    }
                     overlay.PushMessage(languageName, layoutName);
                 }
             }

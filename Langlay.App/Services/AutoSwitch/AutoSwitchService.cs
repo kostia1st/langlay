@@ -44,7 +44,7 @@ namespace Product {
 
         private void HandleTimer() {
             var configService = ServiceRegistry.Instance.Get<IConfigService>();
-            if (configService.AppAttachmentArray.Count > 0) {
+            if (configService.AppBindingArray.Count > 0) {
                 var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
                 var currentFocusedWindowHandle = Win32.GetForegroundWindow();
                 if (currentFocusedWindowHandle != IntPtr.Zero) {
@@ -54,16 +54,16 @@ namespace Product {
                     ) {
                         var text = Win32.GetWindowText(currentFocusedWindowHandle);
                         Debug.WriteLine("Active window title: " + text);
-                        var attachment = configService.AppAttachmentArray.FirstOrDefault(x => text.Contains(x.AppMask));
-                        if (attachment != null) {
+                        var binding = configService.AppBindingArray.FirstOrDefault(x => text.Contains(x.AppMask));
+                        if (binding != null) {
                             var inputLayouts = languageService.GetInputLayouts();
-                            var layout = inputLayouts.FirstOrDefault(x => x.LayoutId == attachment.LanguageOrLayoutId);
+                            var layout = inputLayouts.FirstOrDefault(x => x.LayoutId == binding.LanguageOrLayoutId);
                             if (layout != null) {
                                 Debug.WriteLine($"Attempting to restore layout {layout.LanguageName} - {layout.Name}");
                                 languageService.SetCurrentLayout(layout);
                             } else {
-                                Debug.WriteLine($"Attempting to restore language {attachment.LanguageOrLayoutId}");
-                                languageService.SetCurrentLanguage(attachment.LanguageOrLayoutId, true);
+                                Debug.WriteLine($"Attempting to restore language {binding.LanguageOrLayoutId}");
+                                languageService.SetCurrentLanguage(binding.LanguageOrLayoutId, true);
                             }
                         }
                     }

@@ -4,7 +4,8 @@
         public const string SwitchLanguage = "SwitchLanguage";
         public const string SwitchLayout = "SwitchLayout";
         public const string PasteWithoutFormatting = "PasteWithoutFormatting";
-        public const string AppAttachments = "AppAttachments";
+        public const string AppBindings = "AppBindings";
+        public const string LayoutColorSets = "LayoutColorSets";
 
         public const string LanguageSwitchKeys = "LanguageSwitchKeys";
         public const string LayoutSwitchKeys = "LayoutSwitchKeys";

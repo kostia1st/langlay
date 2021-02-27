@@ -15,7 +15,8 @@ namespace Product.SettingsUi {
         public ObservableCollection<KeyCodeViewModel> LanguageSequence { get; private set; }
         public ObservableCollection<KeyCodeViewModel> LayoutSequence { get; private set; }
         public ObservableCollection<KeyCodeViewModel> PasteSequence { get; private set; }
-        public ObservableCollection<AttachmentViewModel> AttachmentList { get; private set; }
+        public ObservableCollection<AppBindingViewModel> AppBindingList { get; private set; }
+        public ObservableCollection<LayoutColorSetViewModel> LayoutColorSetList { get; private set; }
 
         public ConfigViewModel(IConfigService configService) {
             ConfigService = configService;
@@ -32,13 +33,22 @@ namespace Product.SettingsUi {
                 ConfigService.PasteKeyArray.Select(x => new KeyCodeViewModel { KeyCode = x }));
             PasteSequence.CollectionChanged += PasteSequence_CollectionChanged;
 
-            AttachmentList = new ObservableCollection<AttachmentViewModel>(
-                ConfigService.AppAttachmentArray.Select(x => new AttachmentViewModel(x.AppMask, x.LanguageOrLayoutId)));
-            AttachmentList.CollectionChanged += AttachmentList_CollectionChanged;
+            AppBindingList = new ObservableCollection<AppBindingViewModel>(
+                ConfigService.AppBindingArray.Select(x => new AppBindingViewModel(x.AppMask, x.LanguageOrLayoutId)));
+            AppBindingList.CollectionChanged += AppBindingList_CollectionChanged;
+
+            LayoutColorSetList = new ObservableCollection<LayoutColorSetViewModel>(
+                ConfigService.LayoutColorSetArray.Select(
+                    x => new LayoutColorSetViewModel(x.LayoutId, x.BackgroundColor, x.ForegroundColor)));
+            LayoutColorSetList.CollectionChanged += LayoutColorSetList_CollectionChanged; ;
         }
 
-        private void AttachmentList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            RaiseAttachmentListChanged();
+        private void AppBindingList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            RaiseAppBindingListChanged();
+        }
+
+        private void LayoutColorSetList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            RaiseLayoutColorSetListChanged();
         }
 
         private void PasteSequence_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
@@ -60,13 +70,23 @@ namespace Product.SettingsUi {
             RaisePropertyChanged(x => x.LanguageSequence);
         }
 
-        public void RaiseAttachmentListChanged() {
-            ConfigService.AppAttachmentArray = AttachmentList
-                .Select(x => new AppAttachment {
+        public void RaiseAppBindingListChanged() {
+            ConfigService.AppBindingArray = AppBindingList
+                .Select(x => new AppBinding {
                     AppMask = x.AppTitleMask,
                     LanguageOrLayoutId = x.LanguageOrLayoutId,
                 }).ToList();
-            RaisePropertyChanged(x => x.AttachmentList);
+            RaisePropertyChanged(x => x.AppBindingList);
+        }
+
+        public void RaiseLayoutColorSetListChanged() {
+            ConfigService.LayoutColorSetArray = LayoutColorSetList
+                .Select(x => new LayoutColorSet {
+                    LayoutId = x.LayoutId,
+                    BackgroundColor = x.BackgroundColor,
+                    ForegroundColor = x.ForegroundColor,
+                }).ToList();
+            RaisePropertyChanged(x => x.LayoutColorSetList);
         }
 
         public void RaisePasteSequenceChanged() {
