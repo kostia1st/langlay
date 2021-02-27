@@ -21,6 +21,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_235309F71AB30787E6BFA7ECD7571A41"
+        "OwnerKey" = "8:_C5C489D9350F4AADA868C4A1A5CD3B6A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_235309F71AB30787E6BFA7ECD7571A41"
+        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A36A1C54673D7566E18EE7FB8FE61BA9"
+        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C5C489D9350F4AADA868C4A1A5CD3B6A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -29,6 +47,30 @@
         {
         "MsmKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C5C489D9350F4AADA868C4A1A5CD3B6A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_235309F71AB30787E6BFA7ECD7571A41"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A36A1C54673D7566E18EE7FB8FE61BA9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C95BAE5C8F3E44D3B0ECEC3229C22568"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -184,6 +226,68 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_235309F71AB30787E6BFA7ECD7571A41"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Langlay.Common, Version=2.1.7728.35899, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_235309F71AB30787E6BFA7ECD7571A41"
+                    {
+                    "Name" = "8:Langlay.Common.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Langlay.Common.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A36A1C54673D7566E18EE7FB8FE61BA9"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_A36A1C54673D7566E18EE7FB8FE61BA9"
+                    {
+                    "Name" = "8:WindowsInput.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:WindowsInput.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -252,7 +356,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Langlay"
         "ProductCode" = "8:{709FEE23-B43F-4864-A394-5E16B93D529A}"
-        "PackageCode" = "8:{4BB52A0A-BC16-44DC-9950-0254124D4FB0}"
+        "PackageCode" = "8:{3840397F-C611-4DDE-BD91-FD730B8B235F}"
         "UpgradeCode" = "8:{5EFA80B3-FA49-4F3A-8E8C-0C4F7FC46500}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -694,7 +798,7 @@
             "Tag" = "8:"
             "Folder" = "8:_B2640D6C6E964983B3164069F866F8D4"
             "Condition" = "8:"
-            "Transitive" = "11:FALSE"
+            "Transitive" = "11:TRUE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"

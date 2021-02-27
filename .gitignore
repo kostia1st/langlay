@@ -12,6 +12,7 @@
 /.release
 /Langlay.App/bin
 /Langlay.App/obj
+/Langlay.App/publish
 /Langlay.Common/obj
 /Langlay.Installer
 /Langlay.SettingsUi/bin
