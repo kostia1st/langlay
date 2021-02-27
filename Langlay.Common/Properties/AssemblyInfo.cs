@@ -5,7 +5,7 @@ using Product.Common;
 [assembly: AssemblyTitle("Langlay.Common")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Langlay")]
 [assembly: AssemblyProduct("Langlay.Common")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
