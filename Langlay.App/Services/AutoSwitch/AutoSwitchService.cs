@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+
 using Product.Common;
 
 namespace Product {
@@ -52,9 +53,15 @@ namespace Product {
                         LastFocusedWindowHandle != null
                         && LastFocusedWindowHandle != currentFocusedWindowHandle
                     ) {
+                        var threadAndProcessInfo = ProcessUtils.GetThreadAndProcessInfoByWindowHandle(currentFocusedWindowHandle);
                         var text = Win32.GetWindowText(currentFocusedWindowHandle);
+                        var processName = threadAndProcessInfo != null ? threadAndProcessInfo.Process.ProcessName : "";
+
                         Debug.WriteLine("Active window title: " + text);
-                        var binding = configService.AppBindingArray.FirstOrDefault(x => text.Contains(x.AppMask));
+                        Debug.WriteLine("Active process name: " + processName);
+
+                        var binding = configService.AppBindingArray.FirstOrDefault(
+                            x => text.Contains(x.AppMask) || processName.Contains(x.AppMask));
                         if (binding != null) {
                             var inputLayouts = languageService.GetInputLayouts();
                             var layout = inputLayouts.FirstOrDefault(x => x.LayoutId == binding.LanguageOrLayoutId);

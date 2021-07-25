@@ -91,6 +91,10 @@
     <Compile Include="Services\ILifecycled.cs" />
     <Compile Include="Services\Language\InputLanguage.cs" />
     <Compile Include="Services\Settings\LayoutColorSetViewModel.cs" />
+    <Compile Include="Services\Settings\Ui\LanguageOrLayoutSelector\LanguageOrLayoutSelector.xaml.cs">
+      <DependentUpon>LanguageOrLayoutSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Settings\Ui\LanguageOrLayoutSelector\LanguageOrLayoutHelper.cs" />
     <Compile Include="Services\Settings\Ui\LayoutColorSet\ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
@@ -243,6 +247,10 @@
     <Page Include="Services\Settings\Ui\AppBinding\AppBindingEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Settings\Ui\LanguageOrLayoutSelector\LanguageOrLayoutSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Services\Settings\Ui\LayoutColorSet\ColorPicker.xaml">
       <SubType>Designer</SubType>

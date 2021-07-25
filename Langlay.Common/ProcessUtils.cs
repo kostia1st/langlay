@@ -4,6 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 
 namespace Product.Common {
+    public class ThreadAndProcessInfo {
+        public ProcessInfo Process { get; set; }
+        public int ThreadId { get; set; }
+    }
+
     public class ProcessInfo {
         private Process _process;
 
@@ -92,6 +97,21 @@ namespace Product.Common {
                     _processCache[processId] = new ProcessInfo(process);
             }
             return _processCache[processId];
+        }
+
+        public static ThreadAndProcessInfo GetThreadAndProcessInfoByWindowHandle(IntPtr windowHandle) {
+            var threadId = Win32.GetWindowThreadProcessId(
+    windowHandle, out var processId);
+
+            if (processId != 0) {
+                var process = GetProcessById(processId);
+                if (process != null
+                    && !process.HasExited
+                    && process.ProcessName != ProcessName_Idle) {
+                    return new ThreadAndProcessInfo() { Process = process, ThreadId = threadId };
+                }
+            }
+            return null;
         }
     }
 }

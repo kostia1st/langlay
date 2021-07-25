@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -35,31 +34,9 @@ namespace Product.SettingsUi {
             }
         }
 
-        private IList<LanguageOrLayoutViewModel> _languageOrLayoutList;
-        public IList<LanguageOrLayoutViewModel> LanguageOrLayoutList {
-            get => _languageOrLayoutList;
-            set {
-                if (value != _languageOrLayoutList) {
-                    _languageOrLayoutList = value;
-                    RaisePropertyChanged(x => x.LanguageOrLayoutList);
-                }
-            }
-        }
-
         public AppBindingViewModel(string mask, string languageOrLayoutId) {
             _appTitleMask = mask;
             _languageOrLayoutId = languageOrLayoutId;
-            var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
-            _languageOrLayoutList = languageService
-                .GetInputLayouts()
-                .Aggregate(new List<LanguageOrLayoutViewModel>(), (List<LanguageOrLayoutViewModel> acc, InputLayout layout) => {
-                    if (acc.FirstOrDefault(x => x.LanguageOrLayoutId == layout.LanguageId) == null) {
-                        acc.Add(new LanguageOrLayoutViewModel((InputLanguage) layout));
-                    }
-                    acc.Add(new LanguageOrLayoutViewModel(layout));
-                    return acc;
-                })
-                .ToList();
         }
 
         private void RaisePropertyChanged<T1>(Expression<Func<AppBindingViewModel, T1>> expression) {

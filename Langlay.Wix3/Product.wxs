@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <Product Id="*" 
+           Name="Langlay" 
+           Language="1033" 
+           Version="2.2" 
+           Manufacturer="estorski" 
+           UpgradeCode="{C60AC69B-9F4D-4A80-80FA-A2B4BB0AA3BF}">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="Langlay" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="AppMenuFolder" Name="Langlay" />
+      </Directory>
+    </Directory>
+
+    <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf"/>
+    <Icon Id="Icon.ico" SourceFile="$(var.Langlay.App.ProjectDir)Keyboard-Filled-2-16.ico" />
+    <Property Id="ARPPRODUCTICON" Value="Icon.ico" />
+
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <Component Id="Executable" Guid="{7A585BB6-D8E4-4016-BE2F-49620A6D0A85}">
+        <File Id="Executable" Name="Langlay.exe" Source="$(var.Langlay.App.TargetPath)" KeyPath="yes" Vital="yes" Checksum="yes">
+          <Shortcut Id="ApplicationStartMenuShortcut"
+            Advertise="yes"
+            Directory="AppMenuFolder"
+            Icon="Icon.ico"
+            Name="Langlay"
+            Description="A small &amp; simple tool for switching current input language with a custom hotkey (Caps Lock)."
+            WorkingDirectory="INSTALLFOLDER"/>
+        </File>
+        <RemoveFolder Id="RemoveAppMenuFolder" Directory="AppMenuFolder" On="uninstall" />
+        <RemoveFolder Id="RemoveAppFolder" Directory="INSTALLFOLDER" On="uninstall" />
+      </Component>
+      <Component Id="Config" Guid="{12F2F1E9-2387-4F5B-AA12-EEAB903D7266}">
+        <File Source="$(var.Langlay.App.TargetDir)Langlay.exe.config"  />
+      </Component>
+      <Component Id="Langlay.Common" Guid="{F0AD94D0-F44B-4972-8192-66861F6CC529}">
+        <File Source="$(var.Langlay.App.TargetDir)Langlay.Common.dll" Vital="yes" />
+      </Component>
+      <Component Id="WindowsInput" Guid="{4B53C29C-BCE8-4BBB-B05E-023917BE0BAD}">
+        <File Source="$(var.Langlay.App.TargetDir)WindowsInput.dll" Vital="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <Property Id="WixShellExecTarget" Value="[#Executable]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+    
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_40_OR_LATER_INSTALLED" />
+    <Condition Message="This application requires at least .NET Framework 4.0 Client Profile, or later version. Please install it, then run this installer again.">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_40_OR_LATER_INSTALLED]]>
+    </Condition>
+    <Feature ConfigurableDirectory="INSTALLFOLDER" Id="Langlay" Title="Langlay" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+    </Feature>
+    <UI>
+      <UIRef Id="WixUI_Minimal" />
+      <Publish Dialog="ExitDialog"
+            Control="Finish"
+            Event="DoAction"
+            Value="LaunchApplication">
+        WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
+      </Publish>
+    </UI>
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Langlay" />
+  </Product>
+</Wix>

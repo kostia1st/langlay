@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:settingsui="clr-namespace:Product.SettingsUi"
     mc:Ignorable="d"
     d:DesignHeight="30" 
     d:DesignWidth="400"
@@ -18,15 +19,13 @@
             x:Name="tbAppTitleMask"
             Text="{Binding AppTitleMask}"
         />
-        <ComboBox 
-            x:Name="cbLanguagesAndLayouts"
+        <settingsui:LanguageOrLayoutSelector 
+            x:Name="llsLanguagesAndLayouts"
             Grid.Column="1"
-            ItemsSource="{Binding LanguageOrLayoutList, Mode=OneTime}"
-            SelectedValue="{Binding LanguageOrLayoutId}"
-            DisplayMemberPath="DisplayName"
-            SelectedValuePath="LanguageOrLayoutId"
             Margin="10 0 0 0"
+            Value="{Binding LanguageOrLayoutId}"
         />
+        
         <Button 
             Content="Remove"
             Grid.Column="2"
