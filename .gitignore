@@ -1,22 +1,8 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿bin
+obj
+publish
 
-/Langlay.Common/obj
-/Langlay.SettingsUi/obj
-/Langlay.App/bin
-/Langlay.App/obj
 /.vs
 /packages
 /UpgradeLog*.htm
 /.release
-/Langlay.App/bin
-/Langlay.App/obj
-/Langlay.App/publish
-/Langlay.Common/obj
-/Langlay.Installer
-/Langlay.SettingsUi/bin
-/Langlay.SettingsUi/obj
-/Langlay.Common/bin
-/Langlay.Installer.Actions/bin
-/Langlay.Installer.Actions/obj

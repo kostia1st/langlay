@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Media;
 using Product.Common;
@@ -41,25 +39,8 @@ namespace Product.SettingsUi {
             }
         }
 
-        private IList<LanguageOrLayoutViewModel> _layoutList;
-        public IList<LanguageOrLayoutViewModel> LayoutList {
-            get => _layoutList;
-            set {
-                if (value != _layoutList) {
-                    _layoutList = value;
-                    RaisePropertyChanged(x => x.LayoutList);
-                }
-            }
-        }
-
         public LayoutColorSetViewModel(string layoutId, Color backgroundColor, Color foregroundColor) {
             _layoutId = layoutId;
-            var languageService = ServiceRegistry.Instance.Get<ILanguageService>();
-            _layoutList = languageService
-                .GetInputLayouts()
-                .Select(x => new LanguageOrLayoutViewModel(x))
-                .ToList();
-
             _backgroundColor = backgroundColor;
             _foregroundColor = foregroundColor;
         }
