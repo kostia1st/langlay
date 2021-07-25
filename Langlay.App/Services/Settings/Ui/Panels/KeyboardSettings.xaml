@@ -21,7 +21,7 @@
             IsChecked="{Binding DisableCapsLockToggle}" />
 
 
-        <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Width="auto">
+        <StackPanel Orientation="Horizontal" Margin="0 20 0 0" Width="auto">
             <TextBlock 
                 Text="Switch method:" Width="100"
                 VerticalAlignment="Top" Margin="0 2 2 0" 
@@ -49,7 +49,7 @@
         <local:Separator Margin="0 10 0 0" />
 
         <TextBlock 
-            Text="Here you can set up a key sequence for switching either language or layout, or both."
+            Text="Here you can set up a key sequence for cycling through either language or layout, or both."
             VerticalAlignment="Center"
             Margin="0 10 0 0" />
         <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
@@ -78,5 +78,10 @@
                 Changed="HotkeyComposer_Layout_Changed" />
         </StackPanel>
         <TextBlock x:Name="tbkFeedbackLayout" Foreground="Red" TextWrapping="Wrap" />
+        <local:Separator Margin="0 10 0 0" />
+        <TextBlock 
+            Text="Here you can bind a key sequence specifically to one particular language or layout."
+            VerticalAlignment="Center"
+            Margin="0 10 0 0" />
     </StackPanel>
 </UserControl>

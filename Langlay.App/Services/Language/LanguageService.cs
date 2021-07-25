@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using Product.Common;
 
 namespace Product {
@@ -21,21 +22,20 @@ namespace Product {
                       // ILSpy there're lots of unsafe method and registry
                       // usage each time you read the property and sub-properties.
                       _inputLayouts[x.Handle] = new InputLayout(x);
+                      Debug.WriteLine($"System layout found: {x.LayoutName}, {x.Culture.Name}, {x.Culture.EnglishName}");
                   }
                   return _inputLayouts[x.Handle];
               })
               .ToList();
         }
 
-        private IList<InputLayout> GetLayoutsByLanguage(
-            string languageName, IList<InputLayout> inputLayouts = null) {
+        private IList<InputLayout> GetLayoutsByLanguage(string languageName, IList<InputLayout> inputLayouts = null) {
             if (inputLayouts == null)
                 inputLayouts = GetInputLayouts();
             return inputLayouts.Where(x => x.LanguageName == languageName).ToList();
         }
 
-        private string GetNextInputLayoutName(
-            string currentLanguageName, string currentLayoutName, bool doWrap,
+        private string GetNextInputLayoutName(string currentLanguageName, string currentLayoutName, bool doWrap,
             IList<InputLayout> inputLayouts = null) {
             var layoutNames = GetLayoutsByLanguage(currentLanguageName, inputLayouts)
                 .Select(x => x.Name)
@@ -72,35 +72,18 @@ namespace Product {
             // without a crash.
         }
 
-        private int _processId_old;
-
-        [Conditional("DEBUG")]
-        private void DebugProcessId(ProcessInfo process) {
-            if (process.ProcessId != _processId_old)
-                Debug.WriteLine($"Process name: {process.ProcessName}");
-            _processId_old = process.ProcessId;
-        }
-
         public IntPtr GetCurrentLayoutHandle() {
             var currentLayoutHandle = IntPtr.Zero;
-            var threadId = Win32.GetWindowThreadProcessId(
-                Win32.GetForegroundWindow(), out var processId);
+            var threadAndProcessInfo = ProcessUtils.GetThreadAndProcessInfoByWindowHandle(
+                Win32.GetForegroundWindow());
 
-            if (processId != 0) {
-                var process = ProcessUtils.GetProcessById(processId);
-                if (process != null
-                    && !process.HasExited
-                    && process.ProcessName != ProcessUtils.ProcessName_Idle) {
-
-                    DebugProcessId(process);
-                    currentLayoutHandle = Win32.GetKeyboardLayout(threadId);
-                }
+            if (threadAndProcessInfo != null) {
+                currentLayoutHandle = Win32.GetKeyboardLayout(threadAndProcessInfo.ThreadId);
             }
             return currentLayoutHandle;
         }
 
-        private string GetNextInputLanguageName(
-            string currentLanguageName) {
+        private string GetNextInputLanguageName(string currentLanguageName) {
             var inputLayouts = GetInputLayouts();
             var languageNames = inputLayouts.Select(x => x.LanguageName).Distinct().ToList();
             var indexOfNext = languageNames.IndexOf(currentLanguageName) + 1;
@@ -109,8 +92,7 @@ namespace Product {
             return languageNames[indexOfNext];
         }
 
-        private InputLayout GetDefaultLayoutForLanguage(
-            string languageName) {
+        private InputLayout GetDefaultLayoutForLanguage(string languageName) {
             // Avoid re-evaluating properties
             var inputLayouts = GetInputLayouts();
             var firstLanguageLayout = inputLayouts.FirstOrDefault(x => x.LanguageName == languageName);
@@ -122,8 +104,7 @@ namespace Product {
             return firstLanguageLayout;
         }
 
-        private InputLayout GetLayoutByLanguageAndLayoutName(
-            string languageName, string layoutName) {
+        private InputLayout GetLayoutByLanguageAndLayoutName(string languageName, string layoutName) {
             var inputLayouts = GetInputLayouts();
             return inputLayouts.FirstOrDefault(x => x.LanguageName == languageName && x.Name == layoutName);
         }
