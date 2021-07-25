@@ -34,7 +34,7 @@
             // 
             // timerOverlay
             // 
-            this.timerOverlay.Interval = 50;
+            this.timerOverlay.Interval = 16; // roughly corresponds to 60fps
             this.timerOverlay.Tick += new System.EventHandler(this.timerOverlay_Tick);
             // 
             // OverlayForm
